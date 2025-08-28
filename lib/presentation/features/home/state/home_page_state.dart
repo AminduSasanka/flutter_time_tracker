@@ -1,19 +1,13 @@
-import 'package:flutter_time_tracker/core/constants/enums.dart';
-
 class HomePageState {
   final bool isLoading;
-  final HomePageScreen activeScreen;
 
-  HomePageState(this.isLoading, this.activeScreen);
+  HomePageState(this.isLoading);
 
   factory HomePageState.initial() {
-    return HomePageState(false, HomePageScreen.home);
+    return HomePageState(false);
   }
 
-  HomePageState copyWith(bool? isLoading, HomePageScreen? activeScreen) {
-    return HomePageState(
-      isLoading ?? this.isLoading,
-      activeScreen ?? this.activeScreen,
-    );
+  HomePageState copyWith(bool? isLoading) {
+    return HomePageState(isLoading ?? this.isLoading);
   }
 }
