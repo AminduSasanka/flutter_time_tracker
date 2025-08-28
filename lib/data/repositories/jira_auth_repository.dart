@@ -1,11 +1,11 @@
 import 'package:flutter_time_tracker/core/constants/secure_storage_keys.dart';
 import 'package:flutter_time_tracker/data/sources/local/secure_storage/i_secure_storage_service.dart';
-import 'package:flutter_time_tracker/domain/repositories/i_api_token_repository.dart';
+import 'package:flutter_time_tracker/domain/repositories/i_jira_auth_repository.dart';
 
-class ApiTokenRepository implements IApiTokenRepository {
+class JiraAuthRepository implements IJiraAuthRepository {
   final ISecureStorageService _secureStorageService;
 
-  ApiTokenRepository(this._secureStorageService);
+  JiraAuthRepository(this._secureStorageService);
 
   @override
   Future<void> deleteToken() async {
