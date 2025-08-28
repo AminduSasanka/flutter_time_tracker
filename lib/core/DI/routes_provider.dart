@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_time_tracker/core/constants/route_names.dart';
 import 'package:flutter_time_tracker/presentation/features/home/screens/home_screen.dart';
+import 'package:flutter_time_tracker/presentation/features/settings/screens/settings_screen.dart';
 import 'package:go_router/go_router.dart';
 
 final goRouterProvider = Provider<GoRouter>((ref) {
@@ -11,6 +12,11 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: '/',
         name: homeRoute,
         builder: (context, state) => const HomeScreen(),
+      ),
+      GoRoute(
+        path: '/settings',
+        name: settingsRoute,
+        builder: (context, state) => const SettingsScreen(),
       ),
     ],
   );
