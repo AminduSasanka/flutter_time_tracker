@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_time_tracker/core/DI/routes/routes_provider.dart';
+import 'package:flutter_time_tracker/core/DI/routes_provider.dart';
 
 class App extends ConsumerWidget {
   const App({super.key});
