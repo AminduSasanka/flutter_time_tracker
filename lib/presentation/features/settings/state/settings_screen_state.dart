@@ -3,17 +3,19 @@ import 'package:flutter_time_tracker/domain/entities/JiraAuth/JiraAuth.dart';
 class SettingsScreenState {
   final bool isLoading;
   final JiraAuth jiraAuth;
+  final String error;
 
-  SettingsScreenState(this.isLoading, this.jiraAuth);
+  SettingsScreenState(this.isLoading, this.jiraAuth, this.error);
 
   factory SettingsScreenState.initial() {
-    return SettingsScreenState(true, JiraAuth("", "", ""));
+    return SettingsScreenState(true, JiraAuth("", "", ""), "");
   }
 
-  SettingsScreenState copyWith(bool? isLoading, JiraAuth? jiraAuth) {
+  SettingsScreenState copyWith(bool? isLoading, JiraAuth? jiraAuth, String? error) {
     return SettingsScreenState(
       isLoading ?? this.isLoading,
       jiraAuth ?? this.jiraAuth,
+      error ?? this.error,
     );
   }
 }
