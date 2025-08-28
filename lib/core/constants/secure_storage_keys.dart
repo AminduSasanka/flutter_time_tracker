@@ -1,3 +1,3 @@
 final class SecureStorageKeys {
-  static final String apiTokenKey = 'jiraToken';
+  static final String jiraAuthKey = 'jiraAuth';
 }
