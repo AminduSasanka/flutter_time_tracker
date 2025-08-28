@@ -1,3 +1,5 @@
+import 'package:flutter_time_tracker/data/models/jira_auth/jira_auth_model.dart';
+import 'package:flutter_time_tracker/domain/entities/JiraAuth/JiraAuth.dart';
 import 'package:flutter_time_tracker/domain/repositories/i_jira_auth_repository.dart';
 
 class JiraAuthService {
@@ -5,9 +7,9 @@ class JiraAuthService {
 
   JiraAuthService(this._jiraAuthRepository);
 
-  Future<void> saveApiToken(String token) async {
+  Future<void> update(JiraAuth jiraAuth) async {
     try {
-      await _jiraAuthRepository.saveToken(token);
+      await _jiraAuthRepository.update(jiraAuth);
     } catch (e) {
       rethrow;
     }
@@ -15,15 +17,21 @@ class JiraAuthService {
 
   Future<void> deleteApiToken() async {
     try {
-      await _jiraAuthRepository.deleteToken();
+      await _jiraAuthRepository.delete();
     } catch (e) {
       rethrow;
     }
   }
 
-  Future<String> getApiToken() async {
+  Future<JiraAuth> getApiToken() async {
     try {
-      return await _jiraAuthRepository.getToken();
+      JiraAuthModel jiraAuthModel = await _jiraAuthRepository.read();
+
+      return JiraAuth(
+        jiraAuthModel.apiToken,
+        jiraAuthModel.email,
+        jiraAuthModel.workspace,
+      );
     } catch (e) {
       rethrow;
     }
