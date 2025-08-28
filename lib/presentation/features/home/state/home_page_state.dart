@@ -7,7 +7,7 @@ class HomePageState {
   HomePageState(this.isLoading, this.activeScreen);
 
   factory HomePageState.initial() {
-    return HomePageState(false, HomePageScreen.dashboard);
+    return HomePageState(false, HomePageScreen.home);
   }
 
   HomePageState copyWith(bool? isLoading, HomePageScreen? activeScreen) {

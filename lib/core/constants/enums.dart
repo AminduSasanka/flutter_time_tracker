@@ -1,5 +1,5 @@
 enum HomePageScreen {
-  dashboard,
+  home,
   createWorkLog,
   history
 }
