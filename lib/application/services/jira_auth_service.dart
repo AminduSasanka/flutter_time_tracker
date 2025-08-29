@@ -23,7 +23,7 @@ class JiraAuthService {
     }
   }
 
-  Future<JiraAuth> getApiToken() async {
+  Future<JiraAuth> read() async {
     try {
       JiraAuthModel jiraAuthModel = await _jiraAuthRepository.read();
 
