@@ -14,7 +14,7 @@ class _SettingsState extends State<SettingsScreen> {
     return Scaffold(
       appBar: AppBar(title: Text("Settings")),
       body: Padding(
-        padding: EdgeInsetsGeometry.directional(start: 15, end: 15),
+        padding: EdgeInsetsGeometry.directional(start: 8, end: 8),
         child: Column(
           children: [
             JiraAuthWidget()
