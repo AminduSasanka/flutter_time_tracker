@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_time_tracker/presentation/shared/state/navigation_state.dart';
+import 'package:flutter_time_tracker/presentation/shared/states/navigation_state.dart';
 
 class NavigationController extends Notifier<NavigationState> {
   @override
