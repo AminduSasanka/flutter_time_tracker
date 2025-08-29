@@ -3,23 +3,29 @@ import 'package:flutter_time_tracker/core/DI/service_providers.dart';
 import 'package:flutter_time_tracker/domain/entities/JiraAuth/JiraAuth.dart';
 import 'package:flutter_time_tracker/presentation/features/settings/state/settings_screen_state.dart';
 
-class SettingsScreenController extends AutoDisposeNotifier<SettingsScreenState> {
+class SettingsScreenController extends AutoDisposeAsyncNotifier<SettingsScreenState> {
   @override
-  SettingsScreenState build() {
-    return SettingsScreenState.initial();
+  Future<SettingsScreenState> build() async {
+    return SettingsScreenState.initial(await _getSavedCreds());
   }
 
-  Future<void> update(String email, String workspace, String apiToken) async {
+  Future<void> updateCreds(String email, String workspace, String apiToken) async {
     JiraAuth jiraAuth = JiraAuth(apiToken, email, workspace);
 
     try {
-      state = state.copyWith(true, jiraAuth, "");
+      state = AsyncValue.data(state.value!.copyWith(true, jiraAuth, ""));
 
       await ref.read(jiraAuthServiceProvider).update(jiraAuth);
 
-      state = state.copyWith(false, jiraAuth, "");
+      state = AsyncValue.data(state.value!.copyWith(false, jiraAuth, ""));
     } catch (e) {
-      state = state.copyWith(false, jiraAuth, e.toString());
+      state = AsyncValue.data(state.value!.copyWith(false, jiraAuth, e.toString()));
     }
+  }
+
+  Future<JiraAuth> _getSavedCreds() async {
+    JiraAuth jiraAuth = await ref.read(jiraAuthServiceProvider).read();
+
+    return jiraAuth;
   }
 }

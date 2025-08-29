@@ -10,6 +10,6 @@ final navigationControllerProvider =
     );
 
 final settingsPageControllerProvider =
-    AutoDisposeNotifierProvider<SettingsScreenController, SettingsScreenState>(
+    AutoDisposeAsyncNotifierProvider<SettingsScreenController, SettingsScreenState>(
       SettingsScreenController.new,
     );
