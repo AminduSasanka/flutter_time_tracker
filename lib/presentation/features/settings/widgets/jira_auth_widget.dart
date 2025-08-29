@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_time_tracker/core/DI/controller_providers.dart';
+import 'package:flutter_time_tracker/core/theme/outlined_action_buton.dart';
 import 'package:flutter_time_tracker/core/theme/primary_button.dart';
 import 'package:flutter_time_tracker/domain/entities/JiraAuth/JiraAuth.dart';
 
@@ -57,9 +58,14 @@ class _JiraAuthWidgetState extends ConsumerState<JiraAuthWidget> {
     }
   }
 
+  void _testConnection() async {}
+
   @override
   Widget build(BuildContext context) {
     bool isLoading = ref.watch(settingsPageControllerProvider).isLoading;
+    bool isConnectionTesting = ref
+        .watch(settingsPageControllerProvider)
+        .isLoading;
     JiraAuth? jiraAuth = ref
         .watch(settingsPageControllerProvider)
         .value
@@ -146,10 +152,24 @@ class _JiraAuthWidgetState extends ConsumerState<JiraAuthWidget> {
                     },
                   ),
                   const SizedBox(height: 24),
-                  PrimaryButton(
-                    text: "Update Credentials",
-                    onPressed: _updateJiraAuth,
-                    isLoading: isLoading
+                  Row(
+                    children: [
+                      Expanded(
+                        child: PrimaryButton(
+                          text: "Save",
+                          onPressed: _updateJiraAuth,
+                          isLoading: isLoading,
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: OutlinedActionButton(
+                          text: "Test Connection",
+                          onPressed: _testConnection,
+                          isLoading: isConnectionTesting,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
