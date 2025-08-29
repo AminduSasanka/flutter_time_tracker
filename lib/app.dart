@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_time_tracker/core/DI/routes_provider.dart';
+import 'package:flutter_time_tracker/core/theme/app_theme.dart';
 
 class App extends ConsumerWidget {
   const App({super.key});
@@ -9,6 +10,6 @@ class App extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final goRouter = ref.watch(goRouterProvider);
 
-    return MaterialApp.router(routerConfig: goRouter);
+    return MaterialApp.router(routerConfig: goRouter, theme: appTheme);
   }
 }
