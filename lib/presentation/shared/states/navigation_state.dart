@@ -3,7 +3,7 @@ class NavigationState {
 
   NavigationState({required this.currentScreenIndex});
 
-  NavigationState copyWith(int newIndex) {
-    return NavigationState(currentScreenIndex: currentScreenIndex ?? newIndex);
+  NavigationState copyWith(int? newIndex) {
+    return NavigationState(currentScreenIndex: newIndex ?? currentScreenIndex);
   }
 }
