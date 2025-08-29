@@ -7,8 +7,8 @@ class SettingsScreenState {
 
   SettingsScreenState(this.isLoading, this.jiraAuth, this.error);
 
-  factory SettingsScreenState.initial() {
-    return SettingsScreenState(false, JiraAuth("", "", ""), "");
+  factory SettingsScreenState.initial(JiraAuth? initialJiraAuth) {
+    return SettingsScreenState(false, initialJiraAuth ?? JiraAuth("", "", ""), "");
   }
 
   SettingsScreenState copyWith(bool? isLoading, JiraAuth? jiraAuth, String? error) {
