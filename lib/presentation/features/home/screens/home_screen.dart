@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_time_tracker/core/constants/route_names.dart';
-import 'package:flutter_time_tracker/presentation/shared/widgets/bottom_nav_bar.dart';
 import 'package:go_router/go_router.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -27,7 +26,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ],
       ),
       body: Center(child: Text("Home page")),
-      bottomNavigationBar: BottomNavBar(),
     );
   }
 }
