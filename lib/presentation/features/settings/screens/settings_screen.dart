@@ -13,7 +13,14 @@ class _SettingsState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Settings")),
-      body: Column(children: [JiraAuthWidget()]),
+      body: Padding(
+        padding: EdgeInsetsGeometry.directional(start: 15, end: 15),
+        child: Column(
+          children: [
+            JiraAuthWidget()
+          ],
+        ),
+      ),
     );
   }
 }

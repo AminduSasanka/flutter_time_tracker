@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_time_tracker/core/DI/controller_providers.dart';
+import 'package:flutter_time_tracker/core/theme/primary_button.dart';
 import 'package:flutter_time_tracker/domain/entities/JiraAuth/JiraAuth.dart';
 
 class JiraAuthWidget extends ConsumerStatefulWidget {
@@ -59,7 +60,10 @@ class _JiraAuthWidgetState extends ConsumerState<JiraAuthWidget> {
   @override
   Widget build(BuildContext context) {
     bool isLoading = ref.watch(settingsPageControllerProvider).isLoading;
-    JiraAuth? jiraAuth = ref.watch(settingsPageControllerProvider).value?.jiraAuth;
+    JiraAuth? jiraAuth = ref
+        .watch(settingsPageControllerProvider)
+        .value
+        ?.jiraAuth;
 
     if (jiraAuth != null) {
       _emailController.text = jiraAuth.email;
@@ -67,62 +71,89 @@ class _JiraAuthWidgetState extends ConsumerState<JiraAuthWidget> {
       _tokenController.text = jiraAuth.apiToken;
     }
 
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Form(
-        key: _formKey,
+    return Card(
+      elevation: 0,
+      child: Padding(
+        padding: EdgeInsetsGeometry.all(15),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            TextFormField(
-              controller: _emailController,
-              decoration: const InputDecoration(
-                labelText: 'Email',
-                hint: Text("johndoe@exampl.com"),
-              ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter your jira email';
-                }
-
-                return null;
-              },
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Jira Connection",
+              textAlign: TextAlign.start,
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 16),
-            TextFormField(
-              controller: _workspaceController,
-              decoration: const InputDecoration(
-                labelText: 'Workspace',
-                hint: Text("johndoe.atlassian.com"),
-              ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter your jira workspace url';
-                }
-                return null;
-              },
-            ),
-            const SizedBox(height: 16),
-            TextFormField(
-              controller: _tokenController,
-              decoration: const InputDecoration(
-                labelText: 'API Token',
-                hint: Text("SUB@#NNE@wewebff135b2b237f"),
-              ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter your API token';
-                }
-                return null;
-              },
-            ),
-            const SizedBox(height: 24),
-            isLoading
-                ? const CircularProgressIndicator()
-                : ElevatedButton(
-                    onPressed: _updateJiraAuth,
-                    child: const Text('Update Credentials'),
+            SizedBox(height: 16),
+            Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  const Text(
+                    'Email',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                   ),
+                  const SizedBox(height: 8),
+                  TextFormField(
+                    controller: _emailController,
+                    decoration: const InputDecoration(
+                      hint: Text("johndoe@exampl.com"),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your jira email';
+                      }
+
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Jira Workspace URL',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  ),
+                  const SizedBox(height: 8),
+                  TextFormField(
+                    controller: _workspaceController,
+                    decoration: const InputDecoration(
+                      hint: Text("johndoe.atlassian.com"),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your jira workspace url';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'API Token',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  ),
+                  const SizedBox(height: 8),
+                  TextFormField(
+                    controller: _tokenController,
+                    decoration: const InputDecoration(
+                      hint: Text("SUB@#NNE@wewebff135b2b237f"),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your API token';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 24),
+                  PrimaryButton(
+                    text: "Update Credentials",
+                    onPressed: _updateJiraAuth,
+                    isLoading: isLoading
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
