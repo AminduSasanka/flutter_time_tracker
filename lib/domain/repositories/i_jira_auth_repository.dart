@@ -7,4 +7,6 @@ abstract interface class IJiraAuthRepository {
   Future<void> update(JiraAuth jiraAuth);
 
   Future<void> delete();
+
+  Future<String> getAccessToken();
 }

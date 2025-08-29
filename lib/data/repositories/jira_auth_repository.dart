@@ -44,6 +44,33 @@ class JiraAuthRepository implements IJiraAuthRepository {
       String jsonString = jsonEncode(jiraAuthModel.toJson());
 
       await _secureStorageService.write(SecureStorageKeys.jiraAuthKey, jsonString);
+      await _createAndSaveJiraAccessToken(jiraAuth);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<String> getAccessToken() async {
+    try {
+      String? accessToken = await _secureStorageService.read(SecureStorageKeys.jiraToken);
+
+      if (accessToken != null) {
+        return accessToken;
+      } else {
+        throw Exception("Jira access token not found");
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> _createAndSaveJiraAccessToken(JiraAuth jiraAuth) async {
+    try {
+      String jiraTokenString = "${jiraAuth.email}:${jiraAuth.apiToken}";
+      String base64String = base64Encode(utf8.encode(jiraTokenString));
+
+      await _secureStorageService.write(SecureStorageKeys.jiraToken, base64String);
     } catch (e) {
       rethrow;
     }
