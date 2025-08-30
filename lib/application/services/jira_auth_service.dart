@@ -36,4 +36,12 @@ class JiraAuthService {
       rethrow;
     }
   }
+
+  Future<bool> testConnection() async {
+    try {
+      return await _jiraAuthRepository.testConnection();
+    } catch (e) {
+      rethrow;
+    }
+  }
 }
