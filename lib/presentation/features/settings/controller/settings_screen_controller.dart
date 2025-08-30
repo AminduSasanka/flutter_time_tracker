@@ -28,4 +28,24 @@ class SettingsScreenController extends AutoDisposeAsyncNotifier<SettingsScreenSt
 
     return jiraAuth;
   }
+
+  Future<bool> testConnection() async {
+    try {
+      state = AsyncValue.data(state.value!.copyWith(true, await _getSavedCreds(), ""));
+
+      final isSuccess = await ref.read(jiraAuthServiceProvider).testConnection();
+
+      if (isSuccess) {
+        state = AsyncValue.data(state.value!.copyWith(false, await _getSavedCreds(), ""));
+      } else {
+        state = AsyncValue.data(state.value!.copyWith(false, await _getSavedCreds(), "Connection failed"));
+      }
+
+      return isSuccess;
+    } catch (e) {
+      state = AsyncValue.data(state.value!.copyWith(false, await _getSavedCreds(), e.toString()));
+
+      rethrow;
+    }
+  }
 }
