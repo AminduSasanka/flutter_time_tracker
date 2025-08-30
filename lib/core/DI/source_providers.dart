@@ -9,16 +9,16 @@ import 'package:flutter_time_tracker/data/sources/remote/jira/jira_api_service.d
 
 final secureStorageProvider = Provider<FlutterSecureStorage>((ref) {
   const AndroidOptions androidOptions = AndroidOptions(
-    encryptedSharedPreferences: true
+    encryptedSharedPreferences: true,
   );
 
   const IOSOptions iosOptions = IOSOptions(
-    accessibility: KeychainAccessibility.first_unlock
+    accessibility: KeychainAccessibility.first_unlock,
   );
 
   return const FlutterSecureStorage(
     aOptions: androidOptions,
-    iOptions: iosOptions
+    iOptions: iosOptions,
   );
 });
 
@@ -27,5 +27,8 @@ final secureStorageServiceProvider = Provider<ISecureStorageService>((ref) {
 });
 
 final jiraApiServiceProvider = Provider<IJiraApiService>((ref) {
-  return JiraApiService(ref.read(networkServiceProvider), ref.read(jiraAuthRepositoryProvider));
+  return JiraApiService(
+    ref.read(networkServiceProvider),
+    ref.read(jiraAuthRepositoryProvider),
+  );
 });

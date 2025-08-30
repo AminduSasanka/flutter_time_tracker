@@ -45,10 +45,17 @@ class JiraAuthRepository implements IJiraAuthRepository {
   @override
   Future<void> update(JiraAuth jiraAuth) async {
     try {
-      JiraAuthModel jiraAuthModel = JiraAuthModel(apiToken: jiraAuth.apiToken, email: jiraAuth.email, workspace: jiraAuth.workspace);
+      JiraAuthModel jiraAuthModel = JiraAuthModel(
+        apiToken: jiraAuth.apiToken,
+        email: jiraAuth.email,
+        workspace: jiraAuth.workspace,
+      );
       String jsonString = jsonEncode(jiraAuthModel.toJson());
 
-      await _secureStorageService.write(SecureStorageKeys.jiraAuthKey, jsonString);
+      await _secureStorageService.write(
+        SecureStorageKeys.jiraAuthKey,
+        jsonString,
+      );
       await _createAndSaveJiraAccessToken(jiraAuth);
     } catch (e) {
       rethrow;
@@ -58,7 +65,9 @@ class JiraAuthRepository implements IJiraAuthRepository {
   @override
   Future<String> getAccessToken() async {
     try {
-      String? accessToken = await _secureStorageService.read(SecureStorageKeys.jiraToken);
+      String? accessToken = await _secureStorageService.read(
+        SecureStorageKeys.jiraToken,
+      );
 
       if (accessToken != null) {
         return accessToken;
@@ -95,7 +104,10 @@ class JiraAuthRepository implements IJiraAuthRepository {
       String jiraTokenString = "${jiraAuth.email}:${jiraAuth.apiToken}";
       String base64String = base64Encode(utf8.encode(jiraTokenString));
 
-      await _secureStorageService.write(SecureStorageKeys.jiraToken, base64String);
+      await _secureStorageService.write(
+        SecureStorageKeys.jiraToken,
+        base64String,
+      );
     } catch (e) {
       rethrow;
     }

@@ -60,16 +60,22 @@ class _JiraAuthWidgetState extends ConsumerState<JiraAuthWidget> {
 
   void _testConnection() async {
     try {
-      final bool isSuccess = await ref.read(settingsPageControllerProvider.notifier).testConnection();
-      
+      final bool isSuccess = await ref
+          .read(settingsPageControllerProvider.notifier)
+          .testConnection();
+
       if (mounted) {
         if (isSuccess) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Jira connection is success')),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('Jira connection is success')));
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Jira connection failed. Please check your credentials again')),
+            SnackBar(
+              content: Text(
+                'Jira connection failed. Please check your credentials again',
+              ),
+            ),
           );
         }
       }
