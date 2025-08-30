@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:flutter_time_tracker/core/constants/JiraApiEndpoints.dart';
+import 'package:flutter_time_tracker/core/constants/jira_api_endpoints.dart';
 import 'package:flutter_time_tracker/core/constants/secure_storage_keys.dart';
 import 'package:flutter_time_tracker/data/models/jira_auth/jira_auth_model.dart';
 import 'package:flutter_time_tracker/data/sources/local/secure_storage/i_secure_storage_service.dart';
