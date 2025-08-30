@@ -18,14 +18,14 @@ class SettingsScreenController
     JiraAuth jiraAuth = JiraAuth(apiToken, email, workspace);
 
     try {
-      state = AsyncValue.data(state.value!.copyWith(true, jiraAuth, ""));
+      state = AsyncValue.data(state.value!.copyWith(true, false, jiraAuth, ""));
 
       await ref.read(jiraAuthServiceProvider).update(jiraAuth);
 
-      state = AsyncValue.data(state.value!.copyWith(false, jiraAuth, ""));
+      state = AsyncValue.data(state.value!.copyWith(false, false, jiraAuth, ""));
     } catch (e) {
       state = AsyncValue.data(
-        state.value!.copyWith(false, jiraAuth, e.toString()),
+        state.value!.copyWith(false, false, jiraAuth, e.toString()),
       );
     }
   }
@@ -39,7 +39,7 @@ class SettingsScreenController
   Future<bool> testConnection() async {
     try {
       state = AsyncValue.data(
-        state.value!.copyWith(true, await _getSavedCreds(), ""),
+        state.value!.copyWith(false, true, await _getSavedCreds(), ""),
       );
 
       final isSuccess = await ref
@@ -48,11 +48,12 @@ class SettingsScreenController
 
       if (isSuccess) {
         state = AsyncValue.data(
-          state.value!.copyWith(false, await _getSavedCreds(), ""),
+          state.value!.copyWith(false, false, await _getSavedCreds(), ""),
         );
       } else {
         state = AsyncValue.data(
           state.value!.copyWith(
+            false,
             false,
             await _getSavedCreds(),
             "Connection failed",
@@ -63,7 +64,7 @@ class SettingsScreenController
       return isSuccess;
     } catch (e) {
       state = AsyncValue.data(
-        state.value!.copyWith(false, await _getSavedCreds(), e.toString()),
+        state.value!.copyWith(false, false, await _getSavedCreds(), e.toString()),
       );
 
       rethrow;

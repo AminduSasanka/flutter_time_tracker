@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_time_tracker/core/DI/controller_providers.dart';
 import 'package:flutter_time_tracker/core/theme/outlined_action_buton.dart';
 import 'package:flutter_time_tracker/core/theme/primary_button.dart';
-import 'package:flutter_time_tracker/domain/entities/jira_auth/jira_auth.dart';
+import 'package:flutter_time_tracker/presentation/features/settings/state/settings_screen_state.dart';
 
 class JiraAuthWidget extends ConsumerStatefulWidget {
   const JiraAuthWidget({super.key});
@@ -90,19 +90,18 @@ class _JiraAuthWidgetState extends ConsumerState<JiraAuthWidget> {
 
   @override
   Widget build(BuildContext context) {
-    bool isLoading = ref.watch(settingsPageControllerProvider).isLoading;
-    bool isConnectionTesting = ref
+    bool isLoading = true;
+    bool isConnectionTesting = true;
+    SettingsScreenState? state = ref
         .watch(settingsPageControllerProvider)
-        .isLoading;
-    JiraAuth? jiraAuth = ref
-        .watch(settingsPageControllerProvider)
-        .value
-        ?.jiraAuth;
+        .value;
 
-    if (jiraAuth != null) {
-      _emailController.text = jiraAuth.email;
-      _workspaceController.text = jiraAuth.workspace;
-      _tokenController.text = jiraAuth.apiToken;
+    if (state != null) {
+      _emailController.text = state.jiraAuth.email;
+      _workspaceController.text = state.jiraAuth.workspace;
+      _tokenController.text = state.jiraAuth.apiToken;
+      isLoading = state.isLoading;
+      isConnectionTesting = state.isConnectionTesting;
     }
 
     return Card(
@@ -186,7 +185,7 @@ class _JiraAuthWidgetState extends ConsumerState<JiraAuthWidget> {
                         child: PrimaryButton(
                           text: "Save",
                           onPressed: _updateJiraAuth,
-                          isLoading: isLoading,
+                          isLoading: isLoading
                         ),
                       ),
                       const SizedBox(width: 16),
@@ -194,7 +193,7 @@ class _JiraAuthWidgetState extends ConsumerState<JiraAuthWidget> {
                         child: OutlinedActionButton(
                           text: "Test Connection",
                           onPressed: _testConnection,
-                          isLoading: isConnectionTesting,
+                          isLoading: isConnectionTesting
                         ),
                       ),
                     ],
