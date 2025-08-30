@@ -1,15 +1,20 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:dio/dio.dart';
+import 'package:flutter_time_tracker/core/constants/JiraApiEndpoints.dart';
 import 'package:flutter_time_tracker/core/constants/secure_storage_keys.dart';
 import 'package:flutter_time_tracker/data/models/jira_auth/jira_auth_model.dart';
 import 'package:flutter_time_tracker/data/sources/local/secure_storage/i_secure_storage_service.dart';
+import 'package:flutter_time_tracker/data/sources/remote/jira/i_jira_api_service.dart';
 import 'package:flutter_time_tracker/domain/entities/JiraAuth/JiraAuth.dart';
 import 'package:flutter_time_tracker/domain/repositories/i_jira_auth_repository.dart';
 
 class JiraAuthRepository implements IJiraAuthRepository {
   final ISecureStorageService _secureStorageService;
+  final Dio _dio;
 
-  JiraAuthRepository(this._secureStorageService);
+  JiraAuthRepository(this._secureStorageService, this._dio);
 
   @override
   Future<void> delete() async {
@@ -59,6 +64,26 @@ class JiraAuthRepository implements IJiraAuthRepository {
         return accessToken;
       } else {
         throw Exception("Jira access token not found");
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<bool> testConnection() async {
+    try {
+      _dio.options.baseUrl = "https://${(await read()).workspace}";
+      _dio.options.headers = {
+        "Authorization": "Basic ${await getAccessToken()}",
+      };
+
+      final response = await _dio.get(myselfEndpoint);
+
+      if (response.statusCode == HttpStatus.ok) {
+        return true;
+      } else {
+        return false;
       }
     } catch (e) {
       rethrow;

@@ -9,4 +9,6 @@ abstract interface class IJiraAuthRepository {
   Future<void> delete();
 
   Future<String> getAccessToken();
+
+  Future<bool> testConnection();
 }
