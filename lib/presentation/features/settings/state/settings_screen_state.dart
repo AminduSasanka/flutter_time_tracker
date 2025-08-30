@@ -1,4 +1,4 @@
-import 'package:flutter_time_tracker/domain/entities/JiraAuth/JiraAuth.dart';
+import 'package:flutter_time_tracker/domain/entities/jira_auth/jira_auth.dart';
 
 class SettingsScreenState {
   final bool isLoading;

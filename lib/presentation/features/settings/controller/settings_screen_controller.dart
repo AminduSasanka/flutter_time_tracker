@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_time_tracker/core/DI/service_providers.dart';
-import 'package:flutter_time_tracker/domain/entities/JiraAuth/JiraAuth.dart';
+import 'package:flutter_time_tracker/domain/entities/jira_auth/jira_auth.dart';
 import 'package:flutter_time_tracker/presentation/features/settings/state/settings_screen_state.dart';
 
 class SettingsScreenController

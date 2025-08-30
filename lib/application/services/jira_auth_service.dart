@@ -1,5 +1,5 @@
 import 'package:flutter_time_tracker/data/models/jira_auth/jira_auth_model.dart';
-import 'package:flutter_time_tracker/domain/entities/JiraAuth/JiraAuth.dart';
+import 'package:flutter_time_tracker/domain/entities/jira_auth/jira_auth.dart';
 import 'package:flutter_time_tracker/domain/repositories/i_jira_auth_repository.dart';
 
 class JiraAuthService {

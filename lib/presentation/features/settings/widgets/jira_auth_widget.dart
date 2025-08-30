@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_time_tracker/core/DI/controller_providers.dart';
 import 'package:flutter_time_tracker/core/theme/outlined_action_buton.dart';
 import 'package:flutter_time_tracker/core/theme/primary_button.dart';
-import 'package:flutter_time_tracker/domain/entities/JiraAuth/JiraAuth.dart';
+import 'package:flutter_time_tracker/domain/entities/jira_auth/jira_auth.dart';
 
 class JiraAuthWidget extends ConsumerStatefulWidget {
   const JiraAuthWidget({super.key});
