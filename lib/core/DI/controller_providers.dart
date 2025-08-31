@@ -12,10 +12,12 @@ final navigationControllerProvider =
     );
 
 final settingsPageControllerProvider =
-    AutoDisposeAsyncNotifierProvider<SettingsScreenController, SettingsScreenState>(
-      SettingsScreenController.new,
-    );
+    AutoDisposeAsyncNotifierProvider<
+      SettingsScreenController,
+      SettingsScreenState
+    >(SettingsScreenController.new);
 
-final workLogControllerProvider = AutoDisposeNotifierProvider<WorkLogController, WorkLogState>(
-  WorkLogController.new
-);
+final workLogControllerProvider =
+    AutoDisposeNotifierProvider<WorkLogController, WorkLogState>(
+      WorkLogController.new,
+    );
