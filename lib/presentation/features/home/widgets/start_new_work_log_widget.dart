@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_time_tracker/core/theme/outlined_action_buton.dart';
 import 'package:flutter_time_tracker/core/theme/primary_button.dart';
 
 class StartNewWorkLogWidget extends ConsumerStatefulWidget {
