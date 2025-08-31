@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter_time_tracker/core/constants/enums.dart';
 import 'package:flutter_time_tracker/core/constants/shared_preferences_keys.dart';
 import 'package:flutter_time_tracker/data/models/work_log_model.dart';
 import 'package:flutter_time_tracker/domain/entities/work_log.dart';
@@ -80,6 +81,9 @@ class WorkLogRepository implements IWorkLogRepository {
   void complete() {
     try {
       WorkLogModel workLogModel = getCurrent();
+      workLogModel = workLogModel.copyWith(
+        workLogState: WorkLogStateEnum.completed,
+      );
 
       _addToCompletedWorkLogs(workLogModel);
       delete();
