@@ -7,7 +7,7 @@ class SettingsScreenController
     extends AutoDisposeAsyncNotifier<SettingsScreenState> {
   @override
   Future<SettingsScreenState> build() async {
-    return SettingsScreenState.initial(await _getSavedCreds());
+    return SettingsScreenState.initial(await _loadSavedCreds());
   }
 
   Future<void> updateCreds(
@@ -18,56 +18,66 @@ class SettingsScreenController
     JiraAuth jiraAuth = JiraAuth(apiToken, email, workspace);
 
     try {
-      state = AsyncValue.data(state.value!.copyWith(true, false, jiraAuth, ""));
+      state = AsyncValue.data(
+        state.value!.copyWith(isLoading: true, jiraAuth: jiraAuth, error: ""),
+      );
 
       await ref.read(jiraAuthServiceProvider).update(jiraAuth);
 
-      state = AsyncValue.data(state.value!.copyWith(false, false, jiraAuth, ""));
+      state = AsyncValue.data(
+        state.value!.copyWith(isLoading: false, error: ""),
+      );
     } catch (e) {
       state = AsyncValue.data(
-        state.value!.copyWith(false, false, jiraAuth, e.toString()),
+        state.value!.copyWith(isLoading: false, error: e.toString()),
       );
     }
   }
 
-  Future<JiraAuth> _getSavedCreds() async {
-    JiraAuth jiraAuth = await ref.read(jiraAuthServiceProvider).read();
+  Future<JiraAuth?> _loadSavedCreds() async {
+    final jiraAuthResult = await ref.read(jiraAuthServiceProvider).read();
 
-    return jiraAuth;
+    if (jiraAuthResult.isSuccess()) {
+      return jiraAuthResult.tryGetSuccess();
+    }
+
+    return null;
   }
 
   Future<bool> testConnection() async {
+    if (state.value == null) return false;
+
     try {
       state = AsyncValue.data(
-        state.value!.copyWith(false, true, await _getSavedCreds(), ""),
+        state.value!.copyWith(isConnectionTesting: true, error: ""),
       );
 
-      final isSuccess = await ref
+      final testResult = await ref
           .read(jiraAuthServiceProvider)
           .testConnection();
 
-      if (isSuccess) {
+      if (testResult.isSuccess()) {
         state = AsyncValue.data(
-          state.value!.copyWith(false, false, await _getSavedCreds(), ""),
+          state.value!.copyWith(isConnectionTesting: false, error: ""),
         );
-      } else {
-        state = AsyncValue.data(
-          state.value!.copyWith(
-            false,
-            false,
-            await _getSavedCreds(),
-            "Connection failed",
-          ),
-        );
+
+        return true;
       }
 
-      return isSuccess;
-    } catch (e) {
       state = AsyncValue.data(
-        state.value!.copyWith(false, false, await _getSavedCreds(), e.toString()),
+        state.value!.copyWith(
+          isConnectionTesting: false,
+          error: "Connection failed",
+        ),
       );
 
-      rethrow;
+      return false;
+    } catch (e) {
+      state = AsyncValue.data(
+        state.value!.copyWith(isConnectionTesting: false, error: e.toString()),
+      );
+
+      return false;
     }
   }
 }
