@@ -7,7 +7,9 @@ import 'package:flutter_time_tracker/core/constants/secure_storage_keys.dart';
 import 'package:flutter_time_tracker/data/models/jira_auth/jira_auth_model.dart';
 import 'package:flutter_time_tracker/data/sources/local/secure_storage/i_secure_storage_service.dart';
 import 'package:flutter_time_tracker/domain/entities/jira_auth/jira_auth.dart';
+import 'package:flutter_time_tracker/domain/failures/jira/jira_access_token_not_found_failure.dart';
 import 'package:flutter_time_tracker/domain/failures/jira/jira_credentials_not_found_failure.dart';
+import 'package:flutter_time_tracker/domain/failures/network_failure.dart';
 import 'package:flutter_time_tracker/domain/failures/unknown_failure.dart';
 import 'package:flutter_time_tracker/domain/repositories/i_jira_auth_repository.dart';
 
@@ -82,8 +84,10 @@ class JiraAuthRepository implements IJiraAuthRepository {
       if (accessToken != null) {
         return accessToken;
       } else {
-        throw Exception("Jira access token not found");
+        throw JiraAccessTokenNotFoundFailure();
       }
+    } on JiraAccessTokenNotFoundFailure {
+      rethrow;
     } catch (e, s) {
       throw UnknownFailure(
         exception: e is Exception ? e : Exception(e.toString()),
@@ -107,6 +111,12 @@ class JiraAuthRepository implements IJiraAuthRepository {
       } else {
         return false;
       }
+    } on DioException catch (e, s) {
+      throw NetworkFailure(
+        exception: Exception(e.toString()),
+        stackTrace: s,
+        statusCode: e.response?.statusCode,
+      );
     } catch (e, s) {
       throw UnknownFailure(
         exception: e is Exception ? e : Exception(e.toString()),
