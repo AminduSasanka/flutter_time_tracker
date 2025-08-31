@@ -14,4 +14,20 @@ class WorkLog {
     this.timeSpent,
     this.workLogState = WorkLogStateEnum.blank,
   });
+
+  WorkLog copyWith({
+    String? taskKey,
+    String? summary,
+    String? description,
+    String? timeSpent,
+    WorkLogStateEnum? workLogState,
+  }) {
+    return WorkLog(
+      taskKey: taskKey ?? this.taskKey,
+      summary: summary ?? this.summary,
+      description: description ?? this.description,
+      timeSpent: timeSpent ?? this.timeSpent,
+      workLogState: workLogState ?? this.workLogState,
+    );
+  }
 }
