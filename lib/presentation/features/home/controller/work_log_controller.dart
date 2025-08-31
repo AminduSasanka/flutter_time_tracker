@@ -24,4 +24,32 @@ class WorkLogController extends AutoDisposeNotifier<WorkLogState> {
 
     return WorkLogState(false, null);
   }
+
+  void startNewWorkLog(String taskId, String summary, String description) {
+    final workLog = WorkLog(
+      taskKey: taskId,
+      summary: summary,
+      description: description,
+      workLogState: WorkLogStateEnum.pending,
+    );
+
+    ref.read(workLogServiceProvider).createWorkLog(workLog);
+
+    state = state.copyWith(workLog, true);
+  }
+
+  void stopWorkLog() {
+    ref.read(workLogServiceProvider).completeWorkLog();
+    state = state.copyWith(null, false);
+  }
+
+  void pauseWorkLog() {
+    ref
+        .read(workLogServiceProvider)
+        .updateWorkLog(
+          state.workLog!.copyWith(workLogState: WorkLogStateEnum.paused),
+        );
+
+    state = state.copyWith(state.workLog, false);
+  }
 }
