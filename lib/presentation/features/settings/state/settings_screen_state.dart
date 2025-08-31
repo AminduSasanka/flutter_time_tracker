@@ -6,33 +6,33 @@ class SettingsScreenState {
   final JiraAuth jiraAuth;
   final String error;
 
-  SettingsScreenState(
-    this.isLoading,
-    this.isConnectionTesting,
-    this.jiraAuth,
-    this.error,
-  );
+  SettingsScreenState({
+    required this.isLoading,
+    required this.isConnectionTesting,
+    required this.jiraAuth,
+    required this.error,
+  });
 
   factory SettingsScreenState.initial(JiraAuth? initialJiraAuth) {
     return SettingsScreenState(
-      false,
-      false,
-      initialJiraAuth ?? JiraAuth("", "", ""),
-      "",
+      isLoading: false,
+      isConnectionTesting: false,
+      jiraAuth: initialJiraAuth ?? JiraAuth("", "", ""),
+      error: "",
     );
   }
 
-  SettingsScreenState copyWith(
+  SettingsScreenState copyWith({
     bool? isLoading,
     bool? isConnectionTesting,
     JiraAuth? jiraAuth,
     String? error,
-  ) {
+  }) {
     return SettingsScreenState(
-      isLoading ?? this.isLoading,
-      isConnectionTesting ?? this.isConnectionTesting,
-      jiraAuth ?? this.jiraAuth,
-      error ?? this.error,
+      isLoading: isLoading ?? this.isLoading,
+      isConnectionTesting: isConnectionTesting ?? this.isConnectionTesting,
+      jiraAuth: jiraAuth ?? this.jiraAuth,
+      error: error ?? this.error,
     );
   }
 }
