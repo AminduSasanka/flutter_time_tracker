@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_time_tracker/core/DI/controller_providers.dart';
-import 'package:flutter_time_tracker/core/DI/routes_provider.dart';
-import 'package:flutter_time_tracker/core/constants/route_names.dart';
 import 'package:flutter_time_tracker/presentation/shared/states/navigation_state.dart';
 
 class BottomNavBar extends ConsumerWidget {
