@@ -6,14 +6,14 @@ class WorkLogModel {
   final String summary;
   final String description;
   final String? timeSpent;
-  final WorkLogState workLogState;
+  final WorkLogStateEnum workLogState;
 
   WorkLogModel({
     required this.taskKey,
     required this.summary,
     required this.description,
     this.timeSpent,
-    this.workLogState = WorkLogState.blank,
+    this.workLogState = WorkLogStateEnum.blank,
   });
 
   factory WorkLogModel.fromJson(Map<String, dynamic> json) {
@@ -22,7 +22,7 @@ class WorkLogModel {
       summary: json['summary'] as String,
       description: json['description'] as String,
       timeSpent: json['timeSpent'] as String?,
-      workLogState: WorkLogState.values.firstWhere(
+      workLogState: WorkLogStateEnum.values.firstWhere(
         (state) => state.name == json['workLogState'],
       ),
     );

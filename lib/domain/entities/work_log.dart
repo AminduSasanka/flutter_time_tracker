@@ -5,13 +5,13 @@ class WorkLog {
   final String summary;
   final String description;
   final String? timeSpent;
-  final WorkLogState workLogState;
+  final WorkLogStateEnum workLogState;
 
   WorkLog({
     required this.taskKey,
     required this.summary,
     required this.description,
     this.timeSpent,
-    this.workLogState = WorkLogState.blank,
+    this.workLogState = WorkLogStateEnum.blank,
   });
 }

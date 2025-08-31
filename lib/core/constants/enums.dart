@@ -1,4 +1,4 @@
-enum WorkLogState {
+enum WorkLogStateEnum {
   blank,
   pending,
   paused,
