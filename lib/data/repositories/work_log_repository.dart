@@ -75,4 +75,66 @@ class WorkLogRepository implements IWorkLogRepository {
   void update(WorkLog workLog) {
     create(workLog);
   }
+
+  @override
+  void complete() {
+    try {
+      WorkLogModel workLogModel = getCurrent();
+
+      _addToCompletedWorkLogs(workLogModel);
+      delete();
+    } catch (e, s) {
+      throw UnknownFailure(
+        exception: e is Exception ? e : Exception(e.toString()),
+        stackTrace: s,
+      );
+    }
+  }
+
+  @override
+  List<WorkLogModel> getCompletedWorkLogs() {
+    try {
+      String? jsonString = _sharedPreferences.getString(
+        SharedPreferencesKeys.completedWorkLogsKey,
+      );
+
+      if (jsonString == null) {
+        return [];
+      }
+
+      List<dynamic> jsonList = jsonDecode(jsonString);
+      List<WorkLogModel> workLogModels = jsonList
+          .map((e) => WorkLogModel.fromJson(e))
+          .toList();
+
+      return workLogModels;
+    } catch (e, s) {
+      throw UnknownFailure(
+        exception: e is Exception ? e : Exception(e.toString()),
+        stackTrace: s,
+      );
+    }
+  }
+
+  void _addToCompletedWorkLogs(WorkLogModel workLogModel) {
+    try {
+      List<WorkLogModel> completedWorkLogs = getCompletedWorkLogs();
+
+      completedWorkLogs.add(workLogModel);
+
+      String jsonString = jsonEncode(
+        completedWorkLogs.map((e) => e.toJson()).toList(),
+      );
+
+      _sharedPreferences.setString(
+        SharedPreferencesKeys.completedWorkLogsKey,
+        jsonString,
+      );
+    } catch (e, s) {
+      throw UnknownFailure(
+        exception: e is Exception ? e : Exception(e.toString()),
+        stackTrace: s,
+      );
+    }
+  }
 }

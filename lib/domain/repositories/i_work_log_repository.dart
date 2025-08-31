@@ -9,4 +9,8 @@ abstract interface class IWorkLogRepository {
   void update(WorkLog workLog);
 
   void delete();
+
+  void complete();
+
+  List<WorkLogModel> getCompletedWorkLogs();
 }
