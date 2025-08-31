@@ -10,19 +10,18 @@ class WorkLogController extends AutoDisposeNotifier<WorkLogState> {
     final currentWorkLogResult = ref
         .read(workLogServiceProvider)
         .getCurrentWorkLog();
-    WorkLog workLog = WorkLog(taskKey: "", summary: "", description: "");
 
     if (currentWorkLogResult.isSuccess()) {
       WorkLog? currentWorkLog = currentWorkLogResult.tryGetSuccess();
 
       if (currentWorkLog != null) {
-        workLog = currentWorkLog;
+        return WorkLogState(
+          WorkLogStateEnum.pending == currentWorkLog.workLogState.name,
+          currentWorkLog,
+        );
       }
     }
 
-    return WorkLogState(
-      workLog,
-      WorkLogStateEnum.pending == workLog.workLogState.name,
-    );
+    return WorkLogState(false, null);
   }
 }
