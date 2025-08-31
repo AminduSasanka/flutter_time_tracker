@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_time_tracker/core/DI/controller_providers.dart';
-import 'package:flutter_time_tracker/core/DI/routes_provider.dart';
-import 'package:flutter_time_tracker/core/constants/route_names.dart';
 import 'package:flutter_time_tracker/presentation/shared/states/navigation_state.dart';
 
 class BottomNavBar extends ConsumerWidget {
@@ -10,18 +8,6 @@ class BottomNavBar extends ConsumerWidget {
 
   void _onItemTapped(int idx, BuildContext context, WidgetRef ref) {
     ref.read(navigationControllerProvider.notifier).goTo(idx);
-
-    switch (idx) {
-      case 0:
-        ref.read(goRouterProvider).goNamed(homeRoute);
-        break;
-      case 1:
-        ref.read(goRouterProvider).goNamed(addWorklogRoute);
-        break;
-      case 2:
-        ref.read(goRouterProvider).goNamed(historyRoute);
-        break;
-    }
   }
 
   @override
