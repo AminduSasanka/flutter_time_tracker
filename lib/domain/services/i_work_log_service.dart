@@ -10,4 +10,8 @@ abstract interface class IWorkLogService {
   Result<void, Failure> updateWorkLog(WorkLog workLog);
 
   Result<WorkLog?, Failure> getCurrentWorkLog();
+
+  Result<void, Failure> completeWorkLog();
+
+  Result<List<WorkLog>, Failure> getCompletedWorkLogs();
 }

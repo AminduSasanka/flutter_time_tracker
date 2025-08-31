@@ -77,4 +77,41 @@ class WorkLogService implements IWorkLogService {
       );
     }
   }
+
+  @override
+  Result<void, Failure> completeWorkLog() {
+    try {
+      _workLogRepository.complete();
+
+      return Success(null);
+    } catch (e, s) {
+      return Error(
+        e is Failure
+            ? e
+            : UnknownFailure(exception: Exception(e.toString()), stackTrace: s),
+      );
+    }
+  }
+
+  @override
+  Result<List<WorkLog>, Failure> getCompletedWorkLogs() {
+    try {
+      final workLogModels = _workLogRepository.getCompletedWorkLogs();
+      final workLogs = workLogModels.map((e) => WorkLog(
+        taskKey: e.taskKey,
+        summary: e.summary,
+        description: e.description,
+        timeSpent: e.timeSpent,
+        workLogState: e.workLogState,
+      )).toList();
+
+      return Success(workLogs);
+    } catch (e, s) {
+      return Error(
+        e is Failure
+            ? e
+            : UnknownFailure(exception: Exception(e.toString()), stackTrace: s),
+      );
+    }
+  }
 }
