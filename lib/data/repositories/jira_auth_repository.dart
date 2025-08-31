@@ -43,6 +43,8 @@ class JiraAuthRepository implements IJiraAuthRepository {
       } else {
         throw JiraCredentialsNotFoundFailure();
       }
+    } on JiraCredentialsNotFoundFailure {
+      rethrow;
     } catch (e, s) {
       throw UnknownFailure(
         exception: e is Exception ? e : Exception(e.toString()),
