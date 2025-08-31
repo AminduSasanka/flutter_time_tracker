@@ -10,18 +10,6 @@ class BottomNavBar extends ConsumerWidget {
 
   void _onItemTapped(int idx, BuildContext context, WidgetRef ref) {
     ref.read(navigationControllerProvider.notifier).goTo(idx);
-
-    switch (idx) {
-      case 0:
-        ref.read(goRouterProvider).goNamed(homeRoute);
-        break;
-      case 1:
-        ref.read(goRouterProvider).goNamed(addWorklogRoute);
-        break;
-      case 2:
-        ref.read(goRouterProvider).goNamed(historyRoute);
-        break;
-    }
   }
 
   @override
