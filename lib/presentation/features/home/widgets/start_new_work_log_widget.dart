@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_time_tracker/core/DI/controller_providers.dart';
 import 'package:flutter_time_tracker/core/theme/primary_button.dart';
 
 class StartNewWorkLogWidget extends ConsumerStatefulWidget {
@@ -14,6 +15,16 @@ class _StartNewWorkLogWidgetState extends ConsumerState<StartNewWorkLogWidget> {
   final _summaryController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+
+  void _startWorkLog() {
+    if (_formKey.currentState!.validate()) {
+      ref.read(workLogControllerProvider.notifier).startNewWorkLog(
+        _taskIdController.text,
+        _summaryController.text,
+        _descriptionController.text,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +105,7 @@ class _StartNewWorkLogWidgetState extends ConsumerState<StartNewWorkLogWidget> {
                   const SizedBox(height: 24),
                   PrimaryButton(
                       text: "Start",
-                      onPressed: () {},
+                      onPressed: _startWorkLog,
                       isLoading: false
                   ),
                 ],
