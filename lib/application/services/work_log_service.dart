@@ -44,14 +44,7 @@ class WorkLogService implements IWorkLogService {
   Result<WorkLog, Failure> getCurrentWorkLog() {
     try {
       final workLogModel = _workLogRepository.getCurrent();
-
-      final workLog = WorkLog(
-        taskKey: workLogModel.taskKey,
-        summary: workLogModel.summary,
-        description: workLogModel.description,
-        timeSpent: workLogModel.timeSpent,
-        workLogState: workLogModel.workLogState,
-      );
+      final workLog = workLogModel.toEntity();
 
       return Success(workLog);
     } catch (e, s) {
@@ -97,13 +90,7 @@ class WorkLogService implements IWorkLogService {
   Result<List<WorkLog>, Failure> getCompletedWorkLogs() {
     try {
       final workLogModels = _workLogRepository.getCompletedWorkLogs();
-      final workLogs = workLogModels.map((e) => WorkLog(
-        taskKey: e.taskKey,
-        summary: e.summary,
-        description: e.description,
-        timeSpent: e.timeSpent,
-        workLogState: e.workLogState,
-      )).toList();
+      final workLogs = workLogModels.map((e) => e.toEntity()).toList();
 
       return Success(workLogs);
     } catch (e, s) {

@@ -1,4 +1,5 @@
 import 'package:flutter_time_tracker/core/constants/enums.dart';
+import 'package:flutter_time_tracker/domain/entities/work_log.dart';
 
 class WorkLogModel {
   final String taskKey;
@@ -35,5 +36,15 @@ class WorkLogModel {
       'timeSpent': timeSpent,
       'workLogState': workLogState.name,
     };
+  }
+
+  WorkLog toEntity() {
+    return WorkLog(
+      taskKey: taskKey,
+      summary: summary,
+      description: description,
+      timeSpent: timeSpent,
+      workLogState: workLogState,
+    );
   }
 }
