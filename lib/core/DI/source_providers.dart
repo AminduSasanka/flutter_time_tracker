@@ -4,8 +4,11 @@ import 'package:flutter_time_tracker/core/DI/repository_providers.dart';
 import 'package:flutter_time_tracker/core/services/network/network_service_provider.dart';
 import 'package:flutter_time_tracker/data/sources/local/secure_storage/i_secure_storage_service.dart';
 import 'package:flutter_time_tracker/data/sources/local/secure_storage/secure_storage_service.dart';
+import 'package:flutter_time_tracker/data/sources/local/shared_preferences/i_shared_preferences_service.dart';
+import 'package:flutter_time_tracker/data/sources/local/shared_preferences/shared_preferences_service.dart';
 import 'package:flutter_time_tracker/data/sources/remote/jira/i_jira_api_service.dart';
 import 'package:flutter_time_tracker/data/sources/remote/jira/jira_api_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final secureStorageProvider = Provider<FlutterSecureStorage>((ref) {
   const AndroidOptions androidOptions = AndroidOptions(
@@ -31,4 +34,14 @@ final jiraApiServiceProvider = Provider<IJiraApiService>((ref) {
     ref.read(networkServiceProvider),
     ref.read(jiraAuthRepositoryProvider),
   );
+});
+
+final sharedPreferencesProvider = FutureProvider<SharedPreferences>((ref) async {
+  return await SharedPreferences.getInstance();
+});
+
+final sharedPreferencesServiceProvider = FutureProvider<ISharedPreferencesService> ((ref) async {
+  final sharedPrefs = await SharedPreferences.getInstance();
+
+  return SharedPreferencesService(sharedPrefs);
 });
