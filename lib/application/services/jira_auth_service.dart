@@ -1,39 +1,78 @@
 import 'package:flutter_time_tracker/data/models/jira_auth/jira_auth_model.dart';
-import 'package:flutter_time_tracker/domain/entities/JiraAuth/JiraAuth.dart';
+import 'package:flutter_time_tracker/domain/entities/jira_auth/jira_auth.dart';
+import 'package:flutter_time_tracker/domain/failures/failure.dart';
+import 'package:flutter_time_tracker/domain/failures/unknown_failure.dart';
 import 'package:flutter_time_tracker/domain/repositories/i_jira_auth_repository.dart';
+import 'package:flutter_time_tracker/domain/services/i_jira_auth_service.dart';
+import 'package:multiple_result/multiple_result.dart';
 
-class JiraAuthService {
+class JiraAuthService implements IJiraAuthService {
   final IJiraAuthRepository _jiraAuthRepository;
 
   JiraAuthService(this._jiraAuthRepository);
 
-  Future<void> update(JiraAuth jiraAuth) async {
+  @override
+  Future<Result<void, Failure>> update(JiraAuth jiraAuth) async {
     try {
       await _jiraAuthRepository.update(jiraAuth);
-    } catch (e) {
-      rethrow;
+
+      return Success(null);
+    } catch (e, s) {
+      return Error(
+        e is Failure
+            ? e
+            : UnknownFailure(exception: Exception(e.toString()), stackTrace: s),
+      );
     }
   }
 
-  Future<void> deleteApiToken() async {
+  @override
+  Future<Result<void, Failure>> deleteApiToken() async {
     try {
       await _jiraAuthRepository.delete();
-    } catch (e) {
-      rethrow;
+
+      return Success(null);
+    } catch (e, s) {
+      return Error(
+        e is Failure
+            ? e
+            : UnknownFailure(exception: Exception(e.toString()), stackTrace: s),
+      );
     }
   }
 
-  Future<JiraAuth> read() async {
+  @override
+  Future<Result<JiraAuth, Failure>> read() async {
     try {
       JiraAuthModel jiraAuthModel = await _jiraAuthRepository.read();
-
-      return JiraAuth(
+      JiraAuth jiraAuth = JiraAuth(
         jiraAuthModel.apiToken,
         jiraAuthModel.email,
         jiraAuthModel.workspace,
       );
-    } catch (e) {
-      rethrow;
+
+      return Success(jiraAuth);
+    } catch (e, s) {
+      return Error(
+        e is Failure
+            ? e
+            : UnknownFailure(exception: Exception(e.toString()), stackTrace: s),
+      );
+    }
+  }
+
+  @override
+  Future<Result<bool, Failure>> testConnection() async {
+    try {
+      bool isConnected = await _jiraAuthRepository.testConnection();
+
+      return Success(isConnected);
+    } catch (e, s) {
+      return Error(
+        e is Failure
+            ? e
+            : UnknownFailure(exception: Exception(e.toString()), stackTrace: s),
+      );
     }
   }
 }
