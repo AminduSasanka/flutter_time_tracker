@@ -36,15 +36,12 @@ final jiraApiServiceProvider = Provider<IJiraApiService>((ref) {
   );
 });
 
-final sharedPreferencesProvider = FutureProvider<SharedPreferences>((
-  ref,
-) async {
-  return await SharedPreferences.getInstance();
+final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
+  throw UnimplementedError();
 });
 
-final sharedPreferencesServiceProvider =
-    FutureProvider<ISharedPreferencesService>((ref) async {
-      final sharedPrefs = await SharedPreferences.getInstance();
-
-      return SharedPreferencesService(sharedPrefs);
-    });
+final sharedPreferencesServiceProvider = Provider<ISharedPreferencesService>((
+  ref,
+) {
+  return SharedPreferencesService(ref.watch(sharedPreferencesProvider));
+});
