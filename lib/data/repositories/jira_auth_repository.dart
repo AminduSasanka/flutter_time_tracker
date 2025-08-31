@@ -7,6 +7,8 @@ import 'package:flutter_time_tracker/core/constants/secure_storage_keys.dart';
 import 'package:flutter_time_tracker/data/models/jira_auth/jira_auth_model.dart';
 import 'package:flutter_time_tracker/data/sources/local/secure_storage/i_secure_storage_service.dart';
 import 'package:flutter_time_tracker/domain/entities/jira_auth/jira_auth.dart';
+import 'package:flutter_time_tracker/domain/failures/jira/jira_credentials_not_found_failure.dart';
+import 'package:flutter_time_tracker/domain/failures/unknown_failure.dart';
 import 'package:flutter_time_tracker/domain/repositories/i_jira_auth_repository.dart';
 
 class JiraAuthRepository implements IJiraAuthRepository {
@@ -19,8 +21,11 @@ class JiraAuthRepository implements IJiraAuthRepository {
   Future<void> delete() async {
     try {
       await _secureStorageService.delete(SecureStorageKeys.jiraAuthKey);
-    } catch (e) {
-      rethrow;
+    } catch (e, s) {
+      throw UnknownFailure(
+        exception: e is Exception ? e : Exception(e.toString()),
+        stackTrace: s,
+      );
     }
   }
 
@@ -34,10 +39,13 @@ class JiraAuthRepository implements IJiraAuthRepository {
       if (jiraAuthJson != null) {
         return JiraAuthModel.fromJson(jsonDecode(jiraAuthJson));
       } else {
-        throw Exception("Jira authentication info not found");
+        throw JiraCredentialsNotFoundFailure();
       }
-    } catch (e) {
-      rethrow;
+    } catch (e, s) {
+      throw UnknownFailure(
+        exception: e is Exception ? e : Exception(e.toString()),
+        stackTrace: s,
+      );
     }
   }
 
@@ -56,8 +64,11 @@ class JiraAuthRepository implements IJiraAuthRepository {
         jsonString,
       );
       await _createAndSaveJiraAccessToken(jiraAuth);
-    } catch (e) {
-      rethrow;
+    } catch (e, s) {
+      throw UnknownFailure(
+        exception: e is Exception ? e : Exception(e.toString()),
+        stackTrace: s,
+      );
     }
   }
 
@@ -73,8 +84,11 @@ class JiraAuthRepository implements IJiraAuthRepository {
       } else {
         throw Exception("Jira access token not found");
       }
-    } catch (e) {
-      rethrow;
+    } catch (e, s) {
+      throw UnknownFailure(
+        exception: e is Exception ? e : Exception(e.toString()),
+        stackTrace: s,
+      );
     }
   }
 
@@ -93,8 +107,11 @@ class JiraAuthRepository implements IJiraAuthRepository {
       } else {
         return false;
       }
-    } catch (e) {
-      rethrow;
+    } catch (e, s) {
+      throw UnknownFailure(
+        exception: e is Exception ? e : Exception(e.toString()),
+        stackTrace: s,
+      );
     }
   }
 
@@ -107,8 +124,11 @@ class JiraAuthRepository implements IJiraAuthRepository {
         SecureStorageKeys.jiraToken,
         base64String,
       );
-    } catch (e) {
-      rethrow;
+    } catch (e, s) {
+      throw UnknownFailure(
+        exception: e is Exception ? e : Exception(e.toString()),
+        stackTrace: s,
+      );
     }
   }
 }
