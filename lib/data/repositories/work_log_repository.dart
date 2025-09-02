@@ -1,33 +1,51 @@
-import 'dart:convert';
-
+import 'package:flutter_time_tracker/core/constants/database.dart';
 import 'package:flutter_time_tracker/core/constants/enums.dart';
-import 'package:flutter_time_tracker/core/constants/shared_preferences_keys.dart';
 import 'package:flutter_time_tracker/data/models/work_log_model.dart';
 import 'package:flutter_time_tracker/domain/entities/work_log.dart';
 import 'package:flutter_time_tracker/domain/failures/unknown_failure.dart';
 import 'package:flutter_time_tracker/domain/failures/work_log/work_log_not_found_failure.dart';
 import 'package:flutter_time_tracker/domain/repositories/i_work_log_repository.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sqflite/sqflite.dart';
 
 class WorkLogRepository implements IWorkLogRepository {
-  final SharedPreferences _sharedPreferences;
+  final Database _database;
 
-  WorkLogRepository(this._sharedPreferences);
+  WorkLogRepository(this._database);
+
+  Future<WorkLogModel> getByID(int id) async {
+    try {
+      final workLogs = await _database.query(
+        workLogsTable,
+        where: 'id = ?',
+        whereArgs: [id],
+        limit: 1,
+      );
+
+      if (workLogs.isEmpty) {
+        throw WorkLogNotFoundFailure();
+      }
+
+      return WorkLogModel.fromMap(workLogs.first);
+    } on WorkLogNotFoundFailure {
+      rethrow;
+    } catch (e, s) {
+      throw UnknownFailure(
+        exception: e is Exception ? e : Exception(e.toString()),
+        stackTrace: s,
+      );
+    }
+  }
 
   @override
-  void create(WorkLog workLog) {
+  Future<void> create(WorkLog workLog) async {
     try {
       final WorkLogModel workLogModel = WorkLogModel(
         taskKey: workLog.taskKey,
         summary: workLog.summary,
         description: workLog.description,
       );
-      String jsonString = jsonEncode(workLogModel.toJson());
 
-      _sharedPreferences.setString(
-        SharedPreferencesKeys.currentWorkLogKey,
-        jsonString,
-      );
+      await _database.insert(workLogsTable, workLogModel.toMap());
     } catch (e, s) {
       throw UnknownFailure(
         exception: e is Exception ? e : Exception(e.toString()),
@@ -37,9 +55,12 @@ class WorkLogRepository implements IWorkLogRepository {
   }
 
   @override
-  void delete() {
+  Future<void> delete(int id) async {
     try {
-      _sharedPreferences.remove(SharedPreferencesKeys.currentWorkLogKey);
+      await getByID(id);
+      await _database.delete(workLogsTable, where: 'id = ?', whereArgs: [id]);
+    } on WorkLogNotFoundFailure {
+      rethrow;
     } catch (e, s) {
       throw UnknownFailure(
         exception: e is Exception ? e : Exception(e.toString()),
@@ -49,17 +70,20 @@ class WorkLogRepository implements IWorkLogRepository {
   }
 
   @override
-  WorkLogModel getCurrent() {
+  Future<WorkLogModel> getCurrent() async {
     try {
-      String? jsonString = _sharedPreferences.getString(
-        SharedPreferencesKeys.currentWorkLogKey,
+      final currentWorkLogs = await _database.query(
+        workLogsTable,
+        where: 'work_log_state = ?',
+        whereArgs: [WorkLogStateEnum.pending.name],
+        limit: 1,
       );
 
-      if (jsonString == null) {
+      if (currentWorkLogs.isEmpty) {
         throw WorkLogNotFoundFailure();
       }
 
-      WorkLogModel workLogModel = WorkLogModel.fromJson(jsonDecode(jsonString));
+      WorkLogModel workLogModel = WorkLogModel.fromMap(currentWorkLogs.first);
 
       return workLogModel;
     } on WorkLogNotFoundFailure {
@@ -73,20 +97,30 @@ class WorkLogRepository implements IWorkLogRepository {
   }
 
   @override
-  void update(WorkLog workLog) {
-    create(workLog);
-  }
-
-  @override
-  void complete() {
+  Future<void> update(WorkLog workLog) async {
     try {
-      WorkLogModel workLogModel = getCurrent();
-      workLogModel = workLogModel.copyWith(
-        workLogState: WorkLogStateEnum.completed,
+      if (workLog.id == null) {
+        throw WorkLogNotFoundFailure();
+      }
+
+      WorkLogModel workLogModel = WorkLogModel(
+        id: workLog.id,
+        taskKey: workLog.taskKey,
+        summary: workLog.summary,
+        description: workLog.description,
+        startTime: workLog.startTime,
+        timeSpent: workLog.timeSpent,
+        workLogState: workLog.workLogState,
       );
 
-      _addToCompletedWorkLogs(workLogModel);
-      delete();
+      await _database.update(
+        workLogsTable,
+        workLogModel.toMap(),
+        where: 'id = ?',
+        whereArgs: [workLogModel.id],
+      );
+    } on WorkLogNotFoundFailure {
+      rethrow;
     } catch (e, s) {
       throw UnknownFailure(
         exception: e is Exception ? e : Exception(e.toString()),
@@ -96,44 +130,23 @@ class WorkLogRepository implements IWorkLogRepository {
   }
 
   @override
-  List<WorkLogModel> getCompletedWorkLogs() {
+  Future<List<WorkLogModel>> getCompletedWorkLogs() async {
     try {
-      String? jsonString = _sharedPreferences.getString(
-        SharedPreferencesKeys.completedWorkLogsKey,
+      List<Map<String, dynamic>> completedWorkLogs = await _database.query(
+        workLogsTable,
+        where: 'work_log_state = ?',
+        whereArgs: [WorkLogStateEnum.completed.name],
       );
 
-      if (jsonString == null) {
+      if (completedWorkLogs.isEmpty) {
         return [];
       }
 
-      List<dynamic> jsonList = jsonDecode(jsonString);
-      List<WorkLogModel> workLogModels = jsonList
-          .map((e) => WorkLogModel.fromJson(e))
+      List<WorkLogModel> workLogModels = completedWorkLogs
+          .map((e) => WorkLogModel.fromMap(e))
           .toList();
 
       return workLogModels;
-    } catch (e, s) {
-      throw UnknownFailure(
-        exception: e is Exception ? e : Exception(e.toString()),
-        stackTrace: s,
-      );
-    }
-  }
-
-  void _addToCompletedWorkLogs(WorkLogModel workLogModel) {
-    try {
-      List<WorkLogModel> completedWorkLogs = getCompletedWorkLogs();
-
-      completedWorkLogs.add(workLogModel);
-
-      String jsonString = jsonEncode(
-        completedWorkLogs.map((e) => e.toJson()).toList(),
-      );
-
-      _sharedPreferences.setString(
-        SharedPreferencesKeys.completedWorkLogsKey,
-        jsonString,
-      );
     } catch (e, s) {
       throw UnknownFailure(
         exception: e is Exception ? e : Exception(e.toString()),
