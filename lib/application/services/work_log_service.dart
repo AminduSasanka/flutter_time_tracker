@@ -70,6 +70,10 @@ class WorkLogService implements IWorkLogService {
   @override
   Future<Result<void, Failure>> updateWorkLog(WorkLog workLog) async {
     try {
+      if (workLog.id == null) {
+        throw WorkLogNotFoundFailure();
+      }
+
       await _workLogRepository.update(workLog);
 
       return Success(null);
