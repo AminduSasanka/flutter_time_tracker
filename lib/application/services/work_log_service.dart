@@ -3,6 +3,7 @@ import 'package:flutter_time_tracker/data/models/work_log_model.dart';
 import 'package:flutter_time_tracker/domain/entities/work_log.dart';
 import 'package:flutter_time_tracker/domain/failures/failure.dart';
 import 'package:flutter_time_tracker/domain/failures/unknown_failure.dart';
+import 'package:flutter_time_tracker/domain/failures/work_log/work_log_not_found_failure.dart' show WorkLogNotFoundFailure;
 import 'package:flutter_time_tracker/domain/repositories/i_work_log_repository.dart';
 import 'package:flutter_time_tracker/domain/services/i_work_log_service.dart';
 import 'package:multiple_result/multiple_result.dart';
@@ -49,6 +50,14 @@ class WorkLogService implements IWorkLogService {
       final workLog = workLogModel.toEntity();
 
       return Success(workLog);
+    } on WorkLogNotFoundFailure {
+      try {
+        final workLogModel = await _workLogRepository.getPausedWorkLog();
+        final workLog = workLogModel.toEntity();
+        return Success(workLog);
+      } on WorkLogNotFoundFailure catch (e) {
+        return Error(e);
+      }
     } catch (e, s) {
       return Error(
         e is Failure
@@ -81,7 +90,7 @@ class WorkLogService implements IWorkLogService {
         workLogState: WorkLogStateEnum.completed,
       );
 
-      _workLogRepository.update(completedWorkLogModel.toEntity());
+      await _workLogRepository.update(completedWorkLogModel.toEntity());
 
       return Success(null);
     } catch (e, s) {
