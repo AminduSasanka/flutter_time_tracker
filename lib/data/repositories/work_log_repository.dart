@@ -43,6 +43,9 @@ class WorkLogRepository implements IWorkLogRepository {
         taskKey: workLog.taskKey,
         summary: workLog.summary,
         description: workLog.description,
+        startTime: workLog.startTime,
+        timeSpent: workLog.timeSpent,
+        workLogState: workLog.workLogState,
       );
 
       await _database.insert(workLogsTable, workLogModel.toMap());
