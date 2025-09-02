@@ -34,6 +34,22 @@ class WorkLogModel {
     );
   }
 
+  factory WorkLogModel.fromMap(Map<String, dynamic> map) {
+    return WorkLogModel(
+      id: map['id'] as int?,
+      taskKey: map['task_key'] as String,
+      summary: map['summary'] as String,
+      description: map['description'] as String?,
+      startTime: map['start_time'] != null
+          ? DateTime.parse(map['start_time'] as String)
+          : null,
+      timeSpent: map['time_spent'] as String?,
+      workLogState: WorkLogStateEnum.values.firstWhere(
+            (state) => state.name == map['work_log_state'],
+      ),
+    );
+  }
+
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -76,5 +92,17 @@ class WorkLogModel {
       startTime: startTime ?? this.startTime,
       workLogState: workLogState ?? this.workLogState,
     );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'task_key': taskKey,
+      'summary': summary,
+      'description': description,
+      'start_time': startTime?.toIso8601String(),
+      'time_spent': timeSpent,
+      'work_log_state': workLogState.name,
+    };
   }
 }
