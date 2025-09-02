@@ -54,7 +54,7 @@ class WorkLogController extends AutoDisposeAsyncNotifier<WorkLogState> {
     final result = await ref.read(workLogServiceProvider).completeWorkLog();
 
     if (result.isSuccess()) {
-      state = AsyncData(state.value!.copyWith(null, false));
+      state = AsyncData(state.value!.copyWith(WorkLog.empty(), false));
     } else {
       state = AsyncError(result.tryGetError()!, StackTrace.current);
     }
