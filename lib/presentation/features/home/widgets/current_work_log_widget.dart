@@ -19,7 +19,7 @@ class _CurrentWorkLogWidgetState extends ConsumerState<CurrentWorkLogWidget> {
     final WorkLog? workLog = workLogState.value?.workLog;
     final bool isTimerRunning = workLogState.value?.isTimerRunning ?? false;
 
-    if (workLog == null || !isTimerRunning) {
+    if (workLog == null || workLog.taskKey == "") {
       return StartNewWorkLogWidget();
     }
 

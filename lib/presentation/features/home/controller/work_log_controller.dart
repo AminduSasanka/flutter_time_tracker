@@ -44,7 +44,7 @@ class WorkLogController extends AutoDisposeAsyncNotifier<WorkLogState> {
         .createWorkLog(workLog);
 
     if (result.isSuccess()) {
-      state = AsyncData(WorkLogState(true, workLog));
+      state = AsyncData(WorkLogState(true, result.tryGetSuccess()));
     } else {
       state = AsyncError(result.tryGetError()!, StackTrace.current);
     }
