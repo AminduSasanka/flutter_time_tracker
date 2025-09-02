@@ -59,6 +59,7 @@ class WorkLogModel {
   }
 
   WorkLogModel copyWith({
+    int? id,
     String? taskKey,
     String? summary,
     String? description,
@@ -67,6 +68,7 @@ class WorkLogModel {
     WorkLogStateEnum? workLogState,
   }) {
     return WorkLogModel(
+      id: id ?? this.id,
       taskKey: taskKey ?? this.taskKey,
       summary: summary ?? this.summary,
       description: description ?? this.description,

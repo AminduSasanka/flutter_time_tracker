@@ -20,18 +20,20 @@ class WorkLog {
   });
 
   WorkLog copyWith({
+    int? id,
     String? taskKey,
     String? summary,
     String? description,
-    String? startTime,
+    DateTime? startTime,
     String? timeSpent,
     WorkLogStateEnum? workLogState,
   }) {
     return WorkLog(
+      id: id ?? this.id,
       taskKey: taskKey ?? this.taskKey,
       summary: summary ?? this.summary,
       description: description ?? this.description,
-      startTime: startTime != null ? DateTime.parse(startTime) : this.startTime,
+      startTime: startTime ?? this.startTime,
       timeSpent: timeSpent ?? this.timeSpent,
       workLogState: workLogState ?? this.workLogState,
     );
