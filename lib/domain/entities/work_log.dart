@@ -1,6 +1,7 @@
 import 'package:flutter_time_tracker/core/constants/enums.dart';
 
 class WorkLog {
+  final int? id;
   final String taskKey;
   final String summary;
   final String? description;
@@ -9,6 +10,7 @@ class WorkLog {
   final WorkLogStateEnum workLogState;
 
   WorkLog({
+    this.id,
     required this.taskKey,
     required this.summary,
     this.description,

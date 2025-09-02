@@ -2,6 +2,7 @@ import 'package:flutter_time_tracker/core/constants/enums.dart';
 import 'package:flutter_time_tracker/domain/entities/work_log.dart';
 
 class WorkLogModel {
+  final int? id;
   final String taskKey;
   final String summary;
   final String? description;
@@ -10,6 +11,7 @@ class WorkLogModel {
   final WorkLogStateEnum workLogState;
 
   WorkLogModel({
+    this.id,
     required this.taskKey,
     required this.summary,
     this.description,
@@ -20,6 +22,7 @@ class WorkLogModel {
 
   factory WorkLogModel.fromJson(Map<String, dynamic> json) {
     return WorkLogModel(
+      id: json['id'] as int?,
       taskKey: json['taskKey'] as String,
       summary: json['summary'] as String,
       description: json['description'] as String,
@@ -33,6 +36,7 @@ class WorkLogModel {
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'taskKey': taskKey,
       'summary': summary,
       'description': description,
@@ -44,6 +48,7 @@ class WorkLogModel {
 
   WorkLog toEntity() {
     return WorkLog(
+      id: id,
       taskKey: taskKey,
       summary: summary,
       description: description,
