@@ -121,4 +121,65 @@ class WorkLogService implements IWorkLogService {
       );
     }
   }
+
+  @override
+  Future<Result<void, Failure>> pauseWorkLog(WorkLog workLog) async {
+    try {
+      if (workLog.id == null) {
+        throw WorkLogNotFoundFailure();
+      }
+
+      final pausedWorkLog = workLog.copyWith(
+        workLogState: WorkLogStateEnum.paused,
+        timeSpent: _getSpentTime(workLog),
+      );
+
+      await _workLogRepository.update(pausedWorkLog);
+
+      return Success(null);
+    } catch (e, s) {
+      return Error(
+        e is Failure
+            ? e
+            : UnknownFailure(exception: Exception(e.toString()), stackTrace: s),
+      );
+    }
+  }
+
+  @override
+  Future<Result<void, Failure>> resumeWorkLog(WorkLog workLog) async {
+    try {
+      if (workLog.id == null) {
+        throw WorkLogNotFoundFailure();
+      }
+
+      final resumedWorkLog = workLog.copyWith(
+        workLogState: WorkLogStateEnum.paused,
+        startTime: DateTime.now(),
+      );
+
+      await _workLogRepository.update(resumedWorkLog);
+
+      return Success(null);
+    } catch (e, s) {
+      return Error(
+        e is Failure
+            ? e
+            : UnknownFailure(exception: Exception(e.toString()), stackTrace: s),
+      );
+    }
+  }
+
+  String _getSpentTime(WorkLog workLog) {
+    if (workLog.startTime == null) {
+      return "";
+    }
+
+    Duration spentTime = DateTime.now().difference(workLog.startTime!) ;
+    int hours = spentTime.inHours;
+    int minutes = spentTime.inMinutes.remainder(60);
+    int seconds = spentTime.inSeconds.remainder(60);
+
+    return "${hours}h ${minutes}m ${seconds}s";
+  }
 }

@@ -14,4 +14,8 @@ abstract interface class IWorkLogService {
   Future<Result<void, Failure>> completeWorkLog();
 
   Future<Result<List<WorkLog>, Failure>> getCompletedWorkLogs();
+
+  Future<Result<void, Failure>> pauseWorkLog(WorkLog workLog);
+
+  Future<Result<void, Failure>> resumeWorkLog(WorkLog workLog);
 }

@@ -64,11 +64,7 @@ class WorkLogController extends AutoDisposeAsyncNotifier<WorkLogState> {
     if (state.value != null) {
       final result = await ref
           .read(workLogServiceProvider)
-          .updateWorkLog(
-            state.value!.workLog!.copyWith(
-              workLogState: WorkLogStateEnum.paused,
-            ),
-          );
+          .pauseWorkLog(state.value!.workLog!);
 
       if (result.isSuccess()) {
         state = AsyncData(state.value!.copyWith(state.value!.workLog, false));
@@ -82,11 +78,7 @@ class WorkLogController extends AutoDisposeAsyncNotifier<WorkLogState> {
     if (state.value != null) {
       final result = await ref
           .read(workLogServiceProvider)
-          .updateWorkLog(
-        state.value!.workLog!.copyWith(
-          workLogState: WorkLogStateEnum.pending,
-        ),
-      );
+          .resumeWorkLog(state.value!.workLog!);
 
       if (result.isSuccess()) {
         state = AsyncData(state.value!.copyWith(state.value!.workLog, true));
