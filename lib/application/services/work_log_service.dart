@@ -155,7 +155,7 @@ class WorkLogService implements IWorkLogService {
       }
 
       final resumedWorkLog = workLog.copyWith(
-        workLogState: WorkLogStateEnum.paused,
+        workLogState: WorkLogStateEnum.pending,
         startTime: DateTime.now(),
       );
 
