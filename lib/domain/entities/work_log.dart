@@ -19,6 +19,13 @@ class WorkLog {
     this.workLogState = WorkLogStateEnum.blank,
   });
 
+  WorkLog.empty() : this(
+    taskKey: '',
+    summary: '',
+    description: '',
+    workLogState: WorkLogStateEnum.blank,
+  );
+
   WorkLog copyWith({
     int? id,
     String? taskKey,
