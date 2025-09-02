@@ -37,7 +37,7 @@ class WorkLogRepository implements IWorkLogRepository {
   }
 
   @override
-  Future<void> create(WorkLog workLog) async {
+  Future<int> create(WorkLog workLog) async {
     try {
       final WorkLogModel workLogModel = WorkLogModel(
         taskKey: workLog.taskKey,
@@ -48,7 +48,7 @@ class WorkLogRepository implements IWorkLogRepository {
         workLogState: workLog.workLogState,
       );
 
-      await _database.insert(workLogsTable, workLogModel.toMap());
+      return await _database.insert(workLogsTable, workLogModel.toMap());
     } catch (e, s) {
       throw UnknownFailure(
         exception: e is Exception ? e : Exception(e.toString()),

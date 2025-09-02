@@ -6,7 +6,7 @@ abstract interface class IWorkLogRepository {
 
   Future<WorkLogModel> getPausedWorkLog();
 
-  Future<void> create(WorkLog workLog);
+  Future<int> create(WorkLog workLog);
 
   Future<void> update(WorkLog workLog);
 

@@ -14,11 +14,12 @@ class WorkLogService implements IWorkLogService {
   WorkLogService(this._workLogRepository);
 
   @override
-  Future<Result<void, Failure>> createWorkLog(WorkLog workLog) async {
+  Future<Result<WorkLog, Failure>> createWorkLog(WorkLog workLog) async {
     try {
-      await _workLogRepository.create(workLog);
+      final id = await _workLogRepository.create(workLog);
+      final createdWorkLog = workLog.copyWith(id: id);
 
-      return Success(null);
+      return Success(createdWorkLog);
     } catch (e, s) {
       return Error(
         e is Failure
