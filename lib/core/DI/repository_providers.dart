@@ -14,5 +14,5 @@ final jiraAuthRepositoryProvider = Provider<IJiraAuthRepository>((ref) {
 });
 
 final workLogRepositoryProvider = Provider<IWorkLogRepository>((ref) {
-  return WorkLogRepository(ref.watch(sharedPreferencesProvider));
+  return WorkLogRepository(ref.watch(databaseProvider));
 });
