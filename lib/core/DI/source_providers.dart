@@ -11,6 +11,7 @@ import 'package:flutter_time_tracker/data/sources/local/shared_preferences/share
 import 'package:flutter_time_tracker/data/sources/remote/jira/i_jira_api_service.dart';
 import 'package:flutter_time_tracker/data/sources/remote/jira/jira_api_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sqflite/sqflite.dart';
 
 final secureStorageProvider = Provider<FlutterSecureStorage>((ref) {
   const AndroidOptions androidOptions = AndroidOptions(
@@ -50,4 +51,8 @@ final sharedPreferencesServiceProvider = Provider<ISharedPreferencesService>((
 
 final databaseServiceProvider = Provider<IDatabaseService>((ref) {
   return DatabaseService();
+});
+
+final databaseProvider = Provider<Database>((ref) {
+  throw UnimplementedError();
 });
