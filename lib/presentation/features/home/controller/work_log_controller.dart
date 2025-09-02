@@ -4,10 +4,10 @@ import 'package:flutter_time_tracker/core/constants/enums.dart';
 import 'package:flutter_time_tracker/domain/entities/work_log.dart';
 import 'package:flutter_time_tracker/presentation/features/home/state/work_log_state.dart';
 
-class WorkLogController extends AutoDisposeNotifier<WorkLogState> {
+class WorkLogController extends AutoDisposeAsyncNotifier<WorkLogState> {
   @override
-  WorkLogState build() {
-    final currentWorkLogResult = ref
+  Future<WorkLogState> build() async {
+    final currentWorkLogResult = await ref
         .read(workLogServiceProvider)
         .getCurrentWorkLog();
 
@@ -16,7 +16,7 @@ class WorkLogController extends AutoDisposeNotifier<WorkLogState> {
 
       if (currentWorkLog != null) {
         return WorkLogState(
-          WorkLogStateEnum.pending == currentWorkLog.workLogState.name,
+          currentWorkLog.workLogState == WorkLogStateEnum.pending,
           currentWorkLog,
         );
       }
@@ -25,7 +25,13 @@ class WorkLogController extends AutoDisposeNotifier<WorkLogState> {
     return WorkLogState(false, null);
   }
 
-  void startNewWorkLog(String taskId, String summary, String description) {
+  Future<void> startNewWorkLog(
+    String taskId,
+    String summary,
+    String description,
+  ) async {
+    state = const AsyncLoading();
+
     final workLog = WorkLog(
       taskKey: taskId,
       summary: summary,
@@ -33,23 +39,42 @@ class WorkLogController extends AutoDisposeNotifier<WorkLogState> {
       workLogState: WorkLogStateEnum.pending,
     );
 
-    ref.read(workLogServiceProvider).createWorkLog(workLog);
-
-    state = state.copyWith(workLog, true);
-  }
-
-  void stopWorkLog() {
-    ref.read(workLogServiceProvider).completeWorkLog();
-    state = state.copyWith(null, false);
-  }
-
-  void pauseWorkLog() {
-    ref
+    final result = await ref
         .read(workLogServiceProvider)
-        .updateWorkLog(
-          state.workLog!.copyWith(workLogState: WorkLogStateEnum.paused),
-        );
+        .createWorkLog(workLog);
 
-    state = state.copyWith(state.workLog, false);
+    if (result.isSuccess()) {
+      state = AsyncData(WorkLogState(true, workLog));
+    } else {
+      state = AsyncError(result.tryGetError()!, StackTrace.current);
+    }
+  }
+
+  Future<void> stopWorkLog() async {
+    final result = await ref.read(workLogServiceProvider).completeWorkLog();
+
+    if (result.isSuccess()) {
+      state = AsyncData(state.value!.copyWith(null, false));
+    } else {
+      state = AsyncError(result.tryGetError()!, StackTrace.current);
+    }
+  }
+
+  Future<void> pauseWorkLog() async {
+    if (state.value != null) {
+      final result = await ref
+          .read(workLogServiceProvider)
+          .updateWorkLog(
+            state.value!.workLog!.copyWith(
+              workLogState: WorkLogStateEnum.paused,
+            ),
+          );
+
+      if (result.isSuccess()) {
+        state = AsyncData(state.value!.copyWith(state.value!.workLog, false));
+      } else {
+        state = AsyncError(result.tryGetError()!, StackTrace.current);
+      }
+    }
   }
 }
