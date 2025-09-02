@@ -4,14 +4,16 @@ import 'package:flutter_time_tracker/domain/entities/work_log.dart';
 class WorkLogModel {
   final String taskKey;
   final String summary;
-  final String description;
+  final String? description;
+  final DateTime? startTime;
   final String? timeSpent;
   final WorkLogStateEnum workLogState;
 
   WorkLogModel({
     required this.taskKey,
     required this.summary,
-    required this.description,
+    this.description,
+    this.startTime,
     this.timeSpent,
     this.workLogState = WorkLogStateEnum.blank,
   });
@@ -21,6 +23,7 @@ class WorkLogModel {
       taskKey: json['taskKey'] as String,
       summary: json['summary'] as String,
       description: json['description'] as String,
+      startTime: DateTime.parse(json['startTime'] as String),
       timeSpent: json['timeSpent'] as String?,
       workLogState: WorkLogStateEnum.values.firstWhere(
         (state) => state.name == json['workLogState'],
@@ -33,6 +36,7 @@ class WorkLogModel {
       'taskKey': taskKey,
       'summary': summary,
       'description': description,
+      'startTime': startTime?.toIso8601String(),
       'timeSpent': timeSpent,
       'workLogState': workLogState.name,
     };
@@ -43,6 +47,7 @@ class WorkLogModel {
       taskKey: taskKey,
       summary: summary,
       description: description,
+      startTime: startTime,
       timeSpent: timeSpent,
       workLogState: workLogState,
     );
@@ -52,6 +57,7 @@ class WorkLogModel {
     String? taskKey,
     String? summary,
     String? description,
+    DateTime? startTime,
     String? timeSpent,
     WorkLogStateEnum? workLogState,
   }) {
@@ -60,6 +66,8 @@ class WorkLogModel {
       summary: summary ?? this.summary,
       description: description ?? this.description,
       timeSpent: timeSpent ?? this.timeSpent,
+      startTime: startTime ?? this.startTime,
+      workLogState: workLogState ?? this.workLogState,
     );
   }
 }
