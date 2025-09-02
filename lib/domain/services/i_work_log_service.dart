@@ -3,15 +3,15 @@ import 'package:flutter_time_tracker/domain/failures/failure.dart';
 import 'package:multiple_result/multiple_result.dart';
 
 abstract interface class IWorkLogService {
-  Result<void, Failure> createWorkLog (WorkLog workLog);
+  Future<Result<void, Failure>> createWorkLog(WorkLog workLog);
 
-  Result<void, Failure> deleteWorkLog();
+  Future<Result<void, Failure>> deleteWorkLog(int id);
 
-  Result<void, Failure> updateWorkLog(WorkLog workLog);
+  Future<Result<void, Failure>> updateWorkLog(WorkLog workLog);
 
-  Result<WorkLog?, Failure> getCurrentWorkLog();
+  Future<Result<WorkLog, Failure>> getCurrentWorkLog();
 
-  Result<void, Failure> completeWorkLog();
+  Future<Result<void, Failure>> completeWorkLog();
 
-  Result<List<WorkLog>, Failure> getCompletedWorkLogs();
+  Future<Result<List<WorkLog>, Failure>> getCompletedWorkLogs();
 }

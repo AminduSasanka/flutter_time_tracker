@@ -1,3 +1,5 @@
+import 'package:flutter_time_tracker/core/constants/enums.dart';
+import 'package:flutter_time_tracker/data/models/work_log_model.dart';
 import 'package:flutter_time_tracker/domain/entities/work_log.dart';
 import 'package:flutter_time_tracker/domain/failures/failure.dart';
 import 'package:flutter_time_tracker/domain/failures/unknown_failure.dart';
@@ -11,9 +13,9 @@ class WorkLogService implements IWorkLogService {
   WorkLogService(this._workLogRepository);
 
   @override
-  Result<void, Failure> createWorkLog(WorkLog workLog) {
+  Future<Result<void, Failure>> createWorkLog(WorkLog workLog) async {
     try {
-      _workLogRepository.create(workLog);
+      await _workLogRepository.create(workLog);
 
       return Success(null);
     } catch (e, s) {
@@ -26,9 +28,9 @@ class WorkLogService implements IWorkLogService {
   }
 
   @override
-  Result<void, Failure> deleteWorkLog() {
+  Future<Result<void, Failure>> deleteWorkLog(int id) async {
     try {
-      _workLogRepository.delete();
+      await _workLogRepository.delete(id);
 
       return Success(null);
     } catch (e, s) {
@@ -41,9 +43,9 @@ class WorkLogService implements IWorkLogService {
   }
 
   @override
-  Result<WorkLog, Failure> getCurrentWorkLog() {
+  Future<Result<WorkLog, Failure>> getCurrentWorkLog() async {
     try {
-      final workLogModel = _workLogRepository.getCurrent();
+      final workLogModel = await _workLogRepository.getCurrent();
       final workLog = workLogModel.toEntity();
 
       return Success(workLog);
@@ -57,9 +59,9 @@ class WorkLogService implements IWorkLogService {
   }
 
   @override
-  Result<void, Failure> updateWorkLog(WorkLog workLog) {
+  Future<Result<void, Failure>> updateWorkLog(WorkLog workLog) async {
     try {
-      _workLogRepository.update(workLog);
+      await _workLogRepository.update(workLog);
 
       return Success(null);
     } catch (e, s) {
@@ -72,9 +74,14 @@ class WorkLogService implements IWorkLogService {
   }
 
   @override
-  Result<void, Failure> completeWorkLog() {
+  Future<Result<void, Failure>> completeWorkLog() async {
     try {
-      _workLogRepository.complete();
+      final WorkLogModel currentWorkLog = await _workLogRepository.getCurrent();
+      final WorkLogModel completedWorkLogModel = currentWorkLog.copyWith(
+        workLogState: WorkLogStateEnum.completed,
+      );
+
+      _workLogRepository.update(completedWorkLogModel.toEntity());
 
       return Success(null);
     } catch (e, s) {
@@ -87,9 +94,9 @@ class WorkLogService implements IWorkLogService {
   }
 
   @override
-  Result<List<WorkLog>, Failure> getCompletedWorkLogs() {
+  Future<Result<List<WorkLog>, Failure>> getCompletedWorkLogs() async {
     try {
-      final workLogModels = _workLogRepository.getCompletedWorkLogs();
+      final workLogModels = await _workLogRepository.getCompletedWorkLogs();
       final workLogs = workLogModels.map((e) => e.toEntity()).toList();
 
       return Success(workLogs);
