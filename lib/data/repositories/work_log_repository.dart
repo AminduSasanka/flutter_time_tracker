@@ -97,6 +97,33 @@ class WorkLogRepository implements IWorkLogRepository {
   }
 
   @override
+  Future<WorkLogModel> getPausedWorkLog() async {
+    try {
+      final pausedWorkLogs = await _database.query(
+        workLogsTable,
+        where: 'work_log_state = ?',
+        whereArgs: [WorkLogStateEnum.paused.name],
+        limit: 1,
+      );
+
+      if (pausedWorkLogs.isEmpty) {
+        throw WorkLogNotFoundFailure();
+      }
+
+      WorkLogModel workLogModel = WorkLogModel.fromMap(pausedWorkLogs.first);
+
+      return workLogModel;
+    } on WorkLogNotFoundFailure {
+      rethrow;
+    } catch (e, s) {
+      throw UnknownFailure(
+        exception: e is Exception ? e : Exception(e.toString()),
+        stackTrace: s,
+      );
+    }
+  }
+
+  @override
   Future<void> update(WorkLog workLog) async {
     try {
       if (workLog.id == null) {

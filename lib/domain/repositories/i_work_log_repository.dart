@@ -4,6 +4,8 @@ import 'package:flutter_time_tracker/domain/entities/work_log.dart';
 abstract interface class IWorkLogRepository {
   Future<WorkLogModel> getCurrent();
 
+  Future<WorkLogModel> getPausedWorkLog();
+
   Future<void> create(WorkLog workLog);
 
   Future<void> update(WorkLog workLog);
