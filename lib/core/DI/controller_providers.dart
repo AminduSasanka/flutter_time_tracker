@@ -18,6 +18,6 @@ final settingsPageControllerProvider =
     >(SettingsScreenController.new);
 
 final workLogControllerProvider =
-    AutoDisposeNotifierProvider<WorkLogController, WorkLogState>(
+    AutoDisposeAsyncNotifierProvider<WorkLogController, WorkLogState>(
       WorkLogController.new,
     );
