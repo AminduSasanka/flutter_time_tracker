@@ -110,6 +110,9 @@ class WorkLogController extends AutoDisposeAsyncNotifier<WorkLogState> {
           .read(workLogServiceProvider)
           .resumeWorkLog(state.value!.workLog!);
 
+      // TODO: update state work log with updated work log
+      // TODO: set elapsed time = spent time in updated work log
+
       if (result.isSuccess()) {
         state = AsyncData(
           state.value!.copyWith(
