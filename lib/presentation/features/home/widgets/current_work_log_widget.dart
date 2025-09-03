@@ -31,7 +31,12 @@ class CurrentWorkLogWidget extends ConsumerWidget {
         return Card(
           elevation: 0,
           child: Padding(
-            padding: const EdgeInsetsGeometry.all(8.0),
+            padding: const EdgeInsetsGeometry.only(
+              left: 20.0,
+              right: 8.0,
+              top: 8.0,
+              bottom: 8.0,
+            ),
             child: Row(
               children: [
                 Expanded(
@@ -42,8 +47,13 @@ class CurrentWorkLogWidget extends ConsumerWidget {
                         _formatDuration(_elapsedTime),
                         style: TextStyle(fontSize: 24),
                       ),
-                      SizedBox(height: 16),
-                      Text(workLog.taskKey, style: TextStyle(fontSize: 20)),
+                      Text(
+                        workLog.taskKey,
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                       Text(workLog.summary, style: TextStyle(fontSize: 14)),
                     ],
                   ),
