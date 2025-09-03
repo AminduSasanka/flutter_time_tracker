@@ -43,9 +43,13 @@ class _CurrentWorkLogWidgetState extends ConsumerState<CurrentWorkLogWidget> {
             IconButton(
               onPressed: () async {
                 if (isTimerRunning) {
-                  await ref.read(workLogControllerProvider.notifier).pauseWorkLog();
+                  await ref
+                      .read(workLogControllerProvider.notifier)
+                      .pauseWorkLog();
                 } else {
-                  await ref.read(workLogControllerProvider.notifier).resumeWorkLog();
+                  await ref
+                      .read(workLogControllerProvider.notifier)
+                      .resumeWorkLog();
                 }
               },
               icon: isTimerRunning
@@ -53,9 +57,14 @@ class _CurrentWorkLogWidgetState extends ConsumerState<CurrentWorkLogWidget> {
                   : Icon(Icons.play_circle, size: 50),
             ),
             isTimerRunning
-                ? IconButton(onPressed: () async {
-                  await ref.read(workLogControllerProvider.notifier).stopWorkLog();
-            }, icon: Icon(Icons.stop, size: 50))
+                ? IconButton(
+                    onPressed: () async {
+                      await ref
+                          .read(workLogControllerProvider.notifier)
+                          .stopWorkLog();
+                    },
+                    icon: Icon(Icons.stop, size: 50),
+                  )
                 : Container(),
           ],
         ),
