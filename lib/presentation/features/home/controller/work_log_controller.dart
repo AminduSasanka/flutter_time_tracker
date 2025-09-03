@@ -37,6 +37,7 @@ class WorkLogController extends AutoDisposeAsyncNotifier<WorkLogState> {
       summary: summary,
       description: description,
       workLogState: WorkLogStateEnum.pending,
+      startTime: DateTime.now(),
     );
 
     final result = await ref
