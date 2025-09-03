@@ -19,9 +19,17 @@ class WorkLogController extends AutoDisposeAsyncNotifier<WorkLogState> {
       WorkLog? currentWorkLog = currentWorkLogResult.tryGetSuccess();
 
       if (currentWorkLog != null) {
+        Duration elapsedTime = currentWorkLog.startTime == null
+            ? Duration.zero
+            : DateTime.now().difference(currentWorkLog.startTime!);
+
+        if (currentWorkLog.workLogState == WorkLogStateEnum.pending) {
+          _startTimer();
+        }
+
         return WorkLogState(
           currentWorkLog.workLogState == WorkLogStateEnum.pending,
-          DateTime.now().difference(currentWorkLog.startTime!),
+          elapsedTime,
           currentWorkLog,
         );
       }
@@ -122,11 +130,13 @@ class WorkLogController extends AutoDisposeAsyncNotifier<WorkLogState> {
     _timer?.cancel();
 
     _timer = Timer.periodic(Duration(seconds: 1), (_) {
+      Duration elapsedTime = DateTime.now().difference(state.value!.workLog!.startTime!);
+
       state = AsyncValue.data(
         state.value!.copyWith(
           state.value!.workLog,
           true,
-          DateTime.now().difference(state.value!.workLog!.startTime!),
+          elapsedTime,
         ),
       );
     });
