@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_time_tracker/core/DI/service_providers.dart';
 import 'package:flutter_time_tracker/core/constants/enums.dart';
@@ -5,6 +7,8 @@ import 'package:flutter_time_tracker/domain/entities/work_log.dart';
 import 'package:flutter_time_tracker/presentation/features/home/state/work_log_state.dart';
 
 class WorkLogController extends AutoDisposeAsyncNotifier<WorkLogState> {
+  Timer? _timer;
+
   @override
   Future<WorkLogState> build() async {
     final currentWorkLogResult = await ref
@@ -17,12 +21,13 @@ class WorkLogController extends AutoDisposeAsyncNotifier<WorkLogState> {
       if (currentWorkLog != null) {
         return WorkLogState(
           currentWorkLog.workLogState == WorkLogStateEnum.pending,
+          DateTime.now().difference(currentWorkLog.startTime!),
           currentWorkLog,
         );
       }
     }
 
-    return WorkLogState(false, null);
+    return WorkLogState(false, Duration.zero, null);
   }
 
   Future<void> startNewWorkLog(
@@ -45,9 +50,13 @@ class WorkLogController extends AutoDisposeAsyncNotifier<WorkLogState> {
         .createWorkLog(workLog);
 
     if (result.isSuccess()) {
-      state = AsyncData(WorkLogState(true, result.tryGetSuccess()));
+      state = AsyncData(
+        WorkLogState(true, Duration.zero, result.tryGetSuccess()),
+      );
+      _startTimer();
     } else {
       state = AsyncError(result.tryGetError()!, StackTrace.current);
+      _stopTimer();
     }
   }
 
@@ -55,9 +64,13 @@ class WorkLogController extends AutoDisposeAsyncNotifier<WorkLogState> {
     final result = await ref.read(workLogServiceProvider).completeWorkLog();
 
     if (result.isSuccess()) {
-      state = AsyncData(state.value!.copyWith(WorkLog.empty(), false));
+      state = AsyncData(
+        state.value!.copyWith(WorkLog.empty(), false, Duration.zero),
+      );
+      _stopTimer();
     } else {
       state = AsyncError(result.tryGetError()!, StackTrace.current);
+      _stopTimer();
     }
   }
 
@@ -68,9 +81,17 @@ class WorkLogController extends AutoDisposeAsyncNotifier<WorkLogState> {
           .pauseWorkLog(state.value!.workLog!);
 
       if (result.isSuccess()) {
-        state = AsyncData(state.value!.copyWith(state.value!.workLog, false));
+        state = AsyncData(
+          state.value!.copyWith(
+            state.value!.workLog,
+            false,
+            state.value!.elapsedTime,
+          ),
+        );
+        _stopTimer();
       } else {
         state = AsyncError(result.tryGetError()!, StackTrace.current);
+        _stopTimer();
       }
     }
   }
@@ -82,10 +103,37 @@ class WorkLogController extends AutoDisposeAsyncNotifier<WorkLogState> {
           .resumeWorkLog(state.value!.workLog!);
 
       if (result.isSuccess()) {
-        state = AsyncData(state.value!.copyWith(state.value!.workLog, true));
+        state = AsyncData(
+          state.value!.copyWith(
+            state.value!.workLog,
+            true,
+            state.value!.elapsedTime,
+          ),
+        );
+        _startTimer();
       } else {
         state = AsyncError(result.tryGetError()!, StackTrace.current);
+        _stopTimer();
       }
     }
+  }
+
+  void _startTimer() {
+    _timer?.cancel();
+
+    _timer = Timer.periodic(Duration(seconds: 1), (_) {
+      state = AsyncValue.data(
+        state.value!.copyWith(
+          state.value!.workLog,
+          true,
+          DateTime.now().difference(state.value!.workLog!.startTime!),
+        ),
+      );
+    });
+  }
+
+  void _stopTimer() {
+    _timer?.cancel();
+    _timer = null;
   }
 }
