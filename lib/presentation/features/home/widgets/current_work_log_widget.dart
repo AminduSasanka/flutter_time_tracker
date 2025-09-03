@@ -61,7 +61,7 @@ class CurrentWorkLogWidget extends ConsumerWidget {
                     }
                   },
                   icon: isTimerRunning
-                      ? Icon(Icons.pause, size: 50)
+                      ? Container()
                       : Icon(Icons.play_circle, size: 50),
                 ),
                 isTimerRunning
