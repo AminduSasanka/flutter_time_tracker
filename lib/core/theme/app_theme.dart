@@ -27,4 +27,11 @@ ThemeData appTheme = ThemeData(
       textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
     ),
   ),
+  cardTheme: CardThemeData(
+    shape: RoundedRectangleBorder(
+      side: BorderSide(color: Colors.black12, width: 1.0),
+      borderRadius: BorderRadius.circular(15.0),
+    ),
+    elevation: 1,
+  ),
 );

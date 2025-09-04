@@ -1,0 +1,113 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_time_tracker/core/DI/controller_providers.dart';
+import 'package:flutter_time_tracker/presentation/features/home/widgets/start_new_work_log_widget.dart';
+
+class CurrentWorkLogWidget extends ConsumerWidget {
+  const CurrentWorkLogWidget({super.key});
+
+  String _formatDuration(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    String hours = twoDigits(duration.inHours);
+    String minutes = twoDigits(duration.inMinutes.remainder(60));
+    String seconds = twoDigits(duration.inSeconds.remainder(60));
+    return "$hours:$minutes:$seconds";
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final workLogState = ref.watch(workLogControllerProvider);
+    final bool isTimerRunning = workLogState.value?.isTimerRunning ?? false;
+
+    void stopWorkLog(bool isTimerRunning) async {
+      if (isTimerRunning) {
+        await ref
+            .read(workLogControllerProvider.notifier)
+            .stopWorkLog();
+      }
+
+      if (context.mounted) {
+        if (!workLogState.isLoading && workLogState.error != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Error: ${workLogState.error}')),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Work log stopped and saved')),
+          );
+
+        }
+      }
+    }
+
+    return workLogState.when(
+      data: (state) {
+        final workLog = state.workLog;
+        final elapsedTime = state.elapsedTime;
+
+        if (workLog == null || workLog.taskKey == "") {
+          return StartNewWorkLogWidget();
+        }
+
+        return Card(
+          elevation: 0,
+          child: Padding(
+            padding: const EdgeInsetsGeometry.only(
+              left: 20.0,
+              right: 8.0,
+              top: 8.0,
+              bottom: 8.0,
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        _formatDuration(elapsedTime),
+                        style: TextStyle(fontSize: 24),
+                      ),
+                      Text(
+                        workLog.taskKey,
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(workLog.summary, style: TextStyle(fontSize: 14)),
+                    ],
+                  ),
+                ),
+                IconButton(
+                  onPressed: () async {
+                    if (isTimerRunning) {
+                      await ref
+                          .read(workLogControllerProvider.notifier)
+                          .pauseWorkLog();
+                    } else {
+                      await ref
+                          .read(workLogControllerProvider.notifier)
+                          .resumeWorkLog();
+                    }
+                  },
+                  icon: isTimerRunning
+                      ? Container()
+                      : Icon(Icons.play_circle, size: 50),
+                ),
+                isTimerRunning
+                    ? IconButton(
+                        onPressed: () => stopWorkLog(isTimerRunning),
+                        icon: Icon(Icons.stop, size: 50),
+                      )
+                    : Container(),
+              ],
+            ),
+          ),
+        );
+      },
+      error: (error, stack) => Text('Error: $error'),
+      loading: () => CircularProgressIndicator(),
+    );
+  }
+}
