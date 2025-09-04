@@ -7,6 +7,7 @@ import 'package:flutter_time_tracker/domain/failures/work_log/work_log_not_found
     show WorkLogNotFoundFailure;
 import 'package:flutter_time_tracker/domain/repositories/i_work_log_repository.dart';
 import 'package:flutter_time_tracker/domain/services/i_work_log_service.dart';
+import 'package:flutter_time_tracker/presentation/shared/helpers/spent_time_to_duration.dart';
 import 'package:multiple_result/multiple_result.dart';
 
 class WorkLogService implements IWorkLogService {
@@ -94,6 +95,7 @@ class WorkLogService implements IWorkLogService {
       final WorkLogModel currentWorkLog = await _workLogRepository.getCurrent();
       final WorkLogModel completedWorkLogModel = currentWorkLog.copyWith(
         workLogState: WorkLogStateEnum.completed,
+        timeSpent: _getSpentTime(currentWorkLog.toEntity()),
       );
 
       await _workLogRepository.update(completedWorkLogModel.toEntity());
@@ -177,10 +179,18 @@ class WorkLogService implements IWorkLogService {
       return "";
     }
 
+    Duration totalSpentTime = Duration.zero;
+
+    if (workLog.timeSpent != null) {
+      totalSpentTime = spentTimeToDuration(workLog.timeSpent!);
+    }
+
     Duration spentTime = DateTime.now().difference(workLog.startTime!);
-    int hours = spentTime.inHours;
-    int minutes = spentTime.inMinutes.remainder(60);
-    int seconds = spentTime.inSeconds.remainder(60);
+    totalSpentTime += spentTime;
+
+    int hours = totalSpentTime.inHours;
+    int minutes = totalSpentTime.inMinutes.remainder(60);
+    int seconds = totalSpentTime.inSeconds.remainder(60);
 
     return "${hours}h ${minutes}m ${seconds}s";
   }
