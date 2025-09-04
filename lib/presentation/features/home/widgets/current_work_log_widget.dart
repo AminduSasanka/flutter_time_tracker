@@ -22,7 +22,7 @@ class CurrentWorkLogWidget extends ConsumerWidget {
     return workLogState.when(
       data: (state) {
         final workLog = state.workLog;
-        final _elapsedTime = state.elapsedTime;
+        final elapsedTime = state.elapsedTime;
 
         if (workLog == null || workLog.taskKey == "") {
           return StartNewWorkLogWidget();
@@ -44,7 +44,7 @@ class CurrentWorkLogWidget extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        _formatDuration(_elapsedTime),
+                        _formatDuration(elapsedTime),
                         style: TextStyle(fontSize: 24),
                       ),
                       Text(
