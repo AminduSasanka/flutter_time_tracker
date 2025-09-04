@@ -184,4 +184,45 @@ class WorkLogRepository implements IWorkLogRepository {
       );
     }
   }
+
+  @override
+  Future<List<WorkLogModel>> getFilteredWorkLogs({
+    WorkLogStateEnum? state,
+    String? taskKey,
+    DateTime? startDate,
+    String? groupBy,
+  }) async {
+    try {
+      final whereClauses = <String>[];
+      final whereArgs = <dynamic>[];
+
+      whereClauses.add('work_log_state = ?');
+      whereArgs.add(state?.name ?? WorkLogStateEnum.completed.name);
+
+      if (taskKey != null) {
+        whereClauses.add('task_key = ?');
+        whereArgs.add(taskKey);
+      }
+
+      if (startDate != null) {
+        whereClauses.add('date(start_time) >= ?');
+        whereArgs.add(startDate.toIso8601String());
+      }
+
+      final whereString = whereClauses.join(' AND ');
+      final List<Map<String, dynamic>> filteredWorkLogs = await _database.query(
+        workLogsTable,
+        where: whereString,
+        whereArgs: whereArgs,
+        orderBy: 'start_time DESC',
+      );
+
+      return filteredWorkLogs.map((e) => WorkLogModel.fromMap(e)).toList();
+    } catch (e, s) {
+      throw UnknownFailure(
+        exception: e is Exception ? e : Exception(e.toString()),
+        stackTrace: s,
+      );
+    }
+  }
 }

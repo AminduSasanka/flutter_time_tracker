@@ -1,3 +1,4 @@
+import 'package:flutter_time_tracker/core/constants/enums.dart';
 import 'package:flutter_time_tracker/domain/entities/work_log.dart';
 import 'package:flutter_time_tracker/domain/failures/failure.dart';
 import 'package:multiple_result/multiple_result.dart';
@@ -18,4 +19,10 @@ abstract interface class IWorkLogService {
   Future<Result<void, Failure>> pauseWorkLog(WorkLog workLog);
 
   Future<Result<void, Failure>> resumeWorkLog(WorkLog workLog);
+
+  Future<Result<List<WorkLog>, Failure>> getFilteredWorkLogs({
+    WorkLogStateEnum? state,
+    String? taskKey,
+    DateTime? startDate,
+  });
 }
