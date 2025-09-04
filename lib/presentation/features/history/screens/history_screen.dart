@@ -21,9 +21,15 @@ class HistoryScreen extends ConsumerWidget {
             title: Text("History", style: TextStyles.appBarTitle),
             backgroundColor: Colors.white,
           ),
-          body: WorkLogListWidget(
-            workLogs: workLogs,
-            listTitle: "Work log history",
+          body: Column(
+            children: [
+              Expanded(
+                child: WorkLogListWidget(
+                  workLogs: workLogs,
+                  listTitle: "Work log history",
+                ),
+              ),
+            ],
           ),
         );
       },

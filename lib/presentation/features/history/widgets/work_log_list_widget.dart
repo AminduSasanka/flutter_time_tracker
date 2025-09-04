@@ -31,12 +31,7 @@ class WorkLogListWidget extends StatelessWidget {
               itemBuilder: (context, index) {
                 final workLog = workLogs[index];
 
-                return WorkLogWidget(
-                  taskKey: workLog.taskKey,
-                  summary: workLog.summary,
-                  startTime: workLog.startTime == null ? DateTime.now() : workLog.startTime!,
-                  spentTime: workLog.timeSpent == null ? "00:00" : workLog.timeSpent!,
-                );
+                return WorkLogWidget(workLog: workLog);
               },
             ),
           ),
