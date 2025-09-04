@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_time_tracker/core/constants/route_names.dart';
+import 'package:flutter_time_tracker/core/theme/text_styles.dart';
 import 'package:flutter_time_tracker/presentation/features/home/widgets/current_work_log_widget.dart';
 import 'package:go_router/go_router.dart';
 
@@ -16,7 +17,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home'),
+        title: const Text('Home', style: TextStyles.appBarTitle),
+        backgroundColor: Colors.white,
         actions: [
           IconButton(
             onPressed: () {
@@ -28,11 +30,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       ),
       body: Padding(
         padding: const EdgeInsetsGeometry.all(8),
-        child: Column(
-          children: [
-            CurrentWorkLogWidget()
-          ],
-        ),
+        child: Column(children: [CurrentWorkLogWidget()]),
       ),
     );
   }
