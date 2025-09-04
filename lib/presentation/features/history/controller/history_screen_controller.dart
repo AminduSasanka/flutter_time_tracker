@@ -42,6 +42,30 @@ class HistoryScreenController
     }
   }
 
+  Future<void> deleteWorkLog(int id) async {
+    try {
+      state = const AsyncLoading();
+
+      final result = await ref.read(workLogServiceProvider).deleteWorkLog(id);
+
+      if (result.isSuccess()) {
+        state = AsyncData(
+          state.value!.copyWith(
+            workLogs: await _getInitialWorkLogs(
+              state: WorkLogStateEnum.completed,
+            ),
+            isError: false,
+            errorMessage: null,
+          ),
+        );
+      } else {
+        state = AsyncError(result.tryGetError()!, StackTrace.current);
+      }
+    } catch (e, s) {
+      state = AsyncError(e, s);
+    }
+  }
+
   Future<List<WorkLog>> _getInitialWorkLogs({
     WorkLogStateEnum? state,
     DateTime? startDate,
