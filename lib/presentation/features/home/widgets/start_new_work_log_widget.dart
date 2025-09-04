@@ -24,6 +24,12 @@ class _StartNewWorkLogWidgetState extends ConsumerState<StartNewWorkLogWidget> {
         _descriptionController.text,
       );
     }
+
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Invalid work log. Please check your inputs.')),
+      );
+    }
   }
 
   @override
