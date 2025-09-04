@@ -19,6 +19,27 @@ class CurrentWorkLogWidget extends ConsumerWidget {
     final workLogState = ref.watch(workLogControllerProvider);
     final bool isTimerRunning = workLogState.value?.isTimerRunning ?? false;
 
+    void stopWorkLog(bool isTimerRunning) async {
+      if (isTimerRunning) {
+        await ref
+            .read(workLogControllerProvider.notifier)
+            .stopWorkLog();
+      }
+
+      if (context.mounted) {
+        if (!workLogState.isLoading && workLogState.error != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Error: ${workLogState.error}')),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Work log stopped and saved')),
+          );
+
+        }
+      }
+    }
+
     return workLogState.when(
       data: (state) {
         final workLog = state.workLog;
@@ -76,11 +97,7 @@ class CurrentWorkLogWidget extends ConsumerWidget {
                 ),
                 isTimerRunning
                     ? IconButton(
-                        onPressed: () async {
-                          await ref
-                              .read(workLogControllerProvider.notifier)
-                              .stopWorkLog();
-                        },
+                        onPressed: () => stopWorkLog(isTimerRunning),
                         icon: Icon(Icons.stop, size: 50),
                       )
                     : Container(),
