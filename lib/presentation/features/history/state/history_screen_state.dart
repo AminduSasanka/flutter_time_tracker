@@ -5,14 +5,12 @@ class HistoryScreenState {
   bool isError = false;
   String? errorMessage;
   DateTime? filterStartDate;
-  DateTime? filterEndDate;
 
   HistoryScreenState({
     required this.workLogs,
     required this.isError,
     required this.errorMessage,
     required this.filterStartDate,
-    required this.filterEndDate,
   });
 
   HistoryScreenState copyWith({
@@ -27,7 +25,6 @@ class HistoryScreenState {
       isError: isError ?? this.isError,
       errorMessage: errorMessage ?? this.errorMessage,
       filterStartDate: filterStartDate ?? this.filterStartDate,
-      filterEndDate: filterEndDate ?? this.filterEndDate,
     );
   }
 }

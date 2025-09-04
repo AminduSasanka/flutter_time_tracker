@@ -19,7 +19,6 @@ class HistoryScreenController
       isError: false,
       errorMessage: null,
       filterStartDate: null,
-      filterEndDate: null,
     );
   }
 
