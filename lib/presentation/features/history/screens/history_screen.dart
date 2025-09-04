@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_time_tracker/core/DI/controller_providers.dart';
 import 'package:flutter_time_tracker/domain/entities/work_log.dart';
+import 'package:flutter_time_tracker/presentation/features/history/widgets/work_log_list_widget.dart';
 
 class HistoryScreen extends ConsumerWidget {
   const HistoryScreen({super.key});
@@ -16,16 +17,7 @@ class HistoryScreen extends ConsumerWidget {
 
         return Scaffold(
           appBar: AppBar(title: Text("History")),
-          body: ListView.builder(
-            itemCount: workLogs.length,
-            itemBuilder: (context, index) {
-              final workLog = workLogs[index];
-              return ListTile(
-                title: Text(workLog.taskKey),
-                subtitle: Text(workLog.summary),
-              );
-            },
-          ),
+          body: WorkLogListWidget(workLogs: workLogs, listTitle: "Work log history")
         );
       },
       error: (error, stack) => Text('Error: $error'),
