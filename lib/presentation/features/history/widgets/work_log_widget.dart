@@ -14,7 +14,7 @@ class WorkLogWidget extends ConsumerWidget {
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white60,
+          color: Theme.of(context).colorScheme.surface,
           border: Border(
             top: BorderSide(color: Colors.black12, width: 1),
             right: BorderSide(color: Colors.black12, width: 1),

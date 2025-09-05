@@ -18,7 +18,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home', style: TextStyles.appBarTitle),
-        backgroundColor: Colors.white,
         actions: [
           IconButton(
             onPressed: () {

@@ -14,7 +14,6 @@ class _AddWorklogScreenState extends State<AddWorklogScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Add Worklog", style: TextStyles.appBarTitle),
-        backgroundColor: Colors.white,
       ),
       body: Center(child: Text("Add Worklog page")),
     );
