@@ -11,7 +11,7 @@ class HistoryScreenController
   @override
   Future<HistoryScreenState> build() async {
     List<WorkLog> workLogs = await _getInitialWorkLogs(
-      state: WorkLogStateEnum.completed,
+      states: [WorkLogStateEnum.completed, WorkLogStateEnum.synced],
     );
 
     return HistoryScreenState(
@@ -51,7 +51,7 @@ class HistoryScreenController
         state = AsyncData(
           state.value!.copyWith(
             workLogs: await _getInitialWorkLogs(
-              state: WorkLogStateEnum.completed,
+              states: [WorkLogStateEnum.completed, WorkLogStateEnum.synced],
             ),
             isError: false,
             errorMessage: null,
@@ -69,7 +69,7 @@ class HistoryScreenController
     state = const AsyncLoading();
 
     final result = await ref.read(workLogServiceProvider).getFilteredWorkLogs(
-      state: worklogState,
+      states: worklogState == null ? [WorkLogStateEnum.completed, WorkLogStateEnum.synced] : [worklogState],
       startDate: startDate,
       taskKey: taskKey
     );
@@ -91,14 +91,14 @@ class HistoryScreenController
   }
 
   Future<List<WorkLog>> _getInitialWorkLogs({
-    WorkLogStateEnum? state,
+    List<WorkLogStateEnum>? states,
     DateTime? startDate,
     String? taskKey,
   }) async {
     final result = await ref
         .read(workLogServiceProvider)
         .getFilteredWorkLogs(
-          state: state,
+          states: states,
           startDate: startDate,
           taskKey: taskKey,
         );
