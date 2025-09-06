@@ -17,7 +17,7 @@ class HistoryScreenController
     return HistoryScreenState(
       workLogs: workLogs,
       isError: false,
-      errorMessage: null
+      errorMessage: null,
     );
   }
 
@@ -65,14 +65,22 @@ class HistoryScreenController
     }
   }
 
-  Future<void> filterWorkLogs({WorkLogStateEnum? worklogState, DateTime? startDate, String? taskKey}) async {
+  Future<void> filterWorkLogs({
+    WorkLogStateEnum? worklogState,
+    DateTime? startDate,
+    String? taskKey,
+  }) async {
     state = const AsyncLoading();
 
-    final result = await ref.read(workLogServiceProvider).getFilteredWorkLogs(
-      states: worklogState == null ? [WorkLogStateEnum.completed, WorkLogStateEnum.synced] : [worklogState],
-      startDate: startDate,
-      taskKey: taskKey
-    );
+    final result = await ref
+        .read(workLogServiceProvider)
+        .getFilteredWorkLogs(
+          states: worklogState == null
+              ? [WorkLogStateEnum.completed, WorkLogStateEnum.synced]
+              : [worklogState],
+          startDate: startDate,
+          taskKey: taskKey,
+        );
 
     if (result.isSuccess()) {
       state = AsyncData(
