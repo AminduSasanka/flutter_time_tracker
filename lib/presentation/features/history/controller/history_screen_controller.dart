@@ -17,8 +17,7 @@ class HistoryScreenController
     return HistoryScreenState(
       workLogs: workLogs,
       isError: false,
-      errorMessage: null,
-      filterStartDate: null,
+      errorMessage: null
     );
   }
 
@@ -63,6 +62,31 @@ class HistoryScreenController
       }
     } catch (e, s) {
       state = AsyncError(e, s);
+    }
+  }
+
+  Future<void> filterWorkLogs({WorkLogStateEnum? worklogState, DateTime? startDate, String? taskKey}) async {
+    state = const AsyncLoading();
+
+    final result = await ref.read(workLogServiceProvider).getFilteredWorkLogs(
+      state: worklogState,
+      startDate: startDate,
+      taskKey: taskKey
+    );
+
+    if (result.isSuccess()) {
+      state = AsyncData(
+        state.value!.copyWith(
+          workLogs: result.tryGetSuccess(),
+          isError: false,
+          errorMessage: null,
+          filterStartDate: startDate,
+          filterTaskKey: taskKey,
+          filterState: worklogState,
+        ),
+      );
+    } else {
+      state = AsyncError(result.tryGetError()!, StackTrace.current);
     }
   }
 
