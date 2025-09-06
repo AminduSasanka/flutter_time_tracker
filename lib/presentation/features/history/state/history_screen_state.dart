@@ -31,9 +31,9 @@ class HistoryScreenState {
       workLogs: workLogs ?? this.workLogs,
       isError: isError ?? this.isError,
       errorMessage: errorMessage ?? this.errorMessage,
-      filterStartDate: filterStartDate ?? this.filterStartDate,
-      filterTaskKey: filterTaskKey ?? this.filterTaskKey,
-      filterState: filterState ?? this.filterState,
+      filterStartDate: filterStartDate,
+      filterTaskKey: filterTaskKey,
+      filterState: filterState,
     );
   }
 }

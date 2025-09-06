@@ -59,6 +59,9 @@ class HistoryFilterWidget extends ConsumerWidget {
           .read(historyScreenControllerProvider.notifier)
           .filterWorkLogs(startDate: null, taskKey: null, worklogState: null);
 
+      taskKeyInputController.text = "";
+      dateController.text = "";
+
       Navigator.pop(context);
 
       if (context.mounted) {
@@ -79,6 +82,7 @@ class HistoryFilterWidget extends ConsumerWidget {
         dateController.text = state.filterStartDate != null
             ? DateFormat('yyyy-MM-dd').format(state.filterStartDate!)
             : "";
+        taskKeyInputController.text = state.filterTaskKey ?? "";
 
         return Padding(
           padding: EdgeInsets.only(bottom: 8, left: 16, right: 16, top: 16),
