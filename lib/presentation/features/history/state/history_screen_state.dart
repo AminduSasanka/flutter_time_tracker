@@ -1,3 +1,4 @@
+import 'package:flutter_time_tracker/core/constants/enums.dart';
 import 'package:flutter_time_tracker/domain/entities/work_log.dart';
 
 class HistoryScreenState {
@@ -5,12 +6,16 @@ class HistoryScreenState {
   bool isError = false;
   String? errorMessage;
   DateTime? filterStartDate;
+  String? filterTaskKey;
+  WorkLogStateEnum? filterState;
 
   HistoryScreenState({
     required this.workLogs,
     required this.isError,
     required this.errorMessage,
-    required this.filterStartDate,
+    this.filterStartDate,
+    this.filterTaskKey,
+    this.filterState,
   });
 
   HistoryScreenState copyWith({
@@ -19,12 +24,16 @@ class HistoryScreenState {
     String? errorMessage,
     DateTime? filterStartDate,
     DateTime? filterEndDate,
+    String? filterTaskKey,
+    WorkLogStateEnum? filterState,
   }) {
     return HistoryScreenState(
       workLogs: workLogs ?? this.workLogs,
       isError: isError ?? this.isError,
       errorMessage: errorMessage ?? this.errorMessage,
       filterStartDate: filterStartDate ?? this.filterStartDate,
+      filterTaskKey: filterTaskKey ?? this.filterTaskKey,
+      filterState: filterState ?? this.filterState,
     );
   }
 }
