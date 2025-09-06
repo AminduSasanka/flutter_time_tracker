@@ -39,6 +39,8 @@ class HistoryFilterWidget extends ConsumerWidget {
             worklogState: WorkLogStateEnum.completed,
           );
 
+      Navigator.pop(context);
+
       if (context.mounted) {
         if (ref.read(historyScreenControllerProvider).hasError) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -56,6 +58,8 @@ class HistoryFilterWidget extends ConsumerWidget {
       ref
           .read(historyScreenControllerProvider.notifier)
           .filterWorkLogs(startDate: null, taskKey: null, worklogState: null);
+
+      Navigator.pop(context);
 
       if (context.mounted) {
         if (ref.read(historyScreenControllerProvider).hasError) {
