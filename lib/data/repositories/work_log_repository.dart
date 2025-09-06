@@ -188,7 +188,7 @@ class WorkLogRepository implements IWorkLogRepository {
 
   @override
   Future<List<WorkLogModel>> getFilteredWorkLogs({
-    WorkLogStateEnum? state,
+    List<WorkLogStateEnum>? states,
     String? taskKey,
     DateTime? startDate,
     String? groupBy,
@@ -197,9 +197,11 @@ class WorkLogRepository implements IWorkLogRepository {
       final whereClauses = <String>[];
       final whereArgs = <dynamic>[];
 
-      if (state != null) {
-        whereClauses.add('work_log_state = ?');
-        whereArgs.add(state.name);
+      if (states != null && states.isNotEmpty) {
+        final placeholders = states.map((_) => '?').join(', ');
+
+        whereClauses.add('work_log_state IN ($placeholders)');
+        whereArgs.addAll(states.map((state) => state.name));
       }
 
       if (taskKey != null && taskKey != '') {

@@ -197,13 +197,13 @@ class WorkLogService implements IWorkLogService {
 
   @override
   Future<Result<List<WorkLog>, Failure>> getFilteredWorkLogs({
-    WorkLogStateEnum? state,
+    List<WorkLogStateEnum>? states,
     String? taskKey,
     DateTime? startDate,
   }) async {
     try {
       final workLogModels = await _workLogRepository.getFilteredWorkLogs(
-        state: state,
+        states: states,
         taskKey: taskKey,
         startDate: startDate,
       );

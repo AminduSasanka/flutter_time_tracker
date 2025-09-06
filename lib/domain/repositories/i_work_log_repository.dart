@@ -16,7 +16,7 @@ abstract interface class IWorkLogRepository {
   Future<List<WorkLogModel>> getCompletedWorkLogs();
 
   Future<List<WorkLogModel>> getFilteredWorkLogs({
-    WorkLogStateEnum? state,
+    List<WorkLogStateEnum>? states,
     String? taskKey,
     DateTime? startDate,
     String? groupBy,

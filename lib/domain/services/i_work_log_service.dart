@@ -21,7 +21,7 @@ abstract interface class IWorkLogService {
   Future<Result<void, Failure>> resumeWorkLog(WorkLog workLog);
 
   Future<Result<List<WorkLog>, Failure>> getFilteredWorkLogs({
-    WorkLogStateEnum? state,
+    List<WorkLogStateEnum>? states,
     String? taskKey,
     DateTime? startDate,
   });
