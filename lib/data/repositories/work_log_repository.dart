@@ -5,6 +5,7 @@ import 'package:flutter_time_tracker/domain/entities/work_log.dart';
 import 'package:flutter_time_tracker/domain/failures/unknown_failure.dart';
 import 'package:flutter_time_tracker/domain/failures/work_log/work_log_not_found_failure.dart';
 import 'package:flutter_time_tracker/domain/repositories/i_work_log_repository.dart';
+import 'package:intl/intl.dart';
 import 'package:sqflite/sqflite.dart';
 
 class WorkLogRepository implements IWorkLogRepository {
@@ -196,24 +197,26 @@ class WorkLogRepository implements IWorkLogRepository {
       final whereClauses = <String>[];
       final whereArgs = <dynamic>[];
 
-      whereClauses.add('work_log_state = ?');
-      whereArgs.add(state?.name ?? WorkLogStateEnum.completed.name);
+      if (state != null) {
+        whereClauses.add('work_log_state = ?');
+        whereArgs.add(state.name);
+      }
 
-      if (taskKey != null) {
+      if (taskKey != null && taskKey != '') {
         whereClauses.add('task_key = ?');
         whereArgs.add(taskKey);
       }
 
       if (startDate != null) {
         whereClauses.add('date(start_time) >= ?');
-        whereArgs.add(startDate.toIso8601String());
+        whereArgs.add(DateFormat('yyyy-MM-dd').format(startDate));
       }
 
       final whereString = whereClauses.join(' AND ');
       final List<Map<String, dynamic>> filteredWorkLogs = await _database.query(
         workLogsTable,
-        where: whereString,
-        whereArgs: whereArgs,
+        where: whereString.isEmpty ? null : whereString,
+        whereArgs: whereArgs.isEmpty ? null : whereArgs,
         orderBy: 'start_time DESC',
       );
 
