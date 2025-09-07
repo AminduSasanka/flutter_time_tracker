@@ -29,7 +29,7 @@ class EditWorklogScreen extends ConsumerWidget {
       data: (state) {
         return Scaffold(
           appBar: AppBar(title: Text('Edit Work Log')),
-          body: Center(child: EditWorkLogWidget(worklogId: int.parse(worklogId!))),
+          body: EditWorkLogWidget(worklogId: int.parse(worklogId!)),
         );
       },
       error: (error, stack) => Text('Error: $error'),
