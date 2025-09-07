@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_time_tracker/core/theme/primary_button.dart';
 import 'package:flutter_time_tracker/domain/entities/work_log.dart';
+import 'package:intl/intl.dart';
 
 class WorkLogFormWidget extends StatelessWidget {
   final WorkLog? workLog;
@@ -8,6 +9,7 @@ class WorkLogFormWidget extends StatelessWidget {
   final TextEditingController summaryController;
   final TextEditingController descriptionController;
   final TextEditingController spentTimeController;
+  final TextEditingController startTimeController;
   final GlobalKey<FormState> formKey;
   final void Function() onSave;
 
@@ -18,9 +20,23 @@ class WorkLogFormWidget extends StatelessWidget {
     required this.summaryController,
     required this.descriptionController,
     required this.spentTimeController,
+    required this.startTimeController,
     required this.formKey,
     required this.onSave,
   });
+
+  Future<void> pickDateTime({context, WorkLog? worklog}) async {
+    DateTime? date = await showDatePicker(
+      context: context,
+      initialDate: worklog != null ? worklog.startTime! : DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+
+    if (date == null) return;
+
+    startTimeController.text = DateFormat('yyyy-MM-dd').format(date);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,10 +52,7 @@ class WorkLogFormWidget extends StatelessWidget {
             children: <Widget>[
               const Text(
                 'Task ID',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
               ),
               const SizedBox(height: 8),
               TextFormField(
@@ -56,17 +69,12 @@ class WorkLogFormWidget extends StatelessWidget {
               const SizedBox(height: 16),
               const Text(
                 'Summary',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
               ),
               const SizedBox(height: 8),
               TextFormField(
                 controller: summaryController,
-                decoration: const InputDecoration(
-                  hint: Text("Team meeting"),
-                ),
+                decoration: const InputDecoration(hint: Text("Team meeting")),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your work log summary';
@@ -77,10 +85,7 @@ class WorkLogFormWidget extends StatelessWidget {
               const SizedBox(height: 16),
               const Text(
                 'Description',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
               ),
               const SizedBox(height: 8),
               TextField(
@@ -91,19 +96,29 @@ class WorkLogFormWidget extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
+              Text("Date"),
+              SizedBox(height: 4),
+              TextField(
+                controller: startTimeController,
+                readOnly: true,
+                decoration: InputDecoration(
+                  hintText: "Select Date",
+                  border: OutlineInputBorder(),
+                  suffixIcon: Icon(Icons.calendar_today),
+                ),
+                onTap: () {
+                  pickDateTime(context: context, worklog: workLog);
+                },
+              ),
+              SizedBox(height: 16),
               const Text(
                 'Time Spent',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
               ),
               const SizedBox(height: 8),
               TextFormField(
                 controller: spentTimeController,
-                decoration: const InputDecoration(
-                  hint: Text("3h 04m 23s"),
-                ),
+                decoration: const InputDecoration(hint: Text("3h 04m 23s")),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter valid time spent';
@@ -123,11 +138,7 @@ class WorkLogFormWidget extends StatelessWidget {
                 },
               ),
               const SizedBox(height: 24),
-              PrimaryButton(
-                text: "Save",
-                onPressed: onSave,
-                isLoading: false,
-              ),
+              PrimaryButton(text: "Save", onPressed: onSave, isLoading: false),
             ],
           ),
         ),
