@@ -117,7 +117,7 @@ class WorkLogFormWidget extends StatelessWidget {
               const SizedBox(height: 16),
               Text("Date"),
               SizedBox(height: 4),
-              TextField(
+              TextFormField(
                 controller: startTimeController,
                 readOnly: true,
                 decoration: InputDecoration(
@@ -125,6 +125,12 @@ class WorkLogFormWidget extends StatelessWidget {
                   border: OutlineInputBorder(),
                   suffixIcon: Icon(Icons.calendar_today),
                 ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please select a date';
+                  }
+                  return null;
+                },
                 onTap: () {
                   pickDateTime(context: context, worklog: workLog);
                 },
