@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_time_tracker/core/DI/controller_providers.dart';
-import 'package:flutter_time_tracker/core/theme/primary_button.dart';
+import 'package:flutter_time_tracker/presentation/shared/widgets/work_log_form_widget.dart';
 
 class EditWorkLogWidget extends ConsumerStatefulWidget {
   final int worklogId;
@@ -86,114 +86,13 @@ class _EditWorkLogWidgetState extends ConsumerState<EditWorkLogWidget> {
 
         return Padding(
           padding: EdgeInsetsGeometry.all(15),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    const Text(
-                      'Task ID',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    TextFormField(
-                      controller: _taskIdController,
-                      decoration: const InputDecoration(hint: Text("ABC-2314")),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your jira task ID';
-                        }
-
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    const Text(
-                      'Summary',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    TextFormField(
-                      controller: _summaryController,
-                      decoration: const InputDecoration(
-                        hint: Text("Team meeting"),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your work log summary';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    const Text(
-                      'Description',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    TextField(
-                      maxLines: 5,
-                      controller: _descriptionController,
-                      decoration: const InputDecoration(
-                        hint: Text("Discussed about next CR"),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    const Text(
-                      'Time Spent',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    TextFormField(
-                      controller: _spentTimeController,
-                      decoration: const InputDecoration(
-                        hint: Text("3h 04m 23s"),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter valid time spent';
-                        }
-
-                        // Regular expression to match format: XhYmZs or XhYs or XmYs or Xh or Xm or Xs
-                        RegExp timeRegex = RegExp(
-                          r'^(?:(\d+)h\s*)?(?:(\d+)m\s*)?(?:(\d+)s)?$',
-                          caseSensitive: false,
-                        );
-
-                        if (!timeRegex.hasMatch(value.trim())) {
-                          return 'Invalid format. Use: 3h 04m 23s, 2h 30m, 45m, etc.';
-                        }
-
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 24),
-                    PrimaryButton(
-                      text: "Save",
-                      onPressed: saveWorkLog,
-                      isLoading: false,
-                    ),
-                  ],
-                ),
-              ),
-            ],
+          child: WorkLogFormWidget(
+            taskIdController: _taskIdController,
+            summaryController: _summaryController,
+            descriptionController: _descriptionController,
+            spentTimeController: _spentTimeController,
+            formKey: _formKey,
+            onSave: saveWorkLog,
           ),
         );
       },
