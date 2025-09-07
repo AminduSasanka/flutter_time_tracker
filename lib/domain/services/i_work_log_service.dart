@@ -25,4 +25,6 @@ abstract interface class IWorkLogService {
     String? taskKey,
     DateTime? startDate,
   });
+
+  Future<Result<WorkLog, Failure>> getWorklogById(int id);
 }
