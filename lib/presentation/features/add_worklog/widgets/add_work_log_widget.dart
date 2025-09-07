@@ -49,8 +49,6 @@ class _AddWorkLogWidgetState extends ConsumerState<AddWorkLogWidget> {
         startDate: _startDateController.text,
       );
 
-      Navigator.pop(context);
-
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Work log saved successfully.')),
       );
