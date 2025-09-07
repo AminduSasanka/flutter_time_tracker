@@ -26,7 +26,8 @@ class EditWorklogScreenController
   void saveWorkLog({
     required String taskKey,
     required String summary,
-    required String description
+    required String description,
+    required String timeSpent
   }) {
     final worklog = AsyncData(state.value!.workLog).value;
 
@@ -36,6 +37,7 @@ class EditWorklogScreenController
         taskKey: taskKey,
         summary: summary,
         description: description,
+        timeSpent: timeSpent
       );
 
     ref.read(workLogServiceProvider).updateWorkLog(updatedWorkLog);
