@@ -20,7 +20,7 @@ abstract interface class IWorkLogService {
 
   Future<Result<void, Failure>> resumeWorkLog(WorkLog workLog);
 
-  Future<Result<List<WorkLog>, Failure>> getFilteredWorkLogs({
+  Future<Result<Map<String, List<WorkLog>>, Failure>> getFilteredWorkLogs({
     List<WorkLogStateEnum>? states,
     String? taskKey,
     DateTime? startDate,
