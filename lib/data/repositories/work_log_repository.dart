@@ -210,7 +210,7 @@ class WorkLogRepository implements IWorkLogRepository {
       }
 
       if (startDate != null) {
-        whereClauses.add('date(start_time) >= ?');
+        whereClauses.add('date(start_time) = ?');
         whereArgs.add(DateFormat('yyyy-MM-dd').format(startDate));
       }
 
