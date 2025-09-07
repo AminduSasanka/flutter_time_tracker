@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_time_tracker/core/DI/controller_providers.dart';
 import 'package:flutter_time_tracker/presentation/shared/widgets/work_log_form_widget.dart';
+import 'package:intl/intl.dart';
 
 class EditWorkLogWidget extends ConsumerStatefulWidget {
   final int worklogId;
@@ -17,6 +18,7 @@ class _EditWorkLogWidgetState extends ConsumerState<EditWorkLogWidget> {
   late final TextEditingController _summaryController;
   late final TextEditingController _descriptionController;
   late final TextEditingController _spentTimeController;
+  late final TextEditingController _startTimeController;
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -25,6 +27,7 @@ class _EditWorkLogWidgetState extends ConsumerState<EditWorkLogWidget> {
     _summaryController = TextEditingController();
     _descriptionController = TextEditingController();
     _spentTimeController = TextEditingController();
+    _startTimeController = TextEditingController();
     super.initState();
   }
 
@@ -34,6 +37,7 @@ class _EditWorkLogWidgetState extends ConsumerState<EditWorkLogWidget> {
     _summaryController.dispose();
     _descriptionController.dispose();
     _spentTimeController.dispose();
+    _startTimeController.dispose();
     super.dispose();
   }
 
@@ -84,6 +88,12 @@ class _EditWorkLogWidgetState extends ConsumerState<EditWorkLogWidget> {
             state.workLog.timeSpent != null) {
           _spentTimeController.text = state.workLog.timeSpent!;
         }
+        if (_startTimeController.text.isEmpty &&
+            state.workLog.startTime != null) {
+          _startTimeController.text = DateFormat(
+            'yyyy-MM-dd',
+          ).format(state.workLog.startTime!);
+        }
 
         return Padding(
           padding: EdgeInsetsGeometry.all(15),
@@ -92,6 +102,7 @@ class _EditWorkLogWidgetState extends ConsumerState<EditWorkLogWidget> {
             summaryController: _summaryController,
             descriptionController: _descriptionController,
             spentTimeController: _spentTimeController,
+            startTimeController: _startTimeController,
             formKey: _formKey,
             onSave: saveWorkLog,
           ),

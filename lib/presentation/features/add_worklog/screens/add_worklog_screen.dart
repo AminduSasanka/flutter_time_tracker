@@ -13,7 +13,7 @@ class AddWorklogScreen extends ConsumerWidget {
     return screenState.when(
       data: (state) {
         return Scaffold(
-          appBar: AppBar(title: Text('Edit Work Log')),
+          appBar: AppBar(title: Text('Add Work Log')),
           body: Center(child: AddWorkLogWidget()),
         );
       },
