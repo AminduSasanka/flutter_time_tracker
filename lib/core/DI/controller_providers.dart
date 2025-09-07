@@ -1,4 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_time_tracker/presentation/features/history/controller/history_screen_controller.dart';
+import 'package:flutter_time_tracker/presentation/features/history/state/history_screen_state.dart';
 import 'package:flutter_time_tracker/presentation/features/home/controller/work_log_controller.dart';
 import 'package:flutter_time_tracker/presentation/features/home/state/work_log_state.dart';
 import 'package:flutter_time_tracker/presentation/features/settings/controller/settings_screen_controller.dart';
@@ -21,3 +23,9 @@ final workLogControllerProvider =
     AutoDisposeAsyncNotifierProvider<WorkLogController, WorkLogState>(
       WorkLogController.new,
     );
+
+final historyScreenControllerProvider =
+    AutoDisposeAsyncNotifierProvider<
+      HistoryScreenController,
+      HistoryScreenState
+    >(HistoryScreenController.new);

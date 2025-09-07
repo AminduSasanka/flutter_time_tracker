@@ -5,6 +5,7 @@ import 'package:flutter_time_tracker/domain/entities/work_log.dart';
 import 'package:flutter_time_tracker/domain/failures/unknown_failure.dart';
 import 'package:flutter_time_tracker/domain/failures/work_log/work_log_not_found_failure.dart';
 import 'package:flutter_time_tracker/domain/repositories/i_work_log_repository.dart';
+import 'package:intl/intl.dart';
 import 'package:sqflite/sqflite.dart';
 
 class WorkLogRepository implements IWorkLogRepository {
@@ -177,6 +178,51 @@ class WorkLogRepository implements IWorkLogRepository {
           .toList();
 
       return workLogModels;
+    } catch (e, s) {
+      throw UnknownFailure(
+        exception: e is Exception ? e : Exception(e.toString()),
+        stackTrace: s,
+      );
+    }
+  }
+
+  @override
+  Future<List<WorkLogModel>> getFilteredWorkLogs({
+    List<WorkLogStateEnum>? states,
+    String? taskKey,
+    DateTime? startDate,
+    String? groupBy,
+  }) async {
+    try {
+      final whereClauses = <String>[];
+      final whereArgs = <dynamic>[];
+
+      if (states != null && states.isNotEmpty) {
+        final placeholders = states.map((_) => '?').join(', ');
+
+        whereClauses.add('work_log_state IN ($placeholders)');
+        whereArgs.addAll(states.map((state) => state.name));
+      }
+
+      if (taskKey != null && taskKey != '') {
+        whereClauses.add('task_key = ?');
+        whereArgs.add(taskKey);
+      }
+
+      if (startDate != null) {
+        whereClauses.add('date(start_time) = ?');
+        whereArgs.add(DateFormat('yyyy-MM-dd').format(startDate));
+      }
+
+      final whereString = whereClauses.join(' AND ');
+      final List<Map<String, dynamic>> filteredWorkLogs = await _database.query(
+        workLogsTable,
+        where: whereString.isEmpty ? null : whereString,
+        whereArgs: whereArgs.isEmpty ? null : whereArgs,
+        orderBy: 'start_time DESC',
+      );
+
+      return filteredWorkLogs.map((e) => WorkLogModel.fromMap(e)).toList();
     } catch (e, s) {
       throw UnknownFailure(
         exception: e is Exception ? e : Exception(e.toString()),
