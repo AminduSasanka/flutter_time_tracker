@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_time_tracker/core/DI/controller_providers.dart';
+import 'package:flutter_time_tracker/core/constants/route_names.dart';
 import 'package:flutter_time_tracker/presentation/shared/widgets/work_log_form_widget.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class AddWorkLogWidget extends ConsumerStatefulWidget {
@@ -51,6 +53,8 @@ class _AddWorkLogWidgetState extends ConsumerState<AddWorkLogWidget> {
             startDate: _startDateController.text,
           );
 
+      context.go(historyRoute);
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Work log saved successfully.')),
       );
@@ -88,8 +92,8 @@ class _AddWorkLogWidgetState extends ConsumerState<AddWorkLogWidget> {
           ).format(state.workLog.startTime!);
         }
 
-        return Padding(
-          padding: EdgeInsetsGeometry.all(15),
+        return SingleChildScrollView(
+          padding: EdgeInsets.all(16),
           child: WorkLogFormWidget(
             taskIdController: _taskIdController,
             summaryController: _summaryController,

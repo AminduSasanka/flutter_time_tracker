@@ -14,7 +14,7 @@ class AddWorklogScreen extends ConsumerWidget {
       data: (state) {
         return Scaffold(
           appBar: AppBar(title: Text('Add Work Log')),
-          body: Center(child: AddWorkLogWidget()),
+          body: AddWorkLogWidget(),
         );
       },
       error: (error, stack) => Text('Error: $error'),
