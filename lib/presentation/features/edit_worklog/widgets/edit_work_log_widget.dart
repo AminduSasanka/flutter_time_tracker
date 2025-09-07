@@ -52,6 +52,7 @@ class _EditWorkLogWidgetState extends ConsumerState<EditWorkLogWidget> {
         summary: _summaryController.text,
         description: _descriptionController.text,
         timeSpent: _spentTimeController.text,
+        startTime: _startTimeController.text,
       );
 
       Navigator.pop(context);

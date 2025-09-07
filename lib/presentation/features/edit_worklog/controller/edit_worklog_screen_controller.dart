@@ -27,7 +27,8 @@ class EditWorklogScreenController
     required String taskKey,
     required String summary,
     required String description,
-    required String timeSpent
+    required String timeSpent,
+    required String startTime
   }) {
     final worklog = AsyncData(state.value!.workLog).value;
 
@@ -37,7 +38,8 @@ class EditWorklogScreenController
         taskKey: taskKey,
         summary: summary,
         description: description,
-        timeSpent: timeSpent
+        timeSpent: timeSpent,
+        startTime: DateTime.parse(startTime)
       );
 
     ref.read(workLogServiceProvider).updateWorkLog(updatedWorkLog);
