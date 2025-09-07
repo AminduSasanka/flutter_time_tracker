@@ -13,18 +13,18 @@ class AddWorklogScreenController
     return AddWorklogScreenState(workLog: WorkLog.empty());
   }
 
-  void addWorkLog({
+  Future<bool> addWorkLog({
     required String taskKey,
     required String summary,
     required String description,
     required String timeSpent,
     required String startDate,
-  }) {
+  }) async {
     final worklog = AsyncData(state.value!.workLog).value;
 
     state = AsyncLoading();
 
-    ref
+    final result = await ref
         .read(workLogServiceProvider)
         .createWorkLog(
           worklog.copyWith(
@@ -37,6 +37,14 @@ class AddWorklogScreenController
           ),
         );
 
-    state = AsyncData(state.value!.copyWith(workLog: WorkLog.empty()));
+    if (result.isSuccess()) {
+      state = AsyncData(state.value!.copyWith(workLog: WorkLog.empty()));
+
+      return true;
+    } else {
+      state = AsyncError(result.tryGetError()!, StackTrace.current);
+
+      return false;
+    }
   }
 }

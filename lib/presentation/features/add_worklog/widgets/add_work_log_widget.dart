@@ -43,21 +43,29 @@ class _AddWorkLogWidgetState extends ConsumerState<AddWorkLogWidget> {
 
   void saveWorkLog() async {
     if (_formKey.currentState!.validate()) {
-      ref
+      final isWorkLogAdded = await ref
           .read(addWorkLogScreenControllerProvider.notifier)
           .addWorkLog(
-            taskKey: _taskIdController.text,
-            summary: _summaryController.text,
-            description: _descriptionController.text,
-            timeSpent: _spentTimeController.text,
-            startDate: _startDateController.text,
-          );
-
-      context.go(historyRoute);
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Work log saved successfully.')),
+        taskKey: _taskIdController.text,
+        summary: _summaryController.text,
+        description: _descriptionController.text,
+        timeSpent: _spentTimeController.text,
+        startDate: _startDateController.text,
       );
+
+      if (!mounted) return;
+
+      if (isWorkLogAdded) {
+        context.go(historyRoute);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Work log saved successfully.')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to add work log.')),
+        );
+      }
     } else {
       ScaffoldMessenger.of(
         context,
