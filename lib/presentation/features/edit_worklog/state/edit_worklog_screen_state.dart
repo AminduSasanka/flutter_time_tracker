@@ -4,4 +4,8 @@ class EditWorklogScreenState {
   WorkLog workLog;
 
   EditWorklogScreenState({required this.workLog});
+
+  EditWorklogScreenState copyWith({required WorkLog workLog}) {
+    return EditWorklogScreenState(workLog: workLog);
+  }
 }
