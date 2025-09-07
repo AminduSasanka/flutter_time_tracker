@@ -41,13 +41,15 @@ class _AddWorkLogWidgetState extends ConsumerState<AddWorkLogWidget> {
 
   void saveWorkLog() async {
     if (_formKey.currentState!.validate()) {
-      ref.read(addWorkLogScreenControllerProvider.notifier).addWorkLog(
-        taskKey: _taskIdController.text,
-        summary: _summaryController.text,
-        description: _descriptionController.text,
-        timeSpent: _spentTimeController.text,
-        startDate: _startDateController.text,
-      );
+      ref
+          .read(addWorkLogScreenControllerProvider.notifier)
+          .addWorkLog(
+            taskKey: _taskIdController.text,
+            summary: _summaryController.text,
+            description: _descriptionController.text,
+            timeSpent: _spentTimeController.text,
+            startDate: _startDateController.text,
+          );
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Work log saved successfully.')),
@@ -81,7 +83,9 @@ class _AddWorkLogWidgetState extends ConsumerState<AddWorkLogWidget> {
         }
         if (_startDateController.text.isEmpty &&
             state.workLog.startTime != null) {
-          _startDateController.text = DateFormat('yyyy-MM-dd').format(state.workLog.startTime!);
+          _startDateController.text = DateFormat(
+            'yyyy-MM-dd HH:mm',
+          ).format(state.workLog.startTime!);
         }
 
         return Padding(

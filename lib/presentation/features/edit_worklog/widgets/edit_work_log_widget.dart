@@ -92,7 +92,7 @@ class _EditWorkLogWidgetState extends ConsumerState<EditWorkLogWidget> {
         if (_startTimeController.text.isEmpty &&
             state.workLog.startTime != null) {
           _startTimeController.text = DateFormat(
-            'yyyy-MM-dd',
+            'yyyy-MM-dd HH:mm',
           ).format(state.workLog.startTime!);
         }
 

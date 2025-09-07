@@ -26,16 +26,35 @@ class WorkLogFormWidget extends StatelessWidget {
   });
 
   Future<void> pickDateTime({context, WorkLog? worklog}) async {
+    DateTime initialDate = worklog?.startTime ?? DateTime.now();
     DateTime? date = await showDatePicker(
       context: context,
-      initialDate: worklog != null ? worklog.startTime! : DateTime.now(),
+      initialDate: initialDate,
       firstDate: DateTime(2000),
       lastDate: DateTime.now(),
     );
 
     if (date == null) return;
 
-    startTimeController.text = DateFormat('yyyy-MM-dd').format(date);
+    TimeOfDay initialTime = TimeOfDay.fromDateTime(initialDate);
+    TimeOfDay? time = await showTimePicker(
+      context: context,
+      initialTime: initialTime,
+    );
+
+    if (time == null) return;
+
+    DateTime selectedDateTime = DateTime(
+      date.year,
+      date.month,
+      date.day,
+      time.hour,
+      time.minute,
+    );
+
+    startTimeController.text = DateFormat(
+      'yyyy-MM-dd HH:mm',
+    ).format(selectedDateTime);
   }
 
   @override
