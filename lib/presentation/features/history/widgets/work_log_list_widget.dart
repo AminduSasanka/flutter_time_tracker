@@ -24,16 +24,15 @@ class WorkLogListWidget extends StatelessWidget {
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 16),
-          Expanded(
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: workLogs.length,
-              itemBuilder: (context, index) {
-                final workLog = workLogs[index];
+          ListView.builder(
+            physics: NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: workLogs.length,
+            itemBuilder: (context, index) {
+              final workLog = workLogs[index];
 
-                return WorkLogWidget(workLog: workLog);
-              },
-            ),
+              return WorkLogWidget(workLog: workLog);
+            },
           ),
         ],
       ),

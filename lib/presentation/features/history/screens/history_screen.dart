@@ -15,7 +15,7 @@ class HistoryScreen extends ConsumerWidget {
 
     return historyScreenState.when(
       data: (state) {
-        final List<WorkLog> workLogs = state.workLogs;
+        final Map<String, List<WorkLog>> workLogsGroupedByDate = state.workLogs;
 
         void showFilterSheet() {
           showModalBottomSheet(
@@ -37,15 +37,14 @@ class HistoryScreen extends ConsumerWidget {
               ),
             ],
           ),
-          body: Column(
-            children: [
-              Expanded(
-                child: WorkLogListWidget(
-                  workLogs: workLogs,
-                  listTitle: "Work log history",
-                ),
-              ),
-            ],
+          body: ListView.builder(
+            itemCount: workLogsGroupedByDate.length,
+            itemBuilder: (context, index) {
+              final date = workLogsGroupedByDate.keys.elementAt(index);
+              final workLogs = workLogsGroupedByDate[date]!;
+
+              return WorkLogListWidget(workLogs: workLogs, listTitle: date);
+            },
           ),
         );
       },
