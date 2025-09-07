@@ -13,6 +13,7 @@ class WorkLogRepository implements IWorkLogRepository {
 
   WorkLogRepository(this._database);
 
+  @override
   Future<WorkLogModel> getByID(int id) async {
     try {
       final workLogs = await _database.query(
