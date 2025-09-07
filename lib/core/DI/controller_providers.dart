@@ -1,4 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_time_tracker/presentation/features/add_worklog/controller/add_worklog_screen_controller.dart';
+import 'package:flutter_time_tracker/presentation/features/add_worklog/state/add_worklog_screen_state.dart';
 import 'package:flutter_time_tracker/presentation/features/edit_worklog/controller/edit_worklog_screen_controller.dart';
 import 'package:flutter_time_tracker/presentation/features/edit_worklog/state/edit_worklog_screen_state.dart';
 import 'package:flutter_time_tracker/presentation/features/history/controller/history_screen_controller.dart';
@@ -38,3 +40,9 @@ final editWorklogScreenControllerProvider =
       EditWorklogScreenState,
       int
     >(EditWorklogScreenController.new);
+
+final addWorkLogScreenControllerProvider =
+    AutoDisposeAsyncNotifierProvider<
+      AddWorklogScreenController,
+      AddWorklogScreenState
+    >(AddWorklogScreenController.new);

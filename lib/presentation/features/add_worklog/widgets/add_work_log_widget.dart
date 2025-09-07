@@ -1,24 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_time_tracker/core/DI/controller_providers.dart';
+import 'package:flutter_time_tracker/core/constants/route_names.dart';
 import 'package:flutter_time_tracker/presentation/shared/widgets/work_log_form_widget.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
-class EditWorkLogWidget extends ConsumerStatefulWidget {
-  final int worklogId;
-
-  const EditWorkLogWidget({super.key, required this.worklogId});
+class AddWorkLogWidget extends ConsumerStatefulWidget {
+  const AddWorkLogWidget({super.key});
 
   @override
-  ConsumerState<EditWorkLogWidget> createState() => _EditWorkLogWidgetState();
+  ConsumerState<AddWorkLogWidget> createState() => _AddWorkLogWidgetState();
 }
 
-class _EditWorkLogWidgetState extends ConsumerState<EditWorkLogWidget> {
+class _AddWorkLogWidgetState extends ConsumerState<AddWorkLogWidget> {
   late final TextEditingController _taskIdController;
   late final TextEditingController _summaryController;
   late final TextEditingController _descriptionController;
   late final TextEditingController _spentTimeController;
-  late final TextEditingController _startTimeController;
+  late final TextEditingController _startDateController;
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -27,7 +27,7 @@ class _EditWorkLogWidgetState extends ConsumerState<EditWorkLogWidget> {
     _summaryController = TextEditingController();
     _descriptionController = TextEditingController();
     _spentTimeController = TextEditingController();
-    _startTimeController = TextEditingController();
+    _startDateController = TextEditingController();
     super.initState();
   }
 
@@ -37,25 +37,23 @@ class _EditWorkLogWidgetState extends ConsumerState<EditWorkLogWidget> {
     _summaryController.dispose();
     _descriptionController.dispose();
     _spentTimeController.dispose();
-    _startTimeController.dispose();
+    _startDateController.dispose();
     super.dispose();
   }
 
-  void saveWorkLog() {
+  void saveWorkLog() async {
     if (_formKey.currentState!.validate()) {
-      final controller = ref.read(
-        editWorklogScreenControllerProvider(widget.worklogId).notifier,
-      );
+      ref
+          .read(addWorkLogScreenControllerProvider.notifier)
+          .addWorkLog(
+            taskKey: _taskIdController.text,
+            summary: _summaryController.text,
+            description: _descriptionController.text,
+            timeSpent: _spentTimeController.text,
+            startDate: _startDateController.text,
+          );
 
-      controller.saveWorkLog(
-        taskKey: _taskIdController.text,
-        summary: _summaryController.text,
-        description: _descriptionController.text,
-        timeSpent: _spentTimeController.text,
-        startTime: _startTimeController.text,
-      );
-
-      Navigator.pop(context);
+      context.go(historyRoute);
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Work log saved successfully.')),
@@ -69,9 +67,7 @@ class _EditWorkLogWidgetState extends ConsumerState<EditWorkLogWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final screenState = ref.watch(
-      editWorklogScreenControllerProvider(widget.worklogId),
-    );
+    final screenState = ref.watch(addWorkLogScreenControllerProvider);
 
     return screenState.when(
       data: (state) {
@@ -89,21 +85,21 @@ class _EditWorkLogWidgetState extends ConsumerState<EditWorkLogWidget> {
             state.workLog.timeSpent != null) {
           _spentTimeController.text = state.workLog.timeSpent!;
         }
-        if (_startTimeController.text.isEmpty &&
+        if (_startDateController.text.isEmpty &&
             state.workLog.startTime != null) {
-          _startTimeController.text = DateFormat(
+          _startDateController.text = DateFormat(
             'yyyy-MM-dd HH:mm',
           ).format(state.workLog.startTime!);
         }
 
-        return Padding(
-          padding: EdgeInsetsGeometry.all(15),
+        return SingleChildScrollView(
+          padding: EdgeInsets.all(16),
           child: WorkLogFormWidget(
             taskIdController: _taskIdController,
             summaryController: _summaryController,
             descriptionController: _descriptionController,
             spentTimeController: _spentTimeController,
-            startTimeController: _startTimeController,
+            startTimeController: _startDateController,
             formKey: _formKey,
             onSave: saveWorkLog,
           ),

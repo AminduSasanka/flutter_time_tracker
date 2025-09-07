@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_time_tracker/core/theme/text_styles.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_time_tracker/core/DI/controller_providers.dart';
+import 'package:flutter_time_tracker/presentation/features/add_worklog/widgets/add_work_log_widget.dart';
 
-class AddWorklogScreen extends StatefulWidget {
+class AddWorklogScreen extends ConsumerWidget {
   const AddWorklogScreen({super.key});
 
   @override
-  State<AddWorklogScreen> createState() => _AddWorklogScreenState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+     final screenState = ref.watch(addWorkLogScreenControllerProvider);
 
-class _AddWorklogScreenState extends State<AddWorklogScreen> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Add Worklog", style: TextStyles.appBarTitle),
-      ),
-      body: Center(child: Text("Add Worklog page")),
+    return screenState.when(
+      data: (state) {
+        return Scaffold(
+          appBar: AppBar(title: Text('Add Work Log')),
+          body: AddWorkLogWidget(),
+        );
+      },
+      error: (error, stack) => Text('Error: $error'),
+      loading: () => CircularProgressIndicator(),
     );
   }
 }
