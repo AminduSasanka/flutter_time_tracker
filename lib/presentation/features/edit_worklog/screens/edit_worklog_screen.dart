@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_time_tracker/core/DI/controller_providers.dart';
+import 'package:flutter_time_tracker/presentation/features/edit_worklog/widgets/edit_work_log_widget.dart';
 
 class EditWorklogScreen extends ConsumerWidget {
   final String? worklogId;
@@ -28,7 +29,7 @@ class EditWorklogScreen extends ConsumerWidget {
       data: (state) {
         return Scaffold(
           appBar: AppBar(title: Text('Edit Work Log')),
-          body: Center(child: Text('Edit Work Log Screen for ID: $worklogId')),
+          body: Center(child: EditWorkLogWidget(worklogId: int.parse(worklogId!))),
         );
       },
       error: (error, stack) => Text('Error: $error'),
