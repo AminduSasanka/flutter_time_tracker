@@ -42,6 +42,9 @@ class _AddWorkLogWidgetState extends ConsumerState<AddWorkLogWidget> {
   }
 
   void saveWorkLog() async {
+    final messenger = ScaffoldMessenger.of(context);
+    final router = GoRouter.of(context);
+
     if (_formKey.currentState!.validate()) {
       final isWorkLogAdded = await ref
           .read(addWorkLogScreenControllerProvider.notifier)
@@ -53,23 +56,19 @@ class _AddWorkLogWidgetState extends ConsumerState<AddWorkLogWidget> {
         startDate: _startDateController.text,
       );
 
-      if (!mounted) return;
-
       if (isWorkLogAdded) {
-        context.go(historyRoute);
+        router.go(historyRoute);
 
-        ScaffoldMessenger.of(context).showSnackBar(
+        messenger.showSnackBar(
           const SnackBar(content: Text('Work log saved successfully.')),
         );
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
+        messenger.showSnackBar(
           const SnackBar(content: Text('Failed to add work log.')),
         );
       }
     } else {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Please fill in all fields.')));
+      messenger.showSnackBar(SnackBar(content: Text('Please fill in all fields.')));
     }
   }
 
