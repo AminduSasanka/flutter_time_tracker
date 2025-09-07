@@ -17,6 +17,7 @@ class AddWorklogScreenController
     required String summary,
     required String description,
     required String timeSpent,
+    required String startDate,
   }) {
     final worklog = AsyncData(state.value!.workLog).value;
 
@@ -30,6 +31,7 @@ class AddWorklogScreenController
             summary: summary,
             description: description,
             timeSpent: timeSpent,
+            startTime: DateTime.parse(startDate),
           ),
         );
 

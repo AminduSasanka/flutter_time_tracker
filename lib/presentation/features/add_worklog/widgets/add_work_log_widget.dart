@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_time_tracker/core/DI/controller_providers.dart';
 import 'package:flutter_time_tracker/presentation/shared/widgets/work_log_form_widget.dart';
+import 'package:intl/intl.dart';
 
 class AddWorkLogWidget extends ConsumerStatefulWidget {
   const AddWorkLogWidget({super.key});
@@ -80,6 +81,10 @@ class _AddWorkLogWidgetState extends ConsumerState<AddWorkLogWidget> {
             state.workLog.timeSpent != null) {
           _spentTimeController.text = state.workLog.timeSpent!;
         }
+        if (_startDateController.text.isEmpty &&
+            state.workLog.startTime != null) {
+          _startDateController.text = DateFormat('yyyy-MM-dd').format(state.workLog.startTime!);
+        }
 
         return Padding(
           padding: EdgeInsetsGeometry.all(15),
@@ -88,6 +93,7 @@ class _AddWorkLogWidgetState extends ConsumerState<AddWorkLogWidget> {
             summaryController: _summaryController,
             descriptionController: _descriptionController,
             spentTimeController: _spentTimeController,
+            startTimeController: _startDateController,
             formKey: _formKey,
             onSave: saveWorkLog,
           ),
