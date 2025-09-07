@@ -22,4 +22,24 @@ class EditWorklogScreenController
       workLog: WorkLog.empty(),
     );
   }
+
+  void saveWorkLog({
+    required String taskKey,
+    required String summary,
+    required String description
+  }) {
+    final worklog = AsyncData(state.value!.workLog).value;
+
+    state = AsyncLoading();
+
+    final updatedWorkLog = worklog.copyWith(
+        taskKey: taskKey,
+        summary: summary,
+        description: description,
+      );
+
+    ref.read(workLogServiceProvider).updateWorkLog(updatedWorkLog);
+
+    state = AsyncData(state.value!.copyWith(workLog: updatedWorkLog));
+  }
 }
