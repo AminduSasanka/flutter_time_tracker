@@ -10,7 +10,7 @@ class HistoryScreenController
     extends AutoDisposeAsyncNotifier<HistoryScreenState> {
   @override
   Future<HistoryScreenState> build() async {
-    List<WorkLog> workLogs = await _getInitialWorkLogs(
+    Map<String, List<WorkLog>> workLogs = await _getInitialWorkLogs(
       states: [WorkLogStateEnum.completed, WorkLogStateEnum.synced],
     );
 
@@ -19,26 +19,6 @@ class HistoryScreenController
       isError: false,
       errorMessage: null,
     );
-  }
-
-  Future<void> fetchWorkLogs() async {
-    state = const AsyncLoading();
-
-    final result = await ref
-        .read(workLogServiceProvider)
-        .getCompletedWorkLogs();
-
-    if (result.isSuccess()) {
-      state = AsyncData(
-        state.value!.copyWith(
-          workLogs: result.tryGetSuccess(),
-          isError: false,
-          errorMessage: null,
-        ),
-      );
-    } else {
-      state = AsyncError(result.tryGetError()!, StackTrace.current);
-    }
   }
 
   Future<void> deleteWorkLog(int id) async {
@@ -98,7 +78,7 @@ class HistoryScreenController
     }
   }
 
-  Future<List<WorkLog>> _getInitialWorkLogs({
+  Future<Map<String, List<WorkLog>>> _getInitialWorkLogs({
     List<WorkLogStateEnum>? states,
     DateTime? startDate,
     String? taskKey,
@@ -112,11 +92,11 @@ class HistoryScreenController
         );
 
     if (result.isSuccess()) {
-      List<WorkLog>? workLogs = result.tryGetSuccess();
+      Map<String, List<WorkLog>>? workLogs = result.tryGetSuccess();
 
       return workLogs!;
     }
 
-    return [];
+    return {};
   }
 }

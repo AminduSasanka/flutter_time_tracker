@@ -2,7 +2,7 @@ import 'package:flutter_time_tracker/core/constants/enums.dart';
 import 'package:flutter_time_tracker/domain/entities/work_log.dart';
 
 class HistoryScreenState {
-  List<WorkLog> workLogs = [];
+  Map<String, List<WorkLog>> workLogs = {};
   bool isError = false;
   String? errorMessage;
   DateTime? filterStartDate;
@@ -19,7 +19,7 @@ class HistoryScreenState {
   });
 
   HistoryScreenState copyWith({
-    List<WorkLog>? workLogs,
+    Map<String, List<WorkLog>>? workLogs,
     bool? isError,
     String? errorMessage,
     DateTime? filterStartDate,
