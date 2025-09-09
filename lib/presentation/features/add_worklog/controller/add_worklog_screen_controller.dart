@@ -7,9 +7,9 @@ import 'package:flutter_time_tracker/domain/entities/work_log.dart';
 import 'package:flutter_time_tracker/presentation/features/add_worklog/state/add_worklog_screen_state.dart';
 
 class AddWorklogScreenController
-    extends AutoDisposeAsyncNotifier<AddWorklogScreenState> {
+    extends AutoDisposeNotifier<AddWorklogScreenState> {
   @override
-  FutureOr<AddWorklogScreenState> build() async {
+  AddWorklogScreenState build() {
     return AddWorklogScreenState(workLog: WorkLog.empty());
   }
 
@@ -20,9 +20,7 @@ class AddWorklogScreenController
     required String timeSpent,
     required String startDate,
   }) async {
-    final worklog = AsyncData(state.value!.workLog).value;
-
-    state = AsyncLoading();
+    final worklog = state.workLog;
 
     final result = await ref
         .read(workLogServiceProvider)
@@ -38,12 +36,10 @@ class AddWorklogScreenController
         );
 
     if (result.isSuccess()) {
-      state = AsyncData(state.value!.copyWith(workLog: WorkLog.empty()));
+      state = state.copyWith(workLog: WorkLog.empty());
 
       return true;
     } else {
-      state = AsyncError(result.tryGetError()!, StackTrace.current);
-
       return false;
     }
   }
