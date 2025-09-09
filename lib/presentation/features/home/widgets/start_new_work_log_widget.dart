@@ -88,24 +88,6 @@ class _StartNewWorkLogWidgetState extends ConsumerState<StartNewWorkLogWidget> {
                       return null;
                     },
                   ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    'Description',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                  ),
-                  const SizedBox(height: 8),
-                  TextFormField(
-                    controller: _descriptionController,
-                    decoration: const InputDecoration(
-                      hint: Text("Discussed about next CR"),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter a description';
-                      }
-                      return null;
-                    },
-                  ),
                   const SizedBox(height: 24),
                   PrimaryButton(
                       text: "Start",
