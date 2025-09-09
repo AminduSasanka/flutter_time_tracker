@@ -73,7 +73,7 @@ class WorkLogFormWidget extends StatelessWidget {
           const SizedBox(height: 8),
           TextFormField(
             controller: taskIdController,
-            decoration: const InputDecoration(hint: Text("ABC-2314")),
+            decoration: const InputDecoration(hintText: "ABC-2314"),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter your jira task ID';
@@ -90,7 +90,7 @@ class WorkLogFormWidget extends StatelessWidget {
           const SizedBox(height: 8),
           TextFormField(
             controller: summaryController,
-            decoration: const InputDecoration(hint: Text("Team meeting")),
+            decoration: const InputDecoration(hintText: "Team meeting"),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter your work log summary';
@@ -108,7 +108,7 @@ class WorkLogFormWidget extends StatelessWidget {
             maxLines: 5,
             controller: descriptionController,
             decoration: const InputDecoration(
-              hint: Text("Discussed about next CR"),
+              hintText: "Discussed about next CR",
             ),
           ),
           const SizedBox(height: 16),
@@ -140,7 +140,7 @@ class WorkLogFormWidget extends StatelessWidget {
           const SizedBox(height: 8),
           TextFormField(
             controller: spentTimeController,
-            decoration: const InputDecoration(hint: Text("3h 04m 23s")),
+            decoration: const InputDecoration(hintText: "3h 04m 23s"),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter valid time spent';
