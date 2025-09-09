@@ -19,17 +19,22 @@ class EditWorklogScreen extends ConsumerWidget {
 
       if (context.mounted) {
         if (isDeleted) {
+          ref.invalidate(historyScreenControllerProvider);
           Navigator.pop(context);
 
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text('Worklog deleted successfully')));
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(content: Text('Worklog deleted successfully')),
+            );
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Worklog delete failed. Please try again later.'),
-            ),
-          );
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                content: Text('Worklog delete failed. Please try again later.'),
+              ),
+            );
         }
       }
     }
