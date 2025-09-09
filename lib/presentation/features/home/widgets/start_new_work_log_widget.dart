@@ -16,6 +16,14 @@ class _StartNewWorkLogWidgetState extends ConsumerState<StartNewWorkLogWidget> {
   final _descriptionController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
+  @override
+  void dispose() {
+    _taskIdController.dispose();
+    _summaryController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
+  }
+
   void _startWorkLog() {
     if (_formKey.currentState!.validate()) {
       ref.read(workLogControllerProvider.notifier).startNewWorkLog(
