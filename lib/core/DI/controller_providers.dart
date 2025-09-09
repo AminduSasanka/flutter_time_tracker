@@ -42,7 +42,7 @@ final editWorklogScreenControllerProvider =
     >(EditWorklogScreenController.new);
 
 final addWorkLogScreenControllerProvider =
-    AutoDisposeAsyncNotifierProvider<
+    AutoDisposeNotifierProvider<
       AddWorklogScreenController,
       AddWorklogScreenState
     >(AddWorklogScreenController.new);
