@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_time_tracker/core/DI/controller_providers.dart';
 import 'package:flutter_time_tracker/presentation/features/add_worklog/widgets/add_work_log_widget.dart';
+import 'package:flutter_time_tracker/presentation/features/history/screens/history_screen.dart';
+import 'package:flutter_time_tracker/presentation/shared/layouts/main_layout.dart';
 
 class AddWorklogScreen extends ConsumerStatefulWidget {
   const AddWorklogScreen({super.key});
@@ -42,12 +44,12 @@ class _AddWorklogScreenState extends ConsumerState<AddWorklogScreen> {
     final isWorkLogAdded = await ref
         .read(addWorkLogScreenControllerProvider.notifier)
         .addWorkLog(
-      taskKey: _taskIdController.text,
-      summary: _summaryController.text,
-      description: _descriptionController.text,
-      timeSpent: _spentTimeController.text,
-      startDate: _startDateController.text,
-    );
+          taskKey: _taskIdController.text,
+          summary: _summaryController.text,
+          description: _descriptionController.text,
+          timeSpent: _spentTimeController.text,
+          startDate: _startDateController.text,
+        );
 
     return isWorkLogAdded;
   }
@@ -73,10 +75,16 @@ class _AddWorklogScreenState extends ConsumerState<AddWorklogScreen> {
 
           if (!context.mounted) return;
 
+          ref
+              .read(navigationControllerProvider.notifier)
+              .goTo(
+                MainLayout.mainWidgetList.indexWhere(
+                  (widget) => widget is HistoryScreen,
+                ),
+              );
+
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Work log added successfully'),
-            ),
+            const SnackBar(content: Text('Work log added successfully')),
           );
         }
       }
