@@ -62,7 +62,6 @@ class _StartNewWorkLogWidgetState extends ConsumerState<StartNewWorkLogWidget> {
                 children: <Widget>[
                   const Text(
                     'Task ID',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                   ),
                   const SizedBox(height: 8),
                   TextFormField(
@@ -81,7 +80,6 @@ class _StartNewWorkLogWidgetState extends ConsumerState<StartNewWorkLogWidget> {
                   const SizedBox(height: 16),
                   const Text(
                     'Summary',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                   ),
                   const SizedBox(height: 8),
                   TextFormField(
