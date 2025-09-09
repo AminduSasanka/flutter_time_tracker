@@ -60,7 +60,7 @@ class _StartNewWorkLogWidgetState extends ConsumerState<StartNewWorkLogWidget> {
                   TextFormField(
                     controller: _taskIdController,
                     decoration: const InputDecoration(
-                      hint: Text("ABC-2314"),
+                      hintText:"ABC-2314",
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -79,7 +79,7 @@ class _StartNewWorkLogWidgetState extends ConsumerState<StartNewWorkLogWidget> {
                   TextFormField(
                     controller: _summaryController,
                     decoration: const InputDecoration(
-                      hint: Text("Team meeting"),
+                      hintText: "Team meeting",
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
