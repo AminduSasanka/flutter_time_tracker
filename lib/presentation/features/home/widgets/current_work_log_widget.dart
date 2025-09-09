@@ -21,9 +21,7 @@ class CurrentWorkLogWidget extends ConsumerWidget {
 
     void stopWorkLog(bool isTimerRunning) async {
       if (isTimerRunning) {
-        await ref
-            .read(workLogControllerProvider.notifier)
-            .stopWorkLog();
+        await ref.read(workLogControllerProvider.notifier).stopWorkLog();
       }
 
       if (context.mounted) {
@@ -32,10 +30,9 @@ class CurrentWorkLogWidget extends ConsumerWidget {
             SnackBar(content: Text('Error: ${workLogState.error}')),
           );
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Work log stopped and saved')),
-          );
-
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('Work log stopped and saved')));
         }
       }
     }

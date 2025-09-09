@@ -7,7 +7,8 @@ class StartNewWorkLogWidget extends ConsumerStatefulWidget {
   const StartNewWorkLogWidget({super.key});
 
   @override
-  ConsumerState<StartNewWorkLogWidget> createState() => _StartNewWorkLogWidgetState();
+  ConsumerState<StartNewWorkLogWidget> createState() =>
+      _StartNewWorkLogWidgetState();
 }
 
 class _StartNewWorkLogWidgetState extends ConsumerState<StartNewWorkLogWidget> {
@@ -16,13 +17,23 @@ class _StartNewWorkLogWidgetState extends ConsumerState<StartNewWorkLogWidget> {
   final _descriptionController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
+  @override
+  void dispose() {
+    _taskIdController.dispose();
+    _summaryController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
+  }
+
   void _startWorkLog() {
     if (_formKey.currentState!.validate()) {
-      ref.read(workLogControllerProvider.notifier).startNewWorkLog(
-        _taskIdController.text,
-        _summaryController.text,
-        _descriptionController.text,
-      );
+      ref
+          .read(workLogControllerProvider.notifier)
+          .startNewWorkLog(
+            _taskIdController.text,
+            _summaryController.text,
+            _descriptionController.text,
+          );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Invalid work log. Please check your inputs.')),
@@ -52,16 +63,11 @@ class _StartNewWorkLogWidgetState extends ConsumerState<StartNewWorkLogWidget> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  const Text(
-                    'Task ID',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                  ),
+                  const Text('Task ID'),
                   const SizedBox(height: 8),
                   TextFormField(
                     controller: _taskIdController,
-                    decoration: const InputDecoration(
-                      hint: Text("ABC-2314"),
-                    ),
+                    decoration: const InputDecoration(hintText: "ABC-2314"),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your jira task ID';
@@ -71,16 +77,11 @@ class _StartNewWorkLogWidgetState extends ConsumerState<StartNewWorkLogWidget> {
                     },
                   ),
                   const SizedBox(height: 16),
-                  const Text(
-                    'Summary',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                  ),
+                  const Text('Summary'),
                   const SizedBox(height: 8),
                   TextFormField(
                     controller: _summaryController,
-                    decoration: const InputDecoration(
-                      hint: Text("Team meeting"),
-                    ),
+                    decoration: const InputDecoration(hintText: "Team meeting"),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your work log summary';
@@ -88,29 +89,11 @@ class _StartNewWorkLogWidgetState extends ConsumerState<StartNewWorkLogWidget> {
                       return null;
                     },
                   ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    'Description',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                  ),
-                  const SizedBox(height: 8),
-                  TextFormField(
-                    controller: _descriptionController,
-                    decoration: const InputDecoration(
-                      hint: Text("Discussed about next CR"),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter a description';
-                      }
-                      return null;
-                    },
-                  ),
                   const SizedBox(height: 24),
                   PrimaryButton(
-                      text: "Start",
-                      onPressed: _startWorkLog,
-                      isLoading: false
+                    text: "Start",
+                    onPressed: _startWorkLog,
+                    isLoading: false,
                   ),
                 ],
               ),
