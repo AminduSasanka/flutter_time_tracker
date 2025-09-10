@@ -241,4 +241,19 @@ class WorkLogService implements IWorkLogService {
       );
     }
   }
+
+  @override
+  Future<Result<void, Failure>> bulkDeleteWorkLogs(List<int> ids) async {
+    try {
+      await _workLogRepository.bulkDeleteWorkLogs(ids);
+
+      return Success(null);
+    } catch (e, s) {
+      return Error(
+        e is Failure
+            ? e
+            : UnknownFailure(exception: Exception(e.toString()), stackTrace: s),
+      );
+    }
+  }
 }
