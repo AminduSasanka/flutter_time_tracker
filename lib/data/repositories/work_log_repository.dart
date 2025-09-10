@@ -231,4 +231,20 @@ class WorkLogRepository implements IWorkLogRepository {
       );
     }
   }
+
+  @override
+  Future<void> bulkDeleteWorkLogs(List<int> ids) async {
+    if (ids.isEmpty) return;
+
+    try {
+      final placeholders = List.filled(ids.length, '?').join(', ');
+
+      await _database.delete(workLogsTable, where: 'id IN ($placeholders)', whereArgs: ids);
+    } catch (e, s) {
+      throw UnknownFailure(
+        exception: e is Exception ? e : Exception(e.toString()),
+        stackTrace: s,
+      );
+    }
+  }
 }

@@ -99,4 +99,54 @@ class HistoryScreenController
 
     return {};
   }
+
+  void selectWorkLog(int id) {
+    state = AsyncData(
+      state.value!.copyWith(
+        selectedWorkLogIds: [...state.value!.selectedWorkLogIds, id],
+      ),
+    );
+  }
+
+  void deselectWorkLog(int id) {
+    state = AsyncData(
+      state.value!.copyWith(
+        selectedWorkLogIds: state.value!.selectedWorkLogIds
+            .where((element) => element != id)
+            .toList(),
+      ),
+    );
+  }
+
+  Future<bool> deleteSelectedWorkLogs() async {
+    if (state.value!.selectedWorkLogIds.isEmpty) {
+      return false;
+    }
+
+    List<int> selectedWorkLogIds = state.value!.selectedWorkLogIds;
+    state = const AsyncLoading();
+
+    final result = await ref
+        .read(workLogServiceProvider)
+        .bulkDeleteWorkLogs(selectedWorkLogIds);
+
+    if (result.isSuccess()) {
+      state = AsyncData(
+        state.value!.copyWith(
+          workLogs: await _getInitialWorkLogs(
+            states: [WorkLogStateEnum.completed, WorkLogStateEnum.synced],
+          ),
+          isError: false,
+          errorMessage: null,
+          selectedWorkLogIds: [],
+        ),
+      );
+
+      return true;
+    } else {
+      state = AsyncError(result.tryGetError()!, StackTrace.current);
+
+      return false;
+    }
+  }
 }

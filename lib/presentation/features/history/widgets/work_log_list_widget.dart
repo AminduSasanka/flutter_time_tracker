@@ -5,11 +5,13 @@ import 'package:flutter_time_tracker/presentation/features/history/widgets/work_
 class WorkLogListWidget extends StatelessWidget {
   final List<WorkLog> workLogs;
   final String listTitle;
+  final List<int> selectedWorkLogIds;
 
   const WorkLogListWidget({
     super.key,
     required this.workLogs,
     required this.listTitle,
+    required this.selectedWorkLogIds,
   });
 
   @override
@@ -31,7 +33,11 @@ class WorkLogListWidget extends StatelessWidget {
             itemBuilder: (context, index) {
               final workLog = workLogs[index];
 
-              return WorkLogWidget(workLog: workLog);
+              return WorkLogWidget(
+                workLog: workLog,
+                isSelected: selectedWorkLogIds.contains(workLog.id),
+                isSelectionMode: selectedWorkLogIds.isNotEmpty,
+              );
             },
           ),
         ],

@@ -4,6 +4,7 @@ import 'package:flutter_time_tracker/core/DI/controller_providers.dart';
 import 'package:flutter_time_tracker/core/theme/text_styles.dart';
 import 'package:flutter_time_tracker/domain/entities/work_log.dart';
 import 'package:flutter_time_tracker/presentation/features/history/widgets/history_filters_widget.dart';
+import 'package:flutter_time_tracker/presentation/features/history/widgets/history_screen_menu.dart';
 import 'package:flutter_time_tracker/presentation/features/history/widgets/work_log_list_widget.dart';
 
 class HistoryScreen extends ConsumerWidget {
@@ -16,6 +17,7 @@ class HistoryScreen extends ConsumerWidget {
     return historyScreenState.when(
       data: (state) {
         final Map<String, List<WorkLog>> workLogsGroupedByDate = state.workLogs;
+        final List<int> selectedWorkLogIds = state.selectedWorkLogIds;
 
         void showFilterSheet() {
           showModalBottomSheet(
@@ -35,6 +37,10 @@ class HistoryScreen extends ConsumerWidget {
                 icon: Icon(Icons.filter_alt_outlined),
                 onPressed: showFilterSheet,
               ),
+              HistoryScreenMenu(
+                isSelectionMode: selectedWorkLogIds.isNotEmpty,
+                screenContext: context,
+              ),
             ],
           ),
           body: ListView.builder(
@@ -43,7 +49,11 @@ class HistoryScreen extends ConsumerWidget {
               final date = workLogsGroupedByDate.keys.elementAt(index);
               final workLogs = workLogsGroupedByDate[date]!;
 
-              return WorkLogListWidget(workLogs: workLogs, listTitle: date);
+              return WorkLogListWidget(
+                workLogs: workLogs,
+                listTitle: date,
+                selectedWorkLogIds: selectedWorkLogIds,
+              );
             },
           ),
         );
