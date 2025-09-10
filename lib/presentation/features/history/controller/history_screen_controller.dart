@@ -99,4 +99,21 @@ class HistoryScreenController
 
     return {};
   }
+
+  void selectWorkLog(int id) {
+    state = AsyncData(
+      state.value!.copyWith(
+        selectedWorkLogIds: [...state.value!.selectedWorkLogIds, id],
+      ),
+    );
+  }
+
+  void deselectWorkLog(int id) {
+    state = AsyncData(
+      state.value!.copyWith(
+        selectedWorkLogIds: state.value!.selectedWorkLogIds.where((
+            element) => element != id).toList(),
+      ),
+    );
+  }
 }
