@@ -8,6 +8,7 @@ class HistoryScreenState {
   DateTime? filterStartDate;
   String? filterTaskKey;
   WorkLogStateEnum? filterState;
+  List<int> selectedWorkLogIds = [];
 
   HistoryScreenState({
     required this.workLogs,
@@ -16,6 +17,7 @@ class HistoryScreenState {
     this.filterStartDate,
     this.filterTaskKey,
     this.filterState,
+    this.selectedWorkLogIds = const [],
   });
 
   HistoryScreenState copyWith({
@@ -26,6 +28,7 @@ class HistoryScreenState {
     DateTime? filterEndDate,
     String? filterTaskKey,
     WorkLogStateEnum? filterState,
+    List<int>? selectedWorkLogIds,
   }) {
     return HistoryScreenState(
       workLogs: workLogs ?? this.workLogs,
@@ -34,6 +37,7 @@ class HistoryScreenState {
       filterStartDate: filterStartDate,
       filterTaskKey: filterTaskKey,
       filterState: filterState,
+      selectedWorkLogIds: selectedWorkLogIds ?? this.selectedWorkLogIds,
     );
   }
 }
