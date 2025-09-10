@@ -23,13 +23,13 @@ class EditWorklogScreenController
     );
   }
 
-  void saveWorkLog({
+  Future<bool> saveWorkLog({
     required String taskKey,
     required String summary,
     required String description,
     required String timeSpent,
     required String startTime
-  }) {
+  }) async {
     final worklog = AsyncData(state.value!.workLog).value;
 
     state = AsyncLoading();
@@ -42,9 +42,17 @@ class EditWorklogScreenController
         startTime: DateTime.parse(startTime)
       );
 
-    ref.read(workLogServiceProvider).updateWorkLog(updatedWorkLog);
+    final result = await ref.read(workLogServiceProvider).updateWorkLog(updatedWorkLog);
 
-    state = AsyncData(state.value!.copyWith(workLog: updatedWorkLog));
+    if (result.isSuccess()) {
+      state = AsyncData(state.value!.copyWith(workLog: updatedWorkLog));
+
+      return true;
+    } else {
+      state = AsyncError(result.tryGetError()!, StackTrace.current);
+
+      return false;
+    }
   }
 
   Future<bool> deleteWorkLog() async {
