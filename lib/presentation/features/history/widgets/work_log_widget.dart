@@ -1,23 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_time_tracker/core/DI/controller_providers.dart';
 import 'package:flutter_time_tracker/core/constants/route_names.dart';
 import 'package:flutter_time_tracker/domain/entities/work_log.dart';
 import 'package:go_router/go_router.dart';
 
 class WorkLogWidget extends ConsumerWidget {
   final WorkLog workLog;
+  final bool isSelected;
+  final bool isSelectionMode;
 
-  const WorkLogWidget({super.key, required this.workLog});
+  const WorkLogWidget({super.key, required this.workLog, this.isSelected = false, this.isSelectionMode = false});
+
+  Widget _SelectedIconWidget() {
+    return Row(
+      children: [
+        Icon(Icons.check_box, color: Colors.blue),
+        const SizedBox(width: 12),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ClipRect(
       child: GestureDetector(
         onTap: () {
-          context.pushNamed(
-            editWorklogRoute,
-            pathParameters: {'worklogId': workLog.id!.toString()},
-          );
+          if (isSelectionMode && !isSelected) {
+            ref.read(historyScreenControllerProvider.notifier).selectWorkLog(workLog.id!);
+          } else if (isSelectionMode && isSelected) {
+            ref.read(historyScreenControllerProvider.notifier).deselectWorkLog(workLog.id!);
+          } else {
+            context.pushNamed(
+              editWorklogRoute,
+              pathParameters: {'worklogId': workLog.id!.toString()},
+            );
+          }
+        },
+        onLongPress: () {
+          if (!isSelected) {
+            ref.read(historyScreenControllerProvider.notifier).selectWorkLog(workLog.id!);
+          }
         },
         child: Container(
           margin: const EdgeInsets.only(bottom: 12),
@@ -33,6 +56,7 @@ class WorkLogWidget extends ConsumerWidget {
           ),
           child: Row(
             children: [
+              isSelected ? _SelectedIconWidget() : Container(),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
