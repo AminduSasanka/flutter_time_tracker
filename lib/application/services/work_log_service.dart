@@ -226,4 +226,34 @@ class WorkLogService implements IWorkLogService {
       );
     }
   }
+
+  @override
+  Future<Result<WorkLog, Failure>> getWorklogById(int id) async {
+    try {
+      final WorkLogModel workLogModel = await _workLogRepository.getByID(id);
+
+      return Success(workLogModel.toEntity());
+    } catch (e, s) {
+      return Error(
+        e is Failure
+            ? e
+            : UnknownFailure(exception: Exception(e.toString()), stackTrace: s),
+      );
+    }
+  }
+
+  @override
+  Future<Result<void, Failure>> bulkDeleteWorkLogs(List<int> ids) async {
+    try {
+      await _workLogRepository.bulkDeleteWorkLogs(ids);
+
+      return Success(null);
+    } catch (e, s) {
+      return Error(
+        e is Failure
+            ? e
+            : UnknownFailure(exception: Exception(e.toString()), stackTrace: s),
+      );
+    }
+  }
 }

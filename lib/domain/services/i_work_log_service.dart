@@ -25,4 +25,8 @@ abstract interface class IWorkLogService {
     String? taskKey,
     DateTime? startDate,
   });
+
+  Future<Result<WorkLog, Failure>> getWorklogById(int id);
+
+  Future<Result<void, Failure>> bulkDeleteWorkLogs(List<int> ids);
 }

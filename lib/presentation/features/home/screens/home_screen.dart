@@ -28,7 +28,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsetsGeometry.all(8),
+        padding: const EdgeInsetsGeometry.directional(
+          start: 8,
+          end: 8,
+          top: 16,
+          bottom: 8,
+        ),
         child: Column(children: [CurrentWorkLogWidget()]),
       ),
     );

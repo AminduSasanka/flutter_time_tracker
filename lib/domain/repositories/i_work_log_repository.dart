@@ -21,4 +21,8 @@ abstract interface class IWorkLogRepository {
     DateTime? startDate,
     String? groupBy,
   });
+
+  Future<WorkLogModel> getByID(int id);
+
+  Future<void> bulkDeleteWorkLogs(List<int> ids);
 }
