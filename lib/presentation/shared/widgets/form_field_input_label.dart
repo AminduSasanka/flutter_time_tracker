@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class TextFormFieldInputLabel extends StatelessWidget {
+class FormFieldInputLabel extends StatelessWidget {
   final String label;
   final bool isRequired;
 
-  const TextFormFieldInputLabel({
+  const FormFieldInputLabel({
     super.key,
     required this.label,
     this.isRequired = false,

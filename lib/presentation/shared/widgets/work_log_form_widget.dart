@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_time_tracker/core/theme/primary_button.dart';
 import 'package:flutter_time_tracker/domain/entities/work_log.dart';
-import 'package:flutter_time_tracker/presentation/shared/widgets/text_form_field_input_label.dart';
+import 'package:flutter_time_tracker/presentation/shared/widgets/form_field_input_label.dart';
 import 'package:intl/intl.dart';
 
 class WorkLogFormWidget extends StatelessWidget {
@@ -67,7 +67,7 @@ class WorkLogFormWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          TextFormFieldInputLabel(label: 'Task ID', isRequired: true),
+          FormFieldInputLabel(label: 'Task ID', isRequired: true),
           const SizedBox(height: 8),
           TextFormField(
             controller: taskIdController,
@@ -81,7 +81,7 @@ class WorkLogFormWidget extends StatelessWidget {
             },
           ),
           const SizedBox(height: 16),
-          TextFormFieldInputLabel(label: 'Summary', isRequired: true),
+          FormFieldInputLabel(label: 'Summary', isRequired: true),
           const SizedBox(height: 8),
           TextFormField(
             controller: summaryController,
@@ -94,7 +94,7 @@ class WorkLogFormWidget extends StatelessWidget {
             },
           ),
           const SizedBox(height: 16),
-          TextFormFieldInputLabel(label: 'Description'),
+          FormFieldInputLabel(label: 'Description'),
           const SizedBox(height: 8),
           TextField(
             maxLines: 5,
@@ -104,7 +104,7 @@ class WorkLogFormWidget extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          TextFormFieldInputLabel(label: "Date & Time", isRequired: true),
+          FormFieldInputLabel(label: "Date & Time", isRequired: true),
           const SizedBox(height: 8),
           TextFormField(
             controller: startTimeController,
@@ -125,7 +125,7 @@ class WorkLogFormWidget extends StatelessWidget {
             },
           ),
           SizedBox(height: 16),
-          TextFormFieldInputLabel(label: 'Time Spent', isRequired: true),
+          FormFieldInputLabel(label: 'Time Spent', isRequired: true),
           const SizedBox(height: 8),
           TextFormField(
             controller: spentTimeController,
