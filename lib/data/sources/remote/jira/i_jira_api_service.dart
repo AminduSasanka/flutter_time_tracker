@@ -4,9 +4,9 @@ abstract interface class IJiraApiService {
     Map<String, dynamic>? queryParams,
   );
 
-  Future<Map<String, dynamic>> put();
+  Future<Map<String, dynamic>> put(String url, Map<String, dynamic> body);
 
-  Future<Map<String, dynamic>> post();
+  Future<Map<String, dynamic>> post(String url, Map<String, dynamic> body);
 
-  Future<Map<String, dynamic>> delete();
+  Future<Map<String, dynamic>> delete(String url);
 }
