@@ -10,9 +10,14 @@ class WorkLogWidget extends ConsumerWidget {
   final bool isSelected;
   final bool isSelectionMode;
 
-  const WorkLogWidget({super.key, required this.workLog, this.isSelected = false, this.isSelectionMode = false});
+  const WorkLogWidget({
+    super.key,
+    required this.workLog,
+    this.isSelected = false,
+    this.isSelectionMode = false,
+  });
 
-  Widget _SelectedIconWidget() {
+  Widget _selectedIconWidget() {
     return Row(
       children: [
         Icon(Icons.check_box, color: Colors.blue),
@@ -23,41 +28,47 @@ class WorkLogWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ClipRect(
-      child: GestureDetector(
-        onTap: () {
-          if (isSelectionMode && !isSelected) {
-            ref.read(historyScreenControllerProvider.notifier).selectWorkLog(workLog.id!);
-          } else if (isSelectionMode && isSelected) {
-            ref.read(historyScreenControllerProvider.notifier).deselectWorkLog(workLog.id!);
-          } else {
-            context.pushNamed(
-              editWorklogRoute,
-              pathParameters: {'worklogId': workLog.id!.toString()},
-            );
-          }
-        },
-        onLongPress: () {
-          if (!isSelected) {
-            ref.read(historyScreenControllerProvider.notifier).selectWorkLog(workLog.id!);
-          }
-        },
-        child: Container(
-          margin: const EdgeInsets.only(bottom: 5),
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
-            border: Border(
-              top: BorderSide(color: Colors.black12, width: 1),
-              right: BorderSide(color: Colors.black12, width: 1),
-              bottom: BorderSide(color: Colors.black12, width: 1),
-              left: BorderSide(color: Colors.blue, width: 1),
-            ),
+    return GestureDetector(
+      onTap: () {
+        if (isSelectionMode && !isSelected) {
+          ref
+              .read(historyScreenControllerProvider.notifier)
+              .selectWorkLog(workLog.id!);
+        } else if (isSelectionMode && isSelected) {
+          ref
+              .read(historyScreenControllerProvider.notifier)
+              .deselectWorkLog(workLog.id!);
+        } else {
+          context.pushNamed(
+            editWorklogRoute,
+            pathParameters: {'worklogId': workLog.id!.toString()},
+          );
+        }
+      },
+      onLongPress: () {
+        if (!isSelected) {
+          ref
+              .read(historyScreenControllerProvider.notifier)
+              .selectWorkLog(workLog.id!);
+        }
+      },
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 5),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
+          border: Border(
+            top: BorderSide(color: Colors.black12, width: 1),
+            right: BorderSide(color: Colors.black12, width: 1),
+            bottom: BorderSide(color: Colors.black12, width: 1),
+            left: BorderSide(color: Colors.blue, width: 1),
           ),
-          child: Row(
-            children: [
-              isSelected ? _SelectedIconWidget() : Container(),
-              Column(
+        ),
+        child: Row(
+          children: [
+            isSelected ? _selectedIconWidget() : Container(),
+            Expanded(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
@@ -70,16 +81,19 @@ class WorkLogWidget extends ConsumerWidget {
                   Text(
                     workLog.summary,
                     style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                    softWrap: true,
                   ),
                 ],
               ),
-              const Spacer(),
-              Text(
-                workLog.timeSpent == null ? "00:00" : workLog.timeSpent!,
-                style: const TextStyle(fontWeight: FontWeight.w500),
-              ),
-            ],
-          ),
+            ),
+            const SizedBox(width: 8),
+            Text(
+              workLog.timeSpent == null ? "00:00" : workLog.timeSpent!,
+              style: const TextStyle(fontWeight: FontWeight.w500),
+            ),
+          ],
         ),
       ),
     );
