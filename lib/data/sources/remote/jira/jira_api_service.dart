@@ -1,7 +1,8 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:flutter_time_tracker/data/models/jira_auth/jira_auth_model.dart';
+import 'package:dio_http_formatter/dio_http_formatter.dart';
+import 'package:flutter_time_tracker/core/services/network/network_interceptor.dart';
 import 'package:flutter_time_tracker/data/sources/remote/jira/i_jira_api_service.dart';
 import 'package:flutter_time_tracker/domain/failures/jira/jira_access_denied_failure.dart';
 import 'package:flutter_time_tracker/domain/failures/jira/jira_authentication_failure.dart';
@@ -11,6 +12,7 @@ import 'package:flutter_time_tracker/domain/repositories/i_jira_auth_repository.
 class JiraApiService implements IJiraApiService {
   final Dio _dio;
   final IJiraAuthRepository _jiraAuthRepository;
+  static bool _isInitialized = false;
 
   JiraApiService(this._dio, this._jiraAuthRepository);
 
@@ -56,11 +58,19 @@ class JiraApiService implements IJiraApiService {
   }
 
   Future<Dio> _prepareDio(Dio dio) async {
-    JiraAuthModel jiraAuthModel = await _jiraAuthRepository.read();
-    dio.options.baseUrl = "https://${jiraAuthModel.workspace}";
-    dio.options.headers = {
-      "Authorization": "Basic ${_jiraAuthRepository.getAccessToken()}",
-    };
+    if (_isInitialized) return dio;
+
+    dio.interceptors.addAll([
+      HttpFormatter(
+        loggingFilter: (request, response, error) {
+          if (response?.statusCode == 201) return false;
+
+          return true;
+        },
+      ),
+      NetworkInterceptor(_jiraAuthRepository)
+    ]);
+    _isInitialized = true;
 
     return dio;
   }
@@ -111,5 +121,10 @@ class JiraApiService implements IJiraApiService {
     return response.statusCode != null &&
         response.statusCode! >= 200 &&
         response.statusCode! < 300;
+  }
+
+  void resetInitialization() {
+    _isInitialized = false;
+    _dio.interceptors.clear();
   }
 }
