@@ -9,22 +9,22 @@ class WorkLogWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ClipRect(
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 12),
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
-          border: Border(
-            top: BorderSide(color: Colors.black12, width: 1),
-            right: BorderSide(color: Colors.black12, width: 1),
-            bottom: BorderSide(color: Colors.black12, width: 1),
-            left: BorderSide(color: Colors.blue, width: 1),
-          ),
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        border: Border(
+          top: BorderSide(color: Colors.black12, width: 1),
+          right: BorderSide(color: Colors.black12, width: 1),
+          bottom: BorderSide(color: Colors.black12, width: 1),
+          left: BorderSide(color: Colors.blue, width: 1),
         ),
-        child: Row(
-          children: [
-            Column(
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
@@ -37,16 +37,19 @@ class WorkLogWidget extends ConsumerWidget {
                 Text(
                   workLog.summary,
                   style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 2,
+                  softWrap: true,
                 ),
               ],
             ),
-            const Spacer(),
-            Text(
-              workLog.timeSpent == null ? "00:00" : workLog.timeSpent!,
-              style: const TextStyle(fontWeight: FontWeight.w500),
-            ),
-          ],
-        ),
+          ),
+          const SizedBox(width: 8,),
+          Text(
+            workLog.timeSpent == null ? "00:00" : workLog.timeSpent!,
+            style: const TextStyle(fontWeight: FontWeight.w500),
+          ),
+        ],
       ),
     );
   }
