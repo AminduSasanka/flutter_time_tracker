@@ -129,7 +129,7 @@ class WorkLogFormWidget extends StatelessWidget {
           const SizedBox(height: 8),
           TextFormField(
             controller: spentTimeController,
-            decoration: const InputDecoration(hintText: "3h 04m 23s"),
+            decoration: const InputDecoration(hintText: "3h 04m"),
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter valid time spent';
