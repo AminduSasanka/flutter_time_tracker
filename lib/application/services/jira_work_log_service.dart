@@ -32,7 +32,10 @@ class JiraWorkLogService implements IJiraWorkLogService {
         responseDto = await _jiraWorkLogRepository.updateJiraWorkLog(workLog);
       }
 
-      WorkLog updatedWorkLog = workLog.copyWith(jiraWorkLogId: responseDto.id, workLogState: WorkLogStateEnum.synced);
+      WorkLog updatedWorkLog = workLog.copyWith(
+        jiraWorkLogId: responseDto.id,
+        workLogState: WorkLogStateEnum.synced,
+      );
 
       await _workLogRepository.update(updatedWorkLog);
 
