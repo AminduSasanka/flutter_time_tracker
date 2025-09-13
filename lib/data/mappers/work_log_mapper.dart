@@ -1,12 +1,16 @@
 import 'package:flutter_time_tracker/data/dto/jira_work_log/jira_work_log_create_dto.dart';
 import 'package:flutter_time_tracker/domain/entities/work_log.dart';
+import 'package:flutter_time_tracker/domain/mappers/i_work_log_mapper.dart';
 
-class WorkLogMapper {
+class WorkLogMapper implements IWorkLogMapper {
   static const String _docType = "doc";
   static const String _textType = "text";
   static const int _defaultVersion = 1;
 
-  static JiraWorkLogCreateDto toJiraWorkLogCreateDto(WorkLog workLog) {
+  WorkLogMapper();
+
+  @override
+  JiraWorkLogCreateDto toJiraWorkLogCreateDto(WorkLog workLog) {
     final comment = _buildComment(workLog);
 
     return JiraWorkLogCreateDto(
@@ -18,7 +22,7 @@ class WorkLogMapper {
     );
   }
 
-  static Comment _buildComment(WorkLog workLog) {
+  Comment _buildComment(WorkLog workLog) {
     final contentItems = <ContentContent>[];
 
     contentItems.add(ContentContent(text: workLog.summary, type: _textType));
