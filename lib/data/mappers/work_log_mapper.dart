@@ -5,6 +5,7 @@ import 'package:flutter_time_tracker/domain/mappers/i_work_log_mapper.dart';
 class WorkLogMapper implements IWorkLogMapper {
   static const String _docType = "doc";
   static const String _textType = "text";
+  static const String _paragraphType = "paragraph";
   static const int _defaultVersion = 1;
 
   WorkLogMapper();
@@ -15,10 +16,8 @@ class WorkLogMapper implements IWorkLogMapper {
 
     return JiraWorkLogCreateDto(
       comment: comment,
-      started:
-          workLog.startTime?.toIso8601String() ??
-          DateTime.now().toIso8601String(),
-      timeSpent: workLog.timeSpent ?? "0m",
+      started: _convertStartedTimeToString(workLog.startTime),
+      timeSpent: workLog.timeSpent ?? "0h 0m",
     );
   }
 
@@ -35,7 +34,7 @@ class WorkLogMapper implements IWorkLogMapper {
 
     final commentContent = CommentContent(
       content: contentItems,
-      type: _docType,
+      type: _paragraphType,
     );
 
     return Comment(
@@ -43,5 +42,17 @@ class WorkLogMapper implements IWorkLogMapper {
       type: _docType,
       version: _defaultVersion,
     );
+  }
+
+  String _convertStartedTimeToString(DateTime? dateTime) {
+    DateTime utcTime = dateTime == null ? DateTime.now() : dateTime.toUtc();
+
+    return "${utcTime.year.toString().padLeft(4, '0')}-"
+        "${utcTime.month.toString().padLeft(2, '0')}-"
+        "${utcTime.day.toString().padLeft(2, '0')}T"
+        "${utcTime.hour.toString().padLeft(2, '0')}:"
+        "${utcTime.minute.toString().padLeft(2, '0')}:"
+        "${utcTime.second.toString().padLeft(2, '0')}."
+        "${utcTime.millisecond.toString().padLeft(3, '0')}+0000";
   }
 }
