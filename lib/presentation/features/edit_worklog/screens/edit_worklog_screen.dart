@@ -175,31 +175,29 @@ class _EditWorklogScreenState extends ConsumerState<EditWorklogScreen> {
       editWorklogScreenControllerProvider(int.parse(widget.worklogId!)),
     );
 
-    return screenState.when(
-      data: (state) {
-        return Scaffold(
-          appBar: AppBar(
-            title: Text('Edit Work Log'),
-            actions: [
-              IconButton(icon: Icon(Icons.sync), onPressed: syncWorkLog),
-              IconButton(icon: Icon(Icons.delete), onPressed: deleteWorkLog),
-            ],
-          ),
-          body: EditWorkLogWidget(
-            worklogId: int.parse(widget.worklogId!),
-            taskIdController: _taskIdController,
-            summaryController: _summaryController,
-            descriptionController: _descriptionController,
-            spentTimeController: _spentTimeController,
-            startTimeController: _startTimeController,
-            formKey: _formKey,
-            onSave: saveWorkLog,
-            state: state,
-          ),
-        );
-      },
-      error: (error, stack) => Text('Error: $error'),
-      loading: () => CircularProgressIndicator(),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Edit Work Log'),
+        actions: [
+          IconButton(icon: Icon(Icons.sync), onPressed: syncWorkLog),
+          IconButton(icon: Icon(Icons.delete), onPressed: deleteWorkLog),
+        ],
+      ),
+      body: screenState.when(
+        data: (state) => EditWorkLogWidget(
+          worklogId: int.parse(widget.worklogId!),
+          taskIdController: _taskIdController,
+          summaryController: _summaryController,
+          descriptionController: _descriptionController,
+          spentTimeController: _spentTimeController,
+          startTimeController: _startTimeController,
+          formKey: _formKey,
+          onSave: saveWorkLog,
+          state: state,
+        ),
+        error: (error, stack) => Center(child: Text('Error: ${stack.toString()}')),
+        loading: () => CircularProgressIndicator(),
+      ),
     );
   }
 }
