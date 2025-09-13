@@ -9,6 +9,7 @@ class WorkLogModel {
   final DateTime? startTime;
   final String? timeSpent;
   final WorkLogStateEnum workLogState;
+  final String? jiraWorkLogId;
 
   WorkLogModel({
     this.id,
@@ -18,6 +19,7 @@ class WorkLogModel {
     this.startTime,
     this.timeSpent,
     this.workLogState = WorkLogStateEnum.blank,
+    this.jiraWorkLogId,
   });
 
   factory WorkLogModel.fromJson(Map<String, dynamic> json) {
@@ -31,6 +33,7 @@ class WorkLogModel {
       workLogState: WorkLogStateEnum.values.firstWhere(
         (state) => state.name == json['workLogState'],
       ),
+      jiraWorkLogId: json['jiraWorkLogId'] as String?,
     );
   }
 
@@ -47,6 +50,7 @@ class WorkLogModel {
       workLogState: WorkLogStateEnum.values.firstWhere(
             (state) => state.name == map['work_log_state'],
       ),
+      jiraWorkLogId: map['jira_work_log_id'] as String?,
     );
   }
 
@@ -59,6 +63,7 @@ class WorkLogModel {
       'startTime': startTime?.toIso8601String(),
       'timeSpent': timeSpent,
       'workLogState': workLogState.name,
+      'jiraWorkLogId': jiraWorkLogId,
     };
   }
 
@@ -71,6 +76,7 @@ class WorkLogModel {
       startTime: startTime,
       timeSpent: timeSpent,
       workLogState: workLogState,
+      jiraWorkLogId: jiraWorkLogId,
     );
   }
 
@@ -82,6 +88,7 @@ class WorkLogModel {
     DateTime? startTime,
     String? timeSpent,
     WorkLogStateEnum? workLogState,
+    String? jiraWorkLogId,
   }) {
     return WorkLogModel(
       id: id ?? this.id,
@@ -91,6 +98,7 @@ class WorkLogModel {
       timeSpent: timeSpent ?? this.timeSpent,
       startTime: startTime ?? this.startTime,
       workLogState: workLogState ?? this.workLogState,
+      jiraWorkLogId: jiraWorkLogId ?? this.jiraWorkLogId,
     );
   }
 
@@ -103,6 +111,7 @@ class WorkLogModel {
       'start_time': startTime?.toIso8601String(),
       'time_spent': timeSpent,
       'work_log_state': workLogState.name,
+      'jira_work_log_id': jiraWorkLogId,
     };
   }
 }
