@@ -1,16 +1,16 @@
 import 'package:flutter_time_tracker/data/dto/jira_work_log/jira_work_log_response_dto.dart';
-import 'package:flutter_time_tracker/data/mappers/work_log_mapper.dart';
 import 'package:flutter_time_tracker/data/sources/remote/jira/i_jira_api_service.dart';
 import 'package:flutter_time_tracker/domain/entities/work_log.dart';
 import 'package:flutter_time_tracker/domain/failures/failure.dart';
 import 'package:flutter_time_tracker/domain/failures/jira/jira_work_log_sync_failure.dart';
 import 'package:flutter_time_tracker/domain/failures/unknown_failure.dart';
 import 'package:flutter_time_tracker/domain/failures/work_log/invalid_work_log_sync_failure.dart';
+import 'package:flutter_time_tracker/domain/mappers/i_work_log_mapper.dart';
 import 'package:flutter_time_tracker/domain/repositories/i_jira_work_log_repository.dart';
 
 class JiraWorkLogRepository implements IJiraWorkLogRepository {
   final IJiraApiService _jiraApiService;
-  final WorkLogMapper _mapper;
+  final IWorkLogMapper _mapper;
 
   JiraWorkLogRepository(this._jiraApiService, this._mapper);
 
