@@ -179,7 +179,7 @@ class _EditWorklogScreenState extends ConsumerState<EditWorklogScreen> {
         ),
         error: (error, stack) =>
             Center(child: Text('Error: ${stack.toString()}')),
-        loading: () => CircularProgressIndicator(),
+        loading: () => Center(child: CircularProgressIndicator()),
       ),
     );
   }
