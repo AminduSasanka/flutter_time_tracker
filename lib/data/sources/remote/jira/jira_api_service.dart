@@ -53,7 +53,7 @@ class JiraApiService implements IJiraApiService {
     String url,
     Map<String, dynamic> body,
   ) async {
-    final data = _sendRequest(() async => await _dio.put(url, data: body));
+    final data = await _sendRequest(() async => await _dio.put(url, data: body));
 
     return data as Map<String, dynamic>;
   }
