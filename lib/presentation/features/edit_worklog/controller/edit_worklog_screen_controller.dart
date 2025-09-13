@@ -72,4 +72,28 @@ class EditWorklogScreenController
       return false;
     }
   }
+
+  Future<bool> syncWorkLog() async {
+    final worklog = AsyncData(state.value!.workLog).value;
+
+    state = AsyncLoading();
+
+    final result = await ref.read(jiraWorkLogServiceProvider).syncWorkLog(worklog);
+
+    if (result.isSuccess()) {
+      if (result.tryGetSuccess() != null) {
+        state = AsyncData(state.value!.copyWith(workLog: result.tryGetSuccess()!));
+
+        return true;
+      } else {
+        state = AsyncData(state.value!.copyWith(workLog: worklog));
+
+        return false;
+      }
+    } else {
+      state = AsyncError(result.tryGetError()!, StackTrace.current);
+
+      return false;
+    }
+  }
 }
