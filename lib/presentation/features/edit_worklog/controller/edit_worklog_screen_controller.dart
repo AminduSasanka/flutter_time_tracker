@@ -10,17 +10,15 @@ class EditWorklogScreenController
     extends AutoDisposeFamilyAsyncNotifier<EditWorklogScreenState, int> {
   @override
   FutureOr<EditWorklogScreenState> build(int worklogId) async {
-    final Result result = await ref.read(workLogServiceProvider).getWorklogById(worklogId);
+    final Result result = await ref
+        .read(workLogServiceProvider)
+        .getWorklogById(worklogId);
 
     if (result.isSuccess()) {
-      return EditWorklogScreenState(
-        workLog: result.tryGetSuccess(),
-      );
+      return EditWorklogScreenState(workLog: result.tryGetSuccess());
     }
 
-    return EditWorklogScreenState(
-      workLog: WorkLog.empty(),
-    );
+    return EditWorklogScreenState(workLog: WorkLog.empty());
   }
 
   Future<bool> saveWorkLog({
@@ -28,21 +26,23 @@ class EditWorklogScreenController
     required String summary,
     required String description,
     required String timeSpent,
-    required String startTime
+    required String startTime,
   }) async {
     final worklog = AsyncData(state.value!.workLog).value;
 
     state = AsyncLoading();
 
     final updatedWorkLog = worklog.copyWith(
-        taskKey: taskKey,
-        summary: summary,
-        description: description,
-        timeSpent: timeSpent,
-        startTime: DateTime.parse(startTime)
-      );
+      taskKey: taskKey,
+      summary: summary,
+      description: description,
+      timeSpent: timeSpent,
+      startTime: DateTime.parse(startTime),
+    );
 
-    final result = await ref.read(workLogServiceProvider).updateWorkLog(updatedWorkLog);
+    final result = await ref
+        .read(workLogServiceProvider)
+        .updateWorkLog(updatedWorkLog);
 
     if (result.isSuccess()) {
       state = AsyncData(state.value!.copyWith(workLog: updatedWorkLog));
@@ -60,7 +60,9 @@ class EditWorklogScreenController
 
     state = AsyncLoading();
 
-    final result = await ref.read(workLogServiceProvider).deleteWorkLog(worklog.id!);
+    final result = await ref
+        .read(workLogServiceProvider)
+        .deleteWorkLog(worklog.id!);
 
     if (result.isSuccess()) {
       state = AsyncData(state.value!.copyWith(workLog: WorkLog.empty()));
@@ -78,11 +80,15 @@ class EditWorklogScreenController
 
     state = AsyncLoading();
 
-    final result = await ref.read(jiraWorkLogServiceProvider).syncWorkLog(worklog);
+    final result = await ref
+        .read(jiraWorkLogServiceProvider)
+        .syncWorkLog(worklog);
 
     if (result.isSuccess()) {
       if (result.tryGetSuccess() != null) {
-        state = AsyncData(state.value!.copyWith(workLog: result.tryGetSuccess()!));
+        state = AsyncData(
+          state.value!.copyWith(workLog: result.tryGetSuccess()!),
+        );
 
         return true;
       } else {
