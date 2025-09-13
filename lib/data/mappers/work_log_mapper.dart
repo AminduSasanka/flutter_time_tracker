@@ -28,7 +28,7 @@ class WorkLogMapper implements IWorkLogMapper {
 
     if (workLog.description?.isNotEmpty == true) {
       contentItems.add(
-        ContentContent(text: workLog.description!, type: _textType),
+        ContentContent(text: ' - ${workLog.description!}', type: _textType),
       );
     }
 
