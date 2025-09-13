@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_time_tracker/core/DI/controller_providers.dart';
+import 'package:flutter_time_tracker/presentation/features/edit_worklog/state/edit_worklog_screen_state.dart';
 import 'package:flutter_time_tracker/presentation/features/edit_worklog/widgets/edit_work_log_widget.dart';
 
 class EditWorklogScreen extends ConsumerStatefulWidget {
@@ -108,6 +109,55 @@ class _EditWorklogScreenState extends ConsumerState<EditWorklogScreen> {
       }
     }
 
+    void syncWorkLog() async {
+      await ref
+          .read(
+            editWorklogScreenControllerProvider(
+              int.parse(widget.worklogId!),
+            ).notifier,
+          )
+          .syncWorkLog();
+
+      ref.listen<AsyncValue<EditWorklogScreenState>>(
+        editWorklogScreenControllerProvider(int.parse(widget.worklogId!)),
+        (previous, next) {
+          if (context.mounted) {
+            next.when(
+              data: (state) {
+                ref.invalidate(
+                  editWorklogScreenControllerProvider(
+                    int.parse(widget.worklogId!),
+                  ),
+                );
+
+                ScaffoldMessenger.of(context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(
+                    SnackBar(content: Text('Worklog synced successfully.')),
+                  );
+              },
+              error: (error, stack) {
+                ScaffoldMessenger.of(context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        'Worklog sync failed. Please try again later.',
+                      ),
+                    ),
+                  );
+              },
+              loading: () {
+                ScaffoldMessenger.of(context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(SnackBar(content: Text('Syncing worklog...')));
+              },
+            );
+          }
+        },
+      );
+    }
+
     if (widget.worklogId == null) {
       return Scaffold(
         appBar: AppBar(title: Text('Edit Work Log')),
@@ -129,6 +179,7 @@ class _EditWorklogScreenState extends ConsumerState<EditWorklogScreen> {
           appBar: AppBar(
             title: Text('Edit Work Log'),
             actions: [
+              IconButton(icon: Icon(Icons.sync), onPressed: syncWorkLog),
               IconButton(icon: Icon(Icons.delete), onPressed: deleteWorkLog),
             ],
           ),
