@@ -191,8 +191,10 @@ class WorkLogService implements IWorkLogService {
     int hours = totalSpentTime.inHours;
     int minutes = totalSpentTime.inMinutes.remainder(60);
     int seconds = totalSpentTime.inSeconds.remainder(60);
+    int additionalMinutes = (seconds / 60).round();
+    minutes += additionalMinutes;
 
-    return "${hours}h ${minutes}m ${seconds}s";
+    return "${hours}h ${minutes}m";
   }
 
   @override
