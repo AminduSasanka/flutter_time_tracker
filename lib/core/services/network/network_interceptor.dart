@@ -16,7 +16,8 @@ class NetworkInterceptor extends Interceptor {
     options.headers['accept'] = 'application/json';
 
     if (jiraAuthModel.apiToken != "") {
-      options.headers['Authorization'] = "Basic ${_jiraAuthRepository.getAccessToken()}";
+      options.headers['Authorization'] =
+          "Basic ${await _jiraAuthRepository.getAccessToken()}";
     }
 
     super.onRequest(options, handler);
