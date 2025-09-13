@@ -11,7 +11,7 @@ class NetworkInterceptor extends Interceptor {
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
     JiraAuthModel jiraAuthModel = await _jiraAuthRepository.read();
 
-    options.baseUrl = "https://${jiraAuthModel.workspace}";
+    options.baseUrl = "https://${jiraAuthModel.workspace}/rest/api/3";
     options.headers['content-type'] = 'application/json';
     options.headers['accept'] = 'application/json';
 
