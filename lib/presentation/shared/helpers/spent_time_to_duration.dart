@@ -27,5 +27,13 @@ Duration spentTimeToDuration(String durationString) {
     seconds = int.parse(secondsMatch.group(1)!);
   }
 
-  return Duration(hours: hours, minutes: minutes, seconds: seconds);
+  int additionalMinutes = (seconds / 60).round();
+  minutes += additionalMinutes;
+
+  if (minutes >= 60) {
+    hours += minutes ~/ 60;
+    minutes = minutes % 60;
+  }
+
+  return Duration(hours: hours, minutes: minutes, seconds: 0);
 }
