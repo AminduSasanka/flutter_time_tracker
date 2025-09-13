@@ -49,8 +49,10 @@ class DatabaseService implements IDatabaseService {
   }
 
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
-    if (oldVersion < 2) {
-      // migrations
+    print('Upgrading database from version $oldVersion to $newVersion');
+
+    for (int version = oldVersion + 1; version <= newVersion; version++) {
+      await _runMigration(db, version);
     }
   }
 
@@ -65,5 +67,26 @@ class DatabaseService implements IDatabaseService {
     String path = join(await getDatabasesPath(), databaseName);
     await databaseFactory.deleteDatabase(path);
     _database = null;
+  }
+
+  Future<void> _runMigration(Database db, int version) async {
+    switch (version) {
+      case 1:
+        break;
+
+      case 2:
+        await _migrateToVersion2(db);
+        break;
+
+      default:
+        print('No migration defined for version $version');
+    }
+  }
+
+  Future<void> _migrateToVersion2(Database db) async {
+    await db.execute('''
+      ALTER TABLE work_logs
+      ADD COLUMN jira_work_log_id TEXT
+    ''');
   }
 }
