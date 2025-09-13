@@ -48,6 +48,7 @@ class WorkLogRepository implements IWorkLogRepository {
         startTime: workLog.startTime,
         timeSpent: workLog.timeSpent,
         workLogState: workLog.workLogState,
+        jiraWorkLogId: workLog.jiraWorkLogId,
       );
 
       return await _database.insert(workLogsTable, workLogModel.toMap());
@@ -143,6 +144,7 @@ class WorkLogRepository implements IWorkLogRepository {
         startTime: workLog.startTime,
         timeSpent: workLog.timeSpent,
         workLogState: workLog.workLogState,
+        jiraWorkLogId: workLog.jiraWorkLogId,
       );
 
       await _database.update(
