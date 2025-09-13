@@ -76,7 +76,9 @@ class _EditWorklogScreenState extends ConsumerState<EditWorklogScreen> {
 
     void saveWorkLog() async {
       final controller = ref.read(
-        editWorklogScreenControllerProvider(int.parse(widget.worklogId!)).notifier,
+        editWorklogScreenControllerProvider(
+          int.parse(widget.worklogId!),
+        ).notifier,
       );
 
       final isSaved = await controller.saveWorkLog(
