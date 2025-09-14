@@ -241,7 +241,39 @@ class WorkLogRepository implements IWorkLogRepository {
     try {
       final placeholders = List.filled(ids.length, '?').join(', ');
 
-      await _database.delete(workLogsTable, where: 'id IN ($placeholders)', whereArgs: ids);
+      await _database.delete(
+        workLogsTable,
+        where: 'id IN ($placeholders)',
+        whereArgs: ids,
+      );
+    } catch (e, s) {
+      throw UnknownFailure(
+        exception: e is Exception ? e : Exception(e.toString()),
+        stackTrace: s,
+      );
+    }
+  }
+
+  @override
+  Future<List<WorkLog>> getByIDList(List<int> ids) async {
+    try {
+      if (ids.isEmpty) return [];
+
+      final placeholders = List.filled(ids.length, '?').join(', ');
+      final workLogs = await _database.query(
+        workLogsTable,
+        where: 'id IN ($placeholders)',
+        whereArgs: ids,
+      );
+      final workLogModels = workLogs.map(
+        (workLog) => WorkLogModel.fromMap(workLog),
+      );
+
+      return workLogModels
+          .map((workLogModel) => workLogModel.toEntity())
+          .toList();
+    } on WorkLogNotFoundFailure {
+      rethrow;
     } catch (e, s) {
       throw UnknownFailure(
         exception: e is Exception ? e : Exception(e.toString()),
