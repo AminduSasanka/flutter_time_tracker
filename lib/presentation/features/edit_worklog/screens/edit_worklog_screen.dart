@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_time_tracker/core/DI/controller_providers.dart';
+import 'package:flutter_time_tracker/core/constants/enums.dart';
 import 'package:flutter_time_tracker/presentation/features/edit_worklog/widgets/edit_work_log_widget.dart';
+import 'package:flutter_time_tracker/presentation/shared/helpers/confirmation_dialog.dart';
 
 class EditWorklogScreen extends ConsumerStatefulWidget {
   final String? worklogId;
@@ -174,7 +176,24 @@ class _EditWorklogScreenState extends ConsumerState<EditWorklogScreen> {
           spentTimeController: _spentTimeController,
           startTimeController: _startTimeController,
           formKey: _formKey,
-          onSave: saveWorkLog,
+          onSave: () async {
+            if (state.workLog.workLogState == WorkLogStateEnum.synced) {
+              final confirmed = await showConfirmationDialog(
+                context,
+                title: "Update Work Log",
+                content:
+                    "Are you sure you want to update this work log? Any changes made will reflect in jira time logs.",
+                confirmText: "Save",
+                cancelText: "Cancel",
+              );
+
+              if (confirmed == true) {
+                saveWorkLog();
+              }
+            } else {
+              saveWorkLog();
+            }
+          },
           state: state,
         ),
         error: (error, stack) =>
