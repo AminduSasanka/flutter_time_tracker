@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_time_tracker/core/DI/controller_providers.dart';
+import 'package:flutter_time_tracker/presentation/shared/helpers/confirmation_dialog.dart';
 
 class HistoryScreenMenu extends ConsumerWidget {
   final bool isSelectionMode;
@@ -53,9 +54,18 @@ class HistoryScreenMenu extends ConsumerWidget {
     return PopupMenuButton(
       initialValue: '',
       icon: Icon(Icons.more_vert),
-      onSelected: (value) {
+      onSelected: (value) async {
         switch (value) {
           case 'delete':
+            bool? isConfirmed = await showConfirmationDialog(
+              context,
+              title: "Delete Work Logs",
+              content:
+                  "Are you sure you want to delete selected work logs? Doing this will delete synced work logs in jira.",
+            );
+
+            if (isConfirmed != true) return;
+
             handleBulkDelete();
             break;
           case 'sync':
