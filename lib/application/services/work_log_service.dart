@@ -86,6 +86,11 @@ class WorkLogService implements IWorkLogService {
         throw WorkLogNotFoundFailure();
       }
 
+      if (workLog.workLogState == WorkLogStateEnum.synced &&
+          workLog.jiraWorkLogId != null) {
+        await _jiraWorkLogRepository.updateJiraWorkLog(workLog);
+      }
+
       await _workLogRepository.update(workLog);
 
       return Success(null);
