@@ -14,6 +14,14 @@ class HistoryScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final historyScreenState = ref.watch(historyScreenControllerProvider);
 
+    ref.listen(historyScreenControllerProvider, (previous, next) {
+      if (next.hasError) {
+        ScaffoldMessenger.of(context)
+          ..clearSnackBars()
+          ..showSnackBar(SnackBar(content: Text(next.error.toString())));
+      }
+    });
+
     return historyScreenState.when(
       data: (state) {
         final Map<String, List<WorkLog>> workLogsGroupedByDate = state.workLogs;
