@@ -59,7 +59,7 @@ class HistoryScreen extends ConsumerWidget {
         );
       },
       error: (error, stack) => Text('Error: $error'),
-      loading: () => CircularProgressIndicator(),
+      loading: () => Center(child: CircularProgressIndicator()),
     );
   }
 }
