@@ -263,6 +263,15 @@ class WorkLogService implements IWorkLogService {
   @override
   Future<Result<void, Failure>> bulkDeleteWorkLogs(List<int> ids) async {
     try {
+      List<WorkLog> workLogs = await _workLogRepository.getByIDList(ids);
+      final syncedWorkLogs = workLogs.where(
+        (workLog) => workLog.workLogState == WorkLogStateEnum.synced,
+      );
+
+      for (final workLog in syncedWorkLogs) {
+        await _jiraWorkLogRepository.deleteJiraWorkLog(workLog);
+      }
+
       await _workLogRepository.bulkDeleteWorkLogs(ids);
 
       return Success(null);
