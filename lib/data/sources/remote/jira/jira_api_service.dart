@@ -18,10 +18,10 @@ class JiraApiService implements IJiraApiService {
   JiraApiService(this._dio, this._jiraAuthRepository);
 
   @override
-  Future<Map<String, dynamic>> delete(String url) async {
+  Future<dynamic> delete(String url) async {
     final data = await _sendRequest(() async => await _dio.delete(url));
 
-    return data as Map<String, dynamic>;
+    return data;
   }
 
   @override

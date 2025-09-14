@@ -8,5 +8,5 @@ abstract interface class IJiraApiService {
 
   Future<Map<String, dynamic>> post(String url, Map<String, dynamic> body);
 
-  Future<Map<String, dynamic>> delete(String url);
+  Future<dynamic> delete(String url);
 }
