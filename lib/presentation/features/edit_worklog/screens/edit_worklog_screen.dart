@@ -164,7 +164,29 @@ class _EditWorklogScreenState extends ConsumerState<EditWorklogScreen> {
         title: Text('Edit Work Log'),
         actions: [
           IconButton(icon: Icon(Icons.sync), onPressed: syncWorkLog),
-          IconButton(icon: Icon(Icons.delete), onPressed: deleteWorkLog),
+          IconButton(
+            icon: Icon(Icons.delete),
+            onPressed: () async {
+              if (screenState.value != null &&
+                  screenState.value!.workLog.workLogState ==
+                      WorkLogStateEnum.synced) {
+                final confirmed = await showConfirmationDialog(
+                  context,
+                  title: "Delete Work Log",
+                  content:
+                      "Are you sure you want to delete this work log? This will delete the work log from jira as well.",
+                  confirmText: "Delete",
+                  cancelText: "Cancel",
+                );
+
+                if (confirmed == true) {
+                  deleteWorkLog();
+                }
+              } else {
+                deleteWorkLog();
+              }
+            },
+          ),
         ],
       ),
       body: screenState.when(
