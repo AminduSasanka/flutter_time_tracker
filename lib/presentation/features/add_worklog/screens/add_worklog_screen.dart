@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_time_tracker/core/DI/controller_providers.dart';
+import 'package:flutter_time_tracker/core/theme/text_styles.dart';
 import 'package:flutter_time_tracker/presentation/features/add_worklog/widgets/add_work_log_widget.dart';
 import 'package:flutter_time_tracker/presentation/features/history/screens/history_screen.dart';
 import 'package:flutter_time_tracker/presentation/shared/layouts/main_layout.dart';
@@ -91,7 +92,7 @@ class _AddWorklogScreenState extends ConsumerState<AddWorklogScreen> {
     }
 
     return Scaffold(
-      appBar: AppBar(title: Text('Add Work Log')),
+      appBar: AppBar(title: Text('Add Work Log', style: TextStyles.appBarTitle)),
       body: AddWorkLogWidget(
         state: screenState,
         taskIdController: _taskIdController,
