@@ -222,7 +222,9 @@ class WorkLogService implements IWorkLogService {
       final Map<String, List<WorkLog>> groupedWorkLogs = {};
 
       for (final workLogModel in workLogModels) {
-        final dateKey = DateFormat('yyyy-MM-dd').format(workLogModel.startTime!);
+        final dateKey = DateFormat(
+          'yyyy-MM-dd',
+        ).format(workLogModel.startTime!);
 
         groupedWorkLogs.putIfAbsent(dateKey, () => []);
         groupedWorkLogs[dateKey]!.add(workLogModel.toEntity());
