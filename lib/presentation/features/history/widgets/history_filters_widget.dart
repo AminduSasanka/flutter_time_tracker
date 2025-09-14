@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_time_tracker/core/DI/controller_providers.dart';
-import 'package:flutter_time_tracker/core/constants/enums.dart';
 import 'package:flutter_time_tracker/presentation/features/history/state/history_screen_state.dart';
 import 'package:intl/intl.dart';
 
@@ -36,7 +35,7 @@ class HistoryFilterWidget extends ConsumerWidget {
                 ? DateTime.parse(dateController.text)
                 : null,
             taskKey: taskKeyInputController.text,
-            worklogState: WorkLogStateEnum.completed,
+            worklogState: null,
           );
 
       Navigator.pop(context);
