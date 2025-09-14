@@ -26,10 +26,6 @@ class HistoryScreenMenu extends ConsumerWidget {
         ScaffoldMessenger.of(screenContext).showSnackBar(
           SnackBar(content: Text('Selected items deleted successfully')),
         );
-      } else {
-        ScaffoldMessenger.of(screenContext).showSnackBar(
-          SnackBar(content: Text('Failed to delete selected items')),
-        );
       }
     }
 
@@ -43,10 +39,6 @@ class HistoryScreenMenu extends ConsumerWidget {
       if (isSyncSuccess) {
         ScaffoldMessenger.of(screenContext).showSnackBar(
           SnackBar(content: Text('Selected items synced successfully')),
-        );
-      } else {
-        ScaffoldMessenger.of(screenContext).showSnackBar(
-          SnackBar(content: Text('Failed to sync selected items')),
         );
       }
     }
