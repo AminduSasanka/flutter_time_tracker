@@ -7,6 +7,6 @@ class JiraResourceNotFoundFailure extends Failure {
     super.stackTrace,
   }) : super(
          message:
-             "The resource you are looking for does not exist. Please check your task ID(s)",
+             "The resource you are trying to access does not exist on jira. Please check your entries.",
        );
 }
