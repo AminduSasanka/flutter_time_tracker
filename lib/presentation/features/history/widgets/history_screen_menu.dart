@@ -32,6 +32,24 @@ class HistoryScreenMenu extends ConsumerWidget {
       }
     }
 
+    void handleBulkSync() async {
+      bool isSyncSuccess = await ref
+          .read(historyScreenControllerProvider.notifier)
+          .syncSelectedWorkLogs();
+
+      if (!screenContext.mounted) return;
+
+      if (isSyncSuccess) {
+        ScaffoldMessenger.of(screenContext).showSnackBar(
+          SnackBar(content: Text('Selected items synced successfully')),
+        );
+      } else {
+        ScaffoldMessenger.of(screenContext).showSnackBar(
+          SnackBar(content: Text('Failed to sync selected items')),
+        );
+      }
+    }
+
     return PopupMenuButton(
       initialValue: '',
       icon: Icon(Icons.more_vert),
@@ -39,6 +57,9 @@ class HistoryScreenMenu extends ConsumerWidget {
         switch (value) {
           case 'delete':
             handleBulkDelete();
+            break;
+          case 'sync':
+            handleBulkSync();
             break;
         }
       },
@@ -52,6 +73,17 @@ class HistoryScreenMenu extends ConsumerWidget {
                 Icon(Icons.delete),
                 SizedBox(width: 8),
                 Text('Delete selected items'),
+              ],
+            ),
+          ),
+          PopupMenuItem(
+            value: 'sync',
+            enabled: isSelectionMode,
+            child: Row(
+              children: [
+                Icon(Icons.sync),
+                SizedBox(width: 8),
+                Text('Sync selected items'),
               ],
             ),
           ),
