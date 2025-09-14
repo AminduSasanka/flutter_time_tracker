@@ -149,4 +149,36 @@ class HistoryScreenController
       return false;
     }
   }
+
+  Future<bool> syncSelectedWorkLogs() async {
+    if (state.value!.selectedWorkLogIds.isEmpty) {
+      return false;
+    }
+
+    List<int> selectedWorkLogIds = state.value!.selectedWorkLogIds;
+    state = const AsyncLoading();
+
+    final result = await ref
+        .read(jiraWorkLogServiceProvider)
+        .bulkSyncWorkLogs(selectedWorkLogIds);
+
+    if (result.isSuccess()) {
+      state = AsyncData(
+        state.value!.copyWith(
+          workLogs: await _getInitialWorkLogs(
+            states: [WorkLogStateEnum.completed, WorkLogStateEnum.synced],
+          ),
+          isError: false,
+          errorMessage: null,
+          selectedWorkLogIds: [],
+        ),
+      );
+
+      return true;
+    } else {
+      state = AsyncError(result.tryGetError()!, StackTrace.current);
+
+      return false;
+    }
+  }
 }
