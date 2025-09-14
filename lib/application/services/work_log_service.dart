@@ -4,6 +4,7 @@ import 'package:flutter_time_tracker/domain/entities/work_log.dart';
 import 'package:flutter_time_tracker/domain/failures/failure.dart';
 import 'package:flutter_time_tracker/domain/failures/unknown_failure.dart';
 import 'package:flutter_time_tracker/domain/failures/work_log/work_log_not_found_failure.dart';
+import 'package:flutter_time_tracker/domain/repositories/i_jira_work_log_repository.dart';
 import 'package:flutter_time_tracker/domain/repositories/i_work_log_repository.dart';
 import 'package:flutter_time_tracker/domain/services/i_work_log_service.dart';
 import 'package:flutter_time_tracker/presentation/shared/helpers/spent_time_to_duration.dart';
@@ -12,8 +13,9 @@ import 'package:multiple_result/multiple_result.dart';
 
 class WorkLogService implements IWorkLogService {
   final IWorkLogRepository _workLogRepository;
+  final IJiraWorkLogRepository _jiraWorkLogRepository;
 
-  WorkLogService(this._workLogRepository);
+  WorkLogService(this._workLogRepository, this._jiraWorkLogRepository);
 
   @override
   Future<Result<WorkLog, Failure>> createWorkLog(WorkLog workLog) async {
@@ -34,6 +36,13 @@ class WorkLogService implements IWorkLogService {
   @override
   Future<Result<void, Failure>> deleteWorkLog(int id) async {
     try {
+      final workLogModel = await _workLogRepository.getByID(id);
+
+      if (workLogModel.workLogState == WorkLogStateEnum.synced &&
+          workLogModel.jiraWorkLogId != null) {
+        await _jiraWorkLogRepository.deleteJiraWorkLog(workLogModel.toEntity());
+      }
+
       await _workLogRepository.delete(id);
 
       return Success(null);
@@ -75,6 +84,11 @@ class WorkLogService implements IWorkLogService {
     try {
       if (workLog.id == null) {
         throw WorkLogNotFoundFailure();
+      }
+
+      if (workLog.workLogState == WorkLogStateEnum.synced &&
+          workLog.jiraWorkLogId != null) {
+        await _jiraWorkLogRepository.updateJiraWorkLog(workLog);
       }
 
       await _workLogRepository.update(workLog);
@@ -191,8 +205,10 @@ class WorkLogService implements IWorkLogService {
     int hours = totalSpentTime.inHours;
     int minutes = totalSpentTime.inMinutes.remainder(60);
     int seconds = totalSpentTime.inSeconds.remainder(60);
+    int additionalMinutes = (seconds / 60).round();
+    minutes += additionalMinutes;
 
-    return "${hours}h ${minutes}m ${seconds}s";
+    return "${hours}h ${minutes}m";
   }
 
   @override
@@ -211,7 +227,9 @@ class WorkLogService implements IWorkLogService {
       final Map<String, List<WorkLog>> groupedWorkLogs = {};
 
       for (final workLogModel in workLogModels) {
-        final dateKey = DateFormat('yyyy-MM-dd').format(workLogModel.startTime!);
+        final dateKey = DateFormat(
+          'yyyy-MM-dd',
+        ).format(workLogModel.startTime!);
 
         groupedWorkLogs.putIfAbsent(dateKey, () => []);
         groupedWorkLogs[dateKey]!.add(workLogModel.toEntity());

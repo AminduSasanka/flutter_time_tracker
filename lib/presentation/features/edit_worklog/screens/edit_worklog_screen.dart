@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_time_tracker/core/DI/controller_providers.dart';
+import 'package:flutter_time_tracker/core/constants/enums.dart';
 import 'package:flutter_time_tracker/presentation/features/edit_worklog/widgets/edit_work_log_widget.dart';
+import 'package:flutter_time_tracker/presentation/shared/helpers/confirmation_dialog.dart';
 
 class EditWorklogScreen extends ConsumerStatefulWidget {
   final String? worklogId;
@@ -75,7 +77,9 @@ class _EditWorklogScreenState extends ConsumerState<EditWorklogScreen> {
 
     void saveWorkLog() async {
       final controller = ref.read(
-        editWorklogScreenControllerProvider(int.parse(widget.worklogId!)).notifier,
+        editWorklogScreenControllerProvider(
+          int.parse(widget.worklogId!),
+        ).notifier,
       );
 
       final isSaved = await controller.saveWorkLog(
@@ -108,6 +112,38 @@ class _EditWorklogScreenState extends ConsumerState<EditWorklogScreen> {
       }
     }
 
+    void syncWorkLog() async {
+      final result = await ref
+          .read(
+            editWorklogScreenControllerProvider(
+              int.parse(widget.worklogId!),
+            ).notifier,
+          )
+          .syncWorkLog();
+
+      if (context.mounted) {
+        if (result) {
+          ref.invalidate(
+            editWorklogScreenControllerProvider(int.parse(widget.worklogId!)),
+          );
+
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(content: Text('Worklog synced successfully.')),
+            );
+        } else {
+          ScaffoldMessenger.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                content: Text('Worklog sync failed. Please try again later.'),
+              ),
+            );
+        }
+      }
+    }
+
     if (widget.worklogId == null) {
       return Scaffold(
         appBar: AppBar(title: Text('Edit Work Log')),
@@ -123,30 +159,69 @@ class _EditWorklogScreenState extends ConsumerState<EditWorklogScreen> {
       editWorklogScreenControllerProvider(int.parse(widget.worklogId!)),
     );
 
-    return screenState.when(
-      data: (state) {
-        return Scaffold(
-          appBar: AppBar(
-            title: Text('Edit Work Log'),
-            actions: [
-              IconButton(icon: Icon(Icons.delete), onPressed: deleteWorkLog),
-            ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Edit Work Log'),
+        actions: [
+          IconButton(icon: Icon(Icons.sync), onPressed: syncWorkLog),
+          IconButton(
+            icon: Icon(Icons.delete),
+            onPressed: () async {
+              if (screenState.value != null &&
+                  screenState.value!.workLog.workLogState ==
+                      WorkLogStateEnum.synced) {
+                final confirmed = await showConfirmationDialog(
+                  context,
+                  title: "Delete Work Log",
+                  content:
+                      "Are you sure you want to delete this work log? This will delete the work log from jira as well.",
+                  confirmText: "Delete",
+                  cancelText: "Cancel",
+                );
+
+                if (confirmed == true) {
+                  deleteWorkLog();
+                }
+              } else {
+                deleteWorkLog();
+              }
+            },
           ),
-          body: EditWorkLogWidget(
-            worklogId: int.parse(widget.worklogId!),
-            taskIdController: _taskIdController,
-            summaryController: _summaryController,
-            descriptionController: _descriptionController,
-            spentTimeController: _spentTimeController,
-            startTimeController: _startTimeController,
-            formKey: _formKey,
-            onSave: saveWorkLog,
-            state: state,
-          ),
-        );
-      },
-      error: (error, stack) => Text('Error: $error'),
-      loading: () => CircularProgressIndicator(),
+        ],
+      ),
+      body: screenState.when(
+        data: (state) => EditWorkLogWidget(
+          worklogId: int.parse(widget.worklogId!),
+          taskIdController: _taskIdController,
+          summaryController: _summaryController,
+          descriptionController: _descriptionController,
+          spentTimeController: _spentTimeController,
+          startTimeController: _startTimeController,
+          formKey: _formKey,
+          onSave: () async {
+            if (state.workLog.workLogState == WorkLogStateEnum.synced) {
+              final confirmed = await showConfirmationDialog(
+                context,
+                title: "Update Work Log",
+                content:
+                    "Are you sure you want to update this work log? Any changes made will reflect in jira time logs.",
+                confirmText: "Save",
+                cancelText: "Cancel",
+              );
+
+              if (confirmed == true) {
+                saveWorkLog();
+              }
+            } else {
+              saveWorkLog();
+            }
+          },
+          state: state,
+        ),
+        error: (error, stack) =>
+            Center(child: Text('Error: ${stack.toString()}')),
+        loading: () => Center(child: CircularProgressIndicator()),
+      ),
     );
   }
 }

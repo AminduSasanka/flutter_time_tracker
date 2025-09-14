@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_time_tracker/core/DI/controller_providers.dart';
+import 'package:flutter_time_tracker/core/constants/enums.dart';
 import 'package:flutter_time_tracker/core/constants/route_names.dart';
 import 'package:flutter_time_tracker/domain/entities/work_log.dart';
 import 'package:go_router/go_router.dart';
@@ -61,7 +62,12 @@ class WorkLogWidget extends ConsumerWidget {
             top: BorderSide(color: Colors.black12, width: 1),
             right: BorderSide(color: Colors.black12, width: 1),
             bottom: BorderSide(color: Colors.black12, width: 1),
-            left: BorderSide(color: Colors.blue, width: 1),
+            left: BorderSide(
+              color: workLog.workLogState == WorkLogStateEnum.synced
+                  ? Colors.green
+                  : Colors.blue,
+              width: 1,
+            ),
           ),
         ),
         child: Row(

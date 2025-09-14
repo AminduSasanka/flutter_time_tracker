@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:dio_http_formatter/dio_http_formatter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final networkServiceProvider = Provider<Dio>((ref) {
@@ -11,10 +10,6 @@ final networkServiceProvider = Provider<Dio>((ref) {
   );
 
   dio.options = options;
-
-  dio.interceptors.addAll([
-    HttpFormatter(),
-  ]);
 
   return dio;
 });

@@ -8,6 +8,7 @@ class WorkLog {
   final DateTime? startTime;
   final String? timeSpent;
   final WorkLogStateEnum workLogState;
+  final String? jiraWorkLogId;
 
   WorkLog({
     this.id,
@@ -17,6 +18,7 @@ class WorkLog {
     this.startTime,
     this.timeSpent,
     this.workLogState = WorkLogStateEnum.blank,
+    this.jiraWorkLogId,
   });
 
   WorkLog.empty() : this(
@@ -34,6 +36,7 @@ class WorkLog {
     DateTime? startTime,
     String? timeSpent,
     WorkLogStateEnum? workLogState,
+    String? jiraWorkLogId,
   }) {
     return WorkLog(
       id: id ?? this.id,
@@ -43,6 +46,7 @@ class WorkLog {
       startTime: startTime ?? this.startTime,
       timeSpent: timeSpent ?? this.timeSpent,
       workLogState: workLogState ?? this.workLogState,
+      jiraWorkLogId: jiraWorkLogId ?? this.jiraWorkLogId,
     );
   }
 }
