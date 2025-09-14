@@ -73,4 +73,30 @@ class JiraWorkLogService implements IJiraWorkLogService {
       );
     }
   }
+
+  @override
+  Future<Result<void, Failure>> bulkSyncWorkLogs(
+    List<int> selectedWorkLogIds,
+  ) async {
+    try {
+      final List<WorkLog> worklogs = await _workLogRepository.getByIDList(
+        selectedWorkLogIds,
+      );
+
+      for (WorkLog workLog in worklogs) {
+        await syncWorkLog(workLog);
+      }
+
+      return Result.success(null);
+    } on Failure catch (e) {
+      return Result.error(e);
+    } catch (e, s) {
+      return Result.error(
+        UnknownFailure(
+          exception: e is Exception ? e : Exception(e.toString()),
+          stackTrace: s,
+        ),
+      );
+    }
+  }
 }
