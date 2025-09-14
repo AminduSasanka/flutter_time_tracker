@@ -69,6 +69,15 @@ class HistoryScreenMenu extends ConsumerWidget {
             handleBulkDelete();
             break;
           case 'sync':
+            bool? isConfirmed = await showConfirmationDialog(
+              context,
+              title: "Sync Work Logs",
+              content:
+              "Are you sure you want to sync selected work logs to jira?",
+            );
+
+            if (isConfirmed != true) return;
+
             handleBulkSync();
             break;
         }
