@@ -12,7 +12,10 @@ final jiraAuthServiceProvider = Provider<IJiraAuthService>((ref) {
 });
 
 final workLogServiceProvider = Provider<IWorkLogService>((ref) {
-  return WorkLogService(ref.watch(workLogRepositoryProvider));
+  return WorkLogService(
+    ref.watch(workLogRepositoryProvider),
+    ref.watch(jiraWorkLogRepositoryProvider),
+  );
 });
 
 final jiraWorkLogServiceProvider = Provider<IJiraWorkLogService>((ref) {
