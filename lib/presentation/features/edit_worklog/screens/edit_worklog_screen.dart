@@ -63,14 +63,6 @@ class _EditWorklogScreenState extends ConsumerState<EditWorklogScreen> {
             ..showSnackBar(
               SnackBar(content: Text('Worklog deleted successfully')),
             );
-        } else {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(
-                content: Text('Worklog delete failed. Please try again later.'),
-              ),
-            );
         }
       }
     }
@@ -100,14 +92,6 @@ class _EditWorklogScreenState extends ConsumerState<EditWorklogScreen> {
             ..showSnackBar(
               SnackBar(content: Text('Worklog saved successfully')),
             );
-        } else {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(
-                content: Text('Worklog save failed. Please try again later.'),
-              ),
-            );
         }
       }
     }
@@ -132,14 +116,6 @@ class _EditWorklogScreenState extends ConsumerState<EditWorklogScreen> {
             ..showSnackBar(
               SnackBar(content: Text('Worklog synced successfully.')),
             );
-        } else {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(
-                content: Text('Worklog sync failed. Please try again later.'),
-              ),
-            );
         }
       }
     }
@@ -157,6 +133,17 @@ class _EditWorklogScreenState extends ConsumerState<EditWorklogScreen> {
 
     final screenState = ref.watch(
       editWorklogScreenControllerProvider(int.parse(widget.worklogId!)),
+    );
+
+    ref.listen(
+      editWorklogScreenControllerProvider(int.parse(widget.worklogId!)),
+      (previous, next) {
+        if (next.hasError) {
+          ScaffoldMessenger.of(context)
+            ..clearSnackBars()
+            ..showSnackBar(SnackBar(content: Text(next.error.toString())));
+        }
+      },
     );
 
     return Scaffold(

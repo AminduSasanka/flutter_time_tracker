@@ -43,7 +43,8 @@ class DatabaseService implements IDatabaseService {
         description TEXT,
         time_spent TEXT,
         start_time TEXT,
-        work_log_state TEXT NOT NULL
+        work_log_state TEXT NOT NULL,
+        jira_work_log_id TEXT
       )
     ''');
   }

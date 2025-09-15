@@ -10,4 +10,9 @@ abstract class Failure implements Exception {
     this.statusCode,
     this.stackTrace,
   });
+
+  @override
+  String toString() {
+    return message;
+  }
 }

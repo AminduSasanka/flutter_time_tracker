@@ -40,9 +40,11 @@ class JiraWorkLogService implements IJiraWorkLogService {
       await _workLogRepository.update(updatedWorkLog);
 
       return Result.success(updatedWorkLog);
-    } on Failure catch (e) {
-      return Result.error(e);
     } catch (e, s) {
+      if (e is Failure) {
+        return Result.error(e);
+      }
+
       return Result.error(
         UnknownFailure(
           exception: e is Exception ? e : Exception(e.toString()),
@@ -65,6 +67,42 @@ class JiraWorkLogService implements IJiraWorkLogService {
     } on Failure catch (e) {
       return Result.error(e);
     } catch (e, s) {
+      return Result.error(
+        UnknownFailure(
+          exception: e is Exception ? e : Exception(e.toString()),
+          stackTrace: s,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Result<void, Failure>> bulkSyncWorkLogs(
+    List<int> selectedWorkLogIds,
+  ) async {
+    try {
+      List<WorkLog> worklogs = await _workLogRepository.getByIDList(
+        selectedWorkLogIds,
+      );
+
+      final worklogsToBeSynced = worklogs.where(
+        (workLog) => workLog.workLogState != WorkLogStateEnum.synced,
+      );
+
+      for (WorkLog workLog in worklogsToBeSynced) {
+        final result = await syncWorkLog(workLog);
+
+        if (result.isError()) {
+          throw result.tryGetError()!;
+        }
+      }
+
+      return Result.success(null);
+    } catch (e, s) {
+      if (e is Failure) {
+        return Result.error(e);
+      }
+
       return Result.error(
         UnknownFailure(
           exception: e is Exception ? e : Exception(e.toString()),

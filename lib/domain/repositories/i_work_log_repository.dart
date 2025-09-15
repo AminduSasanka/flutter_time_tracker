@@ -25,4 +25,6 @@ abstract interface class IWorkLogRepository {
   Future<WorkLogModel> getByID(int id);
 
   Future<void> bulkDeleteWorkLogs(List<int> ids);
+
+  Future<List<WorkLog>> getByIDList(List<int> workLogIds);
 }

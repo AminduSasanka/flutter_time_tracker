@@ -66,7 +66,7 @@ class WorkLogWidget extends ConsumerWidget {
               color: workLog.workLogState == WorkLogStateEnum.synced
                   ? Colors.green
                   : Colors.blue,
-              width: 1,
+              width: 2,
             ),
           ),
         ),

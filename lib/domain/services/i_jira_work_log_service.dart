@@ -6,4 +6,6 @@ abstract interface class IJiraWorkLogService {
   Future<Result<WorkLog, Failure>> syncWorkLog(WorkLog workLog);
 
   Future<Result<bool, Failure>> deleteWorkLog(WorkLog workLog);
+
+  Future<Result<void, Failure>> bulkSyncWorkLogs(List<int> selectedWorkLogIds);
 }

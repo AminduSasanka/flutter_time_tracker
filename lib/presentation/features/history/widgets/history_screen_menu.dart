@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_time_tracker/core/DI/controller_providers.dart';
+import 'package:flutter_time_tracker/presentation/shared/helpers/confirmation_dialog.dart';
 
 class HistoryScreenMenu extends ConsumerWidget {
   final bool isSelectionMode;
@@ -25,9 +26,19 @@ class HistoryScreenMenu extends ConsumerWidget {
         ScaffoldMessenger.of(screenContext).showSnackBar(
           SnackBar(content: Text('Selected items deleted successfully')),
         );
-      } else {
+      }
+    }
+
+    void handleBulkSync() async {
+      bool isSyncSuccess = await ref
+          .read(historyScreenControllerProvider.notifier)
+          .syncSelectedWorkLogs();
+
+      if (!screenContext.mounted) return;
+
+      if (isSyncSuccess) {
         ScaffoldMessenger.of(screenContext).showSnackBar(
-          SnackBar(content: Text('Failed to delete selected items')),
+          SnackBar(content: Text('Selected items synced successfully')),
         );
       }
     }
@@ -35,10 +46,31 @@ class HistoryScreenMenu extends ConsumerWidget {
     return PopupMenuButton(
       initialValue: '',
       icon: Icon(Icons.more_vert),
-      onSelected: (value) {
+      onSelected: (value) async {
         switch (value) {
           case 'delete':
+            bool? isConfirmed = await showConfirmationDialog(
+              context,
+              title: "Delete Work Logs",
+              content:
+                  "Are you sure you want to delete selected work logs? Doing this will delete synced work logs in jira.",
+            );
+
+            if (isConfirmed != true) return;
+
             handleBulkDelete();
+            break;
+          case 'sync':
+            bool? isConfirmed = await showConfirmationDialog(
+              context,
+              title: "Sync Work Logs",
+              content:
+              "Are you sure you want to sync selected work logs to jira?",
+            );
+
+            if (isConfirmed != true) return;
+
+            handleBulkSync();
             break;
         }
       },
@@ -52,6 +84,17 @@ class HistoryScreenMenu extends ConsumerWidget {
                 Icon(Icons.delete),
                 SizedBox(width: 8),
                 Text('Delete selected items'),
+              ],
+            ),
+          ),
+          PopupMenuItem(
+            value: 'sync',
+            enabled: isSelectionMode,
+            child: Row(
+              children: [
+                Icon(Icons.sync),
+                SizedBox(width: 8),
+                Text('Sync selected items'),
               ],
             ),
           ),
