@@ -92,7 +92,7 @@ class JiraApiService implements IJiraApiService {
 
   Future<dynamic> _sendRequest(Future<Response> Function() request) async {
     try {
-      _prepareDio(_dio);
+      await _prepareDio(_dio);
 
       final response = await request();
 
@@ -127,6 +127,12 @@ class JiraApiService implements IJiraApiService {
             statusCode: e.response!.statusCode,
             stackTrace: e.stackTrace,
           );
+        }
+      }
+
+      if (e is DioException && e.response == null) {
+        if (e.error is Failure) {
+          throw e.error as Failure;
         }
       }
 
