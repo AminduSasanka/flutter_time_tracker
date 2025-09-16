@@ -177,33 +177,35 @@ class _EditWorklogScreenState extends ConsumerState<EditWorklogScreen> {
         ],
       ),
       body: screenState.when(
-        data: (state) => EditWorkLogWidget(
-          worklogId: int.parse(widget.worklogId!),
-          taskIdController: _taskIdController,
-          summaryController: _summaryController,
-          descriptionController: _descriptionController,
-          spentTimeController: _spentTimeController,
-          startTimeController: _startTimeController,
-          formKey: _formKey,
-          onSave: () async {
-            if (state.workLog.workLogState == WorkLogStateEnum.synced) {
-              final confirmed = await showConfirmationDialog(
-                context,
-                title: "Update Work Log",
-                content:
-                    "Are you sure you want to update this work log? Any changes made will reflect in jira time logs.",
-                confirmText: "Save",
-                cancelText: "Cancel",
-              );
+        data: (state) => SingleChildScrollView(
+          child: EditWorkLogWidget(
+            worklogId: int.parse(widget.worklogId!),
+            taskIdController: _taskIdController,
+            summaryController: _summaryController,
+            descriptionController: _descriptionController,
+            spentTimeController: _spentTimeController,
+            startTimeController: _startTimeController,
+            formKey: _formKey,
+            onSave: () async {
+              if (state.workLog.workLogState == WorkLogStateEnum.synced) {
+                final confirmed = await showConfirmationDialog(
+                  context,
+                  title: "Update Work Log",
+                  content:
+                      "Are you sure you want to update this work log? Any changes made will reflect in jira time logs.",
+                  confirmText: "Save",
+                  cancelText: "Cancel",
+                );
 
-              if (confirmed == true) {
+                if (confirmed == true) {
+                  saveWorkLog();
+                }
+              } else {
                 saveWorkLog();
               }
-            } else {
-              saveWorkLog();
-            }
-          },
-          state: state,
+            },
+            state: state,
+          ),
         ),
         error: (error, stack) =>
             Center(child: Text('Error: ${stack.toString()}')),

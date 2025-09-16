@@ -128,7 +128,7 @@ class HistoryFilterWidget extends ConsumerWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 42),
+              SizedBox(height: 20),
             ],
           ),
         );

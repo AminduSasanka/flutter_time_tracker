@@ -34,7 +34,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           top: 16,
           bottom: 8,
         ),
-        child: Column(children: [CurrentWorkLogWidget()]),
+        child: SingleChildScrollView(child: Column(children: [CurrentWorkLogWidget()])),
       ),
     );
   }
