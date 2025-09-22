@@ -30,6 +30,8 @@ class CurrentWorkLogWidget extends ConsumerWidget {
             SnackBar(content: Text('Error: ${workLogState.error}')),
           );
         } else {
+          ref.invalidate(homePageControllerProvider);
+
           ScaffoldMessenger.of(
             context,
           ).showSnackBar(SnackBar(content: Text('Work log stopped and saved')));
