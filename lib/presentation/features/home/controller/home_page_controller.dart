@@ -49,7 +49,7 @@ class HomePageController extends AsyncNotifier<HomePageState> {
       monthHours: Duration.zero,
       monthTasksCount: 0,
       isError: true,
-      errorMessage: todayResult.tryGetError()!.message,
+      errorMessage: "",
     );
   }
 
