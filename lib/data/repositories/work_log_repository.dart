@@ -281,4 +281,23 @@ class WorkLogRepository implements IWorkLogRepository {
       );
     }
   }
+
+  @override
+  Future<List<WorkLogModel>> getTodayWorkLogs() async {
+    try {
+      final List<Map<String, dynamic>> workLogsModels = await _database.query(
+        workLogsTable,
+        where: 'date(start_time) = ?',
+        whereArgs: [DateFormat('yyyy-MM-dd').format(DateTime.now())],
+        orderBy: 'start_time DESC',
+      );
+
+      return workLogsModels.map((e) => WorkLogModel.fromMap(e)).toList();
+    } catch (e, s) {
+      throw UnknownFailure(
+        exception: e is Exception ? e : Exception(e.toString()),
+        stackTrace: s,
+      );
+    }
+  }
 }
