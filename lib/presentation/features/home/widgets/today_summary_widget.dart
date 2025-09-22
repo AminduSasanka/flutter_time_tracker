@@ -16,9 +16,10 @@ class TodaySummary extends ConsumerWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Today Summary', style: TextStyles.title),
+            Text("Today's Summary", style: TextStyles.subTitle),
             SizedBox(height: 12),
             Card(
+              margin: const EdgeInsets.all(0),
               shape: RoundedRectangleBorder(
                 side: const BorderSide(color: Colors.black12, width: 1.0),
                 borderRadius: BorderRadius.circular(8.0),
@@ -73,7 +74,7 @@ class TodaySummary extends ConsumerWidget {
           ],
         );
       },
-      error: (error, stack) => Text('Error: $error'),
+      error: (error, stack) => Text('Error: $error, Stack: $stack '),
       loading: () => Center(child: const CircularProgressIndicator()),
     );
   }

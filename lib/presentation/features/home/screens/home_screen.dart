@@ -40,7 +40,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CurrentWorkLogWidget(),
-              SizedBox(height: 12),
+              SizedBox(height: 18),
               TodaySummary(),
             ],
           ),
