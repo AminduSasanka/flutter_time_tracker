@@ -287,8 +287,12 @@ class WorkLogRepository implements IWorkLogRepository {
     try {
       final List<Map<String, dynamic>> workLogsModels = await _database.query(
         workLogsTable,
-        where: 'date(start_time) = ?',
-        whereArgs: [DateFormat('yyyy-MM-dd').format(DateTime.now())],
+        where: 'date(start_time) = ? AND work_log_state IN (?, ?)',
+        whereArgs: [
+          DateFormat('yyyy-MM-dd').format(DateTime.now()),
+          WorkLogStateEnum.synced.name,
+          WorkLogStateEnum.completed.name,
+        ],
         orderBy: 'start_time DESC',
       );
 
