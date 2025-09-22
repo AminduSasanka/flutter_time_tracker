@@ -283,4 +283,20 @@ class WorkLogService implements IWorkLogService {
       );
     }
   }
+
+  @override
+  Future<Result<List<WorkLog>, Failure>> getTodayWorkLogs() async {
+    try {
+      final workLogModels = await _workLogRepository.getTodayWorkLogs();
+      final workLogs = workLogModels.map((e) => e.toEntity()).toList();
+
+      return Success(workLogs);
+    } catch (e, s) {
+      return Error(
+        e is Failure
+            ? e
+            : UnknownFailure(exception: Exception(e.toString()), stackTrace: s),
+      );
+    }
+  }
 }

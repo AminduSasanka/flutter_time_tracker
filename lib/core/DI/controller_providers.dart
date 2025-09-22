@@ -5,7 +5,9 @@ import 'package:flutter_time_tracker/presentation/features/edit_worklog/controll
 import 'package:flutter_time_tracker/presentation/features/edit_worklog/state/edit_worklog_screen_state.dart';
 import 'package:flutter_time_tracker/presentation/features/history/controller/history_screen_controller.dart';
 import 'package:flutter_time_tracker/presentation/features/history/state/history_screen_state.dart';
+import 'package:flutter_time_tracker/presentation/features/home/controller/home_page_controller.dart';
 import 'package:flutter_time_tracker/presentation/features/home/controller/work_log_controller.dart';
+import 'package:flutter_time_tracker/presentation/features/home/state/home_page_state.dart';
 import 'package:flutter_time_tracker/presentation/features/home/state/work_log_state.dart';
 import 'package:flutter_time_tracker/presentation/features/settings/controller/settings_screen_controller.dart';
 import 'package:flutter_time_tracker/presentation/features/settings/state/settings_screen_state.dart';
@@ -46,3 +48,8 @@ final addWorkLogScreenControllerProvider =
       AddWorklogScreenController,
       AddWorklogScreenState
     >(AddWorklogScreenController.new);
+
+final homePageControllerProvider =
+    AsyncNotifierProvider<HomePageController, HomePageState>(
+      HomePageController.new,
+    );
