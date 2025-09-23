@@ -15,7 +15,9 @@ class _SettingsState extends State<SettingsScreen> {
       appBar: AppBar(title: Text("Settings")),
       body: Padding(
         padding: EdgeInsetsGeometry.directional(top: 16, start: 8, end: 8),
-        child: Column(children: [JiraAuthWidget()]),
+        child: SingleChildScrollView(
+          child: Column(children: [JiraAuthWidget()]),
+        ),
       ),
     );
   }
