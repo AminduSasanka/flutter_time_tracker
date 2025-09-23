@@ -13,7 +13,17 @@ class HomePageController extends AsyncNotifier<HomePageState> {
         .read(workLogServiceProvider)
         .getTodayWorkLogs();
 
-    if (todayResult.isError()) {
+    final weekResult = await ref
+        .read(workLogServiceProvider)
+        .getWeeklyWorkLogs();
+
+    final monthResult = await ref
+        .read(workLogServiceProvider)
+        .getMonthlyWorkLogs();
+
+    if (todayResult.isError() ||
+        weekResult.isError() ||
+        monthResult.isError()) {
       return HomePageState(
         todayHours: Duration.zero,
         todayTasksCount: 0,
@@ -22,13 +32,20 @@ class HomePageController extends AsyncNotifier<HomePageState> {
         monthHours: Duration.zero,
         monthTasksCount: 0,
         isError: true,
-        errorMessage: todayResult.tryGetError()!.message,
+        errorMessage: todayResult.tryGetError()?.message ??
+            weekResult.tryGetError()?.message ??
+            monthResult.tryGetError()?.message ??
+            "An unknown error occurred",
       );
     }
 
     final todayWorkLogs = todayResult.tryGetSuccess();
+    final weekWorkLogs = weekResult.tryGetSuccess();
+    final monthWorkLogs = monthResult.tryGetSuccess();
 
-    if (todayWorkLogs!.isEmpty) {
+    if (todayWorkLogs!.isEmpty ||
+        weekWorkLogs!.isEmpty ||
+        monthWorkLogs!.isEmpty) {
       return HomePageState(
         todayHours: Duration.zero,
         todayTasksCount: 0,
@@ -36,7 +53,7 @@ class HomePageController extends AsyncNotifier<HomePageState> {
         weekTasksCount: 0,
         monthHours: Duration.zero,
         monthTasksCount: 0,
-        isError: true,
+        isError: false,
         errorMessage: "",
       );
     }
@@ -44,11 +61,11 @@ class HomePageController extends AsyncNotifier<HomePageState> {
     return HomePageState(
       todayHours: _totalHours(todayWorkLogs),
       todayTasksCount: todayWorkLogs.length,
-      weekHours: Duration.zero,
-      weekTasksCount: 0,
-      monthHours: Duration.zero,
-      monthTasksCount: 0,
-      isError: true,
+      weekHours: _totalHours(weekWorkLogs),
+      weekTasksCount: weekWorkLogs.length,
+      monthHours: _totalHours(monthWorkLogs),
+      monthTasksCount: monthWorkLogs.length,
+      isError: false,
       errorMessage: "",
     );
   }
