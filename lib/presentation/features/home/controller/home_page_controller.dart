@@ -43,9 +43,9 @@ class HomePageController extends AsyncNotifier<HomePageState> {
     final weekWorkLogs = weekResult.tryGetSuccess();
     final monthWorkLogs = monthResult.tryGetSuccess();
 
-    if (todayWorkLogs!.isEmpty ||
-        weekWorkLogs!.isEmpty ||
-        monthWorkLogs!.isEmpty) {
+    if (todayWorkLogs == null ||
+        weekWorkLogs == null ||
+        monthWorkLogs == null) {
       return HomePageState(
         todayHours: Duration.zero,
         todayTasksCount: 0,
@@ -58,7 +58,22 @@ class HomePageController extends AsyncNotifier<HomePageState> {
       );
     }
 
-    return HomePageState(
+    if (todayWorkLogs.isEmpty &&
+        weekWorkLogs.isEmpty &&
+        monthWorkLogs.isEmpty) {
+      return HomePageState(
+        todayHours: Duration.zero,
+        todayTasksCount: 0,
+        weekHours: Duration.zero,
+        weekTasksCount: 0,
+        monthHours: Duration.zero,
+        monthTasksCount: 0,
+        isError: false,
+        errorMessage: "",
+      );
+    }
+
+    final logs = HomePageState(
       todayHours: _totalHours(todayWorkLogs),
       todayTasksCount: todayWorkLogs.length,
       weekHours: _totalHours(weekWorkLogs),
@@ -68,6 +83,8 @@ class HomePageController extends AsyncNotifier<HomePageState> {
       isError: false,
       errorMessage: "",
     );
+
+    return logs;
   }
 
   Duration _totalHours(List<WorkLog> workLogs) {
