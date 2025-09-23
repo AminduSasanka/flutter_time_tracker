@@ -48,17 +48,14 @@ class EditWorkLogWidget extends StatelessWidget {
       ).format(state.workLog.startTime!);
     }
 
-    return Padding(
-      padding: EdgeInsetsGeometry.all(15),
-      child: WorkLogFormWidget(
-        taskIdController: taskIdController,
-        summaryController: summaryController,
-        descriptionController: descriptionController,
-        spentTimeController: spentTimeController,
-        startTimeController: startTimeController,
-        formKey: formKey,
-        onSave: onSave,
-      ),
+    return WorkLogFormWidget(
+      taskIdController: taskIdController,
+      summaryController: summaryController,
+      descriptionController: descriptionController,
+      spentTimeController: spentTimeController,
+      startTimeController: startTimeController,
+      formKey: formKey,
+      onSave: onSave,
     );
   }
 }

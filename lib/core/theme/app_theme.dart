@@ -41,7 +41,7 @@ final ThemeData lightTheme = ThemeData(
     ),
   ),
   cardTheme: CardThemeData(
-    color: Colors.white,
+    color: const Color(0xFFF5F5F5),
     shape: RoundedRectangleBorder(
       side: const BorderSide(color: Colors.black12, width: 1.0),
       borderRadius: BorderRadius.circular(15.0),

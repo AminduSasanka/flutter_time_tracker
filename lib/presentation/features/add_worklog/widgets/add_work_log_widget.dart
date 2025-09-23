@@ -46,17 +46,14 @@ class AddWorkLogWidget extends StatelessWidget {
       ).format(state.workLog.startTime!);
     }
 
-    return SingleChildScrollView(
-      padding: EdgeInsets.all(16),
-      child: WorkLogFormWidget(
-        taskIdController: taskIdController,
-        summaryController: summaryController,
-        descriptionController: descriptionController,
-        spentTimeController: spentTimeController,
-        startTimeController: startDateController,
-        formKey: formKey,
-        onSave: onSave,
-      ),
+    return WorkLogFormWidget(
+      taskIdController: taskIdController,
+      summaryController: summaryController,
+      descriptionController: descriptionController,
+      spentTimeController: spentTimeController,
+      startTimeController: startDateController,
+      formKey: formKey,
+      onSave: onSave,
     );
   }
 }

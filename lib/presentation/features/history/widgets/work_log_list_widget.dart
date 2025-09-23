@@ -17,7 +17,7 @@ class WorkLogListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: 16, right: 16, top: 16),
+      padding: EdgeInsets.only(left: 8, right: 8, top: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
