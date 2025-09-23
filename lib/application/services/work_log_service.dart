@@ -302,4 +302,50 @@ class WorkLogService implements IWorkLogService {
       );
     }
   }
+
+  @override
+  Future<Result<List<WorkLog>, Failure>> getWeeklyWorkLogs() async {
+    try {
+      DateTime today = DateTime.now();
+      Duration datesToMonday = Duration(days: today.weekday - 1);
+      Duration datesToSunday = Duration(days: 7 - today.weekday);
+
+      final workLogModels = await _workLogRepository.getWorkLogsByDates(
+        DateTime.now().subtract(datesToMonday),
+        DateTime.now().add(datesToSunday),
+      );
+      final workLogs = workLogModels.map((e) => e.toEntity()).toList();
+
+      return Success(workLogs);
+    } catch (e, s) {
+      return Error(
+        e is Failure
+            ? e
+            : UnknownFailure(exception: Exception(e.toString()), stackTrace: s),
+      );
+    }
+  }
+
+  @override
+  Future<Result<List<WorkLog>, Failure>> getMonthlyWorkLogs() async {
+    try {
+      DateTime today = DateTime.now();
+      DateTime monthStart = DateTime(today.year, today.month, 1);
+      DateTime monthEnd = DateTime(today.year, today.month + 1, 0);
+
+      final workLogModels = await _workLogRepository.getWorkLogsByDates(
+        monthStart,
+        monthEnd,
+      );
+      final workLogs = workLogModels.map((e) => e.toEntity()).toList();
+
+      return Success(workLogs);
+    } catch (e, s) {
+      return Error(
+        e is Failure
+            ? e
+            : UnknownFailure(exception: Exception(e.toString()), stackTrace: s),
+      );
+    }
+  }
 }

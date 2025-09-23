@@ -31,4 +31,8 @@ abstract interface class IWorkLogService {
   Future<Result<void, Failure>> bulkDeleteWorkLogs(List<int> ids);
 
   Future<Result<List<WorkLog>, Failure>> getTodayWorkLogs();
+
+  Future<Result<List<WorkLog>, Failure>> getWeeklyWorkLogs();
+
+  Future<Result<List<WorkLog>, Failure>> getMonthlyWorkLogs();
 }
