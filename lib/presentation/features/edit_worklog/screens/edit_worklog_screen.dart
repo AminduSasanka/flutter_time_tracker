@@ -178,6 +178,7 @@ class _EditWorklogScreenState extends ConsumerState<EditWorklogScreen> {
       ),
       body: screenState.when(
         data: (state) => SingleChildScrollView(
+          padding: const EdgeInsets.only(top: 16, left: 8, right: 8),
           child: EditWorkLogWidget(
             worklogId: int.parse(widget.worklogId!),
             taskIdController: _taskIdController,
