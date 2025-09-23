@@ -83,7 +83,7 @@ class HistoryFilterWidget extends ConsumerWidget {
             : "";
         taskKeyInputController.text = state.filterTaskKey ?? "";
 
-        return Padding(
+        return SingleChildScrollView(
           padding: EdgeInsets.only(bottom: 8, left: 16, right: 16, top: 16),
           child: Column(
             mainAxisSize: MainAxisSize.min,
