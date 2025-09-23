@@ -287,7 +287,10 @@ class WorkLogService implements IWorkLogService {
   @override
   Future<Result<List<WorkLog>, Failure>> getTodayWorkLogs() async {
     try {
-      final workLogModels = await _workLogRepository.getTodayWorkLogs();
+      final workLogModels = await _workLogRepository.getWorkLogsByDates(
+        DateTime.now(),
+        DateTime.now(),
+      );
       final workLogs = workLogModels.map((e) => e.toEntity()).toList();
 
       return Success(workLogs);

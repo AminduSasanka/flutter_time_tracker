@@ -28,8 +28,6 @@ abstract interface class IWorkLogRepository {
 
   Future<List<WorkLog>> getByIDList(List<int> workLogIds);
 
-  Future<List<WorkLogModel>> getTodayWorkLogs();
-
   Future<List<WorkLogModel>> getWorkLogsByDates(
     DateTime startDate,
     DateTime endDate,
