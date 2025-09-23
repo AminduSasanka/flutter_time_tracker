@@ -104,100 +104,91 @@ class _JiraAuthWidgetState extends ConsumerState<JiraAuthWidget> {
       isConnectionTesting = state.isConnectionTesting;
     }
 
-    return Padding(
-      padding: EdgeInsetsGeometry.all(15),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "Jira Connection",
-            textAlign: TextAlign.start,
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: 16),
-          Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                const Text(
-                  'Email',
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Jira Connection",
+          textAlign: TextAlign.start,
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(height: 16),
+        Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              const Text('Email'),
+              const SizedBox(height: 8),
+              TextFormField(
+                controller: _emailController,
+                decoration: const InputDecoration(
+                  hintText: "johndoe@exampl.com",
                 ),
-                const SizedBox(height: 8),
-                TextFormField(
-                  controller: _emailController,
-                  decoration: const InputDecoration(
-                    hintText: "johndoe@exampl.com",
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your jira email';
-                    }
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your jira email';
+                  }
 
-                    return null;
-                  },
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+              const Text('Jira Workspace URL'),
+              const SizedBox(height: 8),
+              TextFormField(
+                controller: _workspaceController,
+                decoration: const InputDecoration(
+                  hintText: "johndoe.atlassian.com",
                 ),
-                const SizedBox(height: 16),
-                const Text(
-                  'Jira Workspace URL',
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your jira workspace url';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+              const Text('API Token'),
+              const SizedBox(height: 8),
+              TextFormField(
+                controller: _tokenController,
+                decoration: const InputDecoration(
+                  hintText: "SUB@#NNE@wewebff135b2b237f",
                 ),
-                const SizedBox(height: 8),
-                TextFormField(
-                  controller: _workspaceController,
-                  decoration: const InputDecoration(
-                    hintText: "johndoe.atlassian.com",
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your jira workspace url';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                const Text(
-                  'API Token',
-                ),
-                const SizedBox(height: 8),
-                TextFormField(
-                  controller: _tokenController,
-                  decoration: const InputDecoration(
-                    hintText: "SUB@#NNE@wewebff135b2b237f",
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your API token';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 24),
-                Row(
-                  children: [
-                    Expanded(
-                      child: PrimaryButton(
-                        text: "Save",
-                        onPressed: _updateJiraAuth,
-                        isLoading: isLoading
-                      ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your API token';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 24),
+              Row(
+                children: [
+                  Expanded(
+                    child: PrimaryButton(
+                      text: "Save",
+                      onPressed: _updateJiraAuth,
+                      isLoading: isLoading,
                     ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: OutlinedActionButton(
-                        text: "Test Connection",
-                        onPressed: _testConnection,
-                        isLoading: isConnectionTesting
-                      ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: OutlinedActionButton(
+                      text: "Test Connection",
+                      onPressed: _testConnection,
+                      isLoading: isConnectionTesting,
                     ),
-                  ],
-                ),
-              ],
-            ),
+                  ),
+                ],
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
