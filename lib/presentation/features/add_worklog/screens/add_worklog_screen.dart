@@ -92,16 +92,21 @@ class _AddWorklogScreenState extends ConsumerState<AddWorklogScreen> {
     }
 
     return Scaffold(
-      appBar: AppBar(title: Text('Add Work Log', style: TextStyles.appBarTitle)),
-      body: AddWorkLogWidget(
-        state: screenState,
-        taskIdController: _taskIdController,
-        summaryController: _summaryController,
-        descriptionController: _descriptionController,
-        spentTimeController: _spentTimeController,
-        startDateController: _startDateController,
-        formKey: _formKey,
-        onSave: handleAddWorkLog,
+      appBar: AppBar(
+        title: Text('Add Work Log', style: TextStyles.appBarTitle),
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.only(top: 16, left: 8, right: 8),
+        child: AddWorkLogWidget(
+          state: screenState,
+          taskIdController: _taskIdController,
+          summaryController: _summaryController,
+          descriptionController: _descriptionController,
+          spentTimeController: _spentTimeController,
+          startDateController: _startDateController,
+          formKey: _formKey,
+          onSave: handleAddWorkLog,
+        ),
       ),
     );
   }
