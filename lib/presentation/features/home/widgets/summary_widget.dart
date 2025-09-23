@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_time_tracker/core/DI/controller_providers.dart';
 import 'package:flutter_time_tracker/core/theme/text_styles.dart';
 import 'package:flutter_time_tracker/presentation/shared/helpers/duration_to_spent_time.dart';
 
