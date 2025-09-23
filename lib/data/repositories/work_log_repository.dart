@@ -304,4 +304,31 @@ class WorkLogRepository implements IWorkLogRepository {
       );
     }
   }
+
+  @override
+  Future<List<WorkLogModel>> getWorkLogsByDates(
+    DateTime startDate,
+    DateTime endDate,
+  ) async {
+    try {
+      final List<Map<String, dynamic>> workLogsModels = await _database.query(
+        workLogsTable,
+        where: 'date(start_time) >= ? AND date(start_time) <= ? AND work_log_state IN (?, ?)',
+        whereArgs: [
+          DateFormat('yyyy-MM-dd').format(startDate),
+          DateFormat('yyyy-MM-dd').format(endDate),
+          WorkLogStateEnum.synced.name,
+          WorkLogStateEnum.completed.name,
+        ],
+        orderBy: 'start_time DESC',
+      );
+
+      return workLogsModels.map((e) => WorkLogModel.fromMap(e)).toList();
+    } catch (e, s) {
+      throw UnknownFailure(
+        exception: e is Exception ? e : Exception(e.toString()),
+        stackTrace: s,
+      );
+    }
+  }
 }
