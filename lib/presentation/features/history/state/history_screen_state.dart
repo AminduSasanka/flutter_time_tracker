@@ -7,8 +7,11 @@ class HistoryScreenState {
   String? errorMessage;
   DateTime? filterStartDate;
   String? filterTaskKey;
-  WorkLogStateEnum? filterState;
+  List<WorkLogStateEnum>? filterStates;
   List<int> selectedWorkLogIds = [];
+  int currentPage;
+  bool? hasMore = true;
+  bool? isLoading = false;
 
   HistoryScreenState({
     required this.workLogs,
@@ -16,8 +19,11 @@ class HistoryScreenState {
     required this.errorMessage,
     this.filterStartDate,
     this.filterTaskKey,
-    this.filterState,
+    this.filterStates,
     this.selectedWorkLogIds = const [],
+    required this.currentPage,
+    this.hasMore,
+    this.isLoading,
   });
 
   HistoryScreenState copyWith({
@@ -27,8 +33,11 @@ class HistoryScreenState {
     DateTime? filterStartDate,
     DateTime? filterEndDate,
     String? filterTaskKey,
-    WorkLogStateEnum? filterState,
+    List<WorkLogStateEnum>? filterStates,
     List<int>? selectedWorkLogIds,
+    int? currentPage,
+    bool? hasMore,
+    bool? isLoading,
   }) {
     return HistoryScreenState(
       workLogs: workLogs ?? this.workLogs,
@@ -36,8 +45,11 @@ class HistoryScreenState {
       errorMessage: errorMessage ?? this.errorMessage,
       filterStartDate: filterStartDate,
       filterTaskKey: filterTaskKey,
-      filterState: filterState,
+      filterStates: filterStates,
       selectedWorkLogIds: selectedWorkLogIds ?? this.selectedWorkLogIds,
+      currentPage: currentPage ?? this.currentPage,
+      hasMore: hasMore ?? this.hasMore,
+      isLoading: isLoading ?? this.isLoading,
     );
   }
 }

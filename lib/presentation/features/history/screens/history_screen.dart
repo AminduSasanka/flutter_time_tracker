@@ -7,11 +7,39 @@ import 'package:flutter_time_tracker/presentation/features/history/widgets/histo
 import 'package:flutter_time_tracker/presentation/features/history/widgets/history_screen_menu.dart';
 import 'package:flutter_time_tracker/presentation/features/history/widgets/work_log_list_widget.dart';
 
-class HistoryScreen extends ConsumerWidget {
+class HistoryScreen extends ConsumerStatefulWidget {
   const HistoryScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HistoryScreen> createState() => _HistoryScreenState();
+}
+
+class _HistoryScreenState extends ConsumerState<HistoryScreen> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels ==
+            _scrollController.position.maxScrollExtent &&
+        !_scrollController.position.outOfRange) {
+      ref.read(historyScreenControllerProvider.notifier).loadMore();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final historyScreenState = ref.watch(historyScreenControllerProvider);
 
     ref.listen(historyScreenControllerProvider, (previous, next) {
@@ -52,6 +80,7 @@ class HistoryScreen extends ConsumerWidget {
             ],
           ),
           body: ListView.builder(
+            controller: _scrollController,
             itemCount: workLogsGroupedByDate.length,
             itemBuilder: (context, index) {
               final date = workLogsGroupedByDate.keys.elementAt(index);

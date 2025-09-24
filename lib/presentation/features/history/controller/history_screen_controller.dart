@@ -18,6 +18,10 @@ class HistoryScreenController
       workLogs: workLogs,
       isError: false,
       errorMessage: null,
+      selectedWorkLogIds: [],
+      currentPage: 1,
+      hasMore: true,
+      isLoading: false,
     );
   }
 
@@ -46,7 +50,7 @@ class HistoryScreenController
   }
 
   Future<void> filterWorkLogs({
-    WorkLogStateEnum? worklogState,
+    List<WorkLogStateEnum>? worklogStates,
     DateTime? startDate,
     String? taskKey,
   }) async {
@@ -55,9 +59,7 @@ class HistoryScreenController
     final result = await ref
         .read(workLogServiceProvider)
         .getFilteredWorkLogs(
-          states: worklogState == null
-              ? [WorkLogStateEnum.completed, WorkLogStateEnum.synced]
-              : [worklogState],
+          states: worklogStates,
           startDate: startDate,
           taskKey: taskKey,
         );
@@ -70,7 +72,7 @@ class HistoryScreenController
           errorMessage: null,
           filterStartDate: startDate,
           filterTaskKey: taskKey,
-          filterState: worklogState,
+          filterStates: worklogStates,
         ),
       );
     } else {
@@ -98,6 +100,52 @@ class HistoryScreenController
     }
 
     return {};
+  }
+
+  Future<void> loadMore() async {
+    if (!state.value!.hasMore! || state.value!.isLoading!) return;
+
+    state = AsyncData(state.value!.copyWith(isLoading: true));
+
+    final result = await ref
+        .read(workLogServiceProvider)
+        .getFilteredWorkLogs(
+          states: state.value!.filterStates,
+          startDate: state.value!.filterStartDate,
+          taskKey: state.value!.filterTaskKey,
+          page: state.value!.currentPage + 1,
+          pageSize: 10,
+        );
+
+    if (result.isSuccess()) {
+      Map<String, List<WorkLog>>? newWorkLogsByDates = result.tryGetSuccess();
+
+      if (newWorkLogsByDates != null && newWorkLogsByDates.isNotEmpty) {
+        final updatedWorkLogs = Map<String, List<WorkLog>>.from(state.value!.workLogs);
+
+        newWorkLogsByDates.forEach((key, value) {
+          if (updatedWorkLogs.containsKey(key)) {
+            updatedWorkLogs[key] = [...updatedWorkLogs[key]!, ...value];
+          } else {
+            updatedWorkLogs[key] = value;
+          }
+        });
+
+        state = AsyncData(
+          state.value!.copyWith(
+            workLogs: updatedWorkLogs,
+            isLoading: false,
+            currentPage: state.value!.currentPage + 1,
+          ),
+        );
+      } else {
+        state = AsyncData(
+          state.value!.copyWith(hasMore: false, isLoading: false),
+        );
+      }
+    } else {
+      state = AsyncError(result.tryGetError()!, StackTrace.current);
+    }
   }
 
   void selectWorkLog(int id) {

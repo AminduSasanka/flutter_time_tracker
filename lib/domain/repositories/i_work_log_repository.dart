@@ -20,6 +20,8 @@ abstract interface class IWorkLogRepository {
     String? taskKey,
     DateTime? startDate,
     String? groupBy,
+    int? page,
+    int? pageSize,
   });
 
   Future<WorkLogModel> getByID(int id);

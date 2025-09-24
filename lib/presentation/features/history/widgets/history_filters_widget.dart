@@ -35,7 +35,7 @@ class HistoryFilterWidget extends ConsumerWidget {
                 ? DateTime.parse(dateController.text)
                 : null,
             taskKey: taskKeyInputController.text,
-            worklogState: null,
+            worklogStates: null,
           );
 
       Navigator.pop(context);
@@ -56,7 +56,7 @@ class HistoryFilterWidget extends ConsumerWidget {
     void clearFilters() {
       ref
           .read(historyScreenControllerProvider.notifier)
-          .filterWorkLogs(startDate: null, taskKey: null, worklogState: null);
+          .filterWorkLogs(startDate: null, taskKey: null, worklogStates: null);
 
       taskKeyInputController.text = "";
       dateController.text = "";
@@ -83,53 +83,58 @@ class HistoryFilterWidget extends ConsumerWidget {
             : "";
         taskKeyInputController.text = state.filterTaskKey ?? "";
 
-        return SingleChildScrollView(
-          padding: EdgeInsets.only(bottom: 8, left: 16, right: 16, top: 16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 16),
-              Text("Date"),
-              SizedBox(height: 4),
-              TextField(
-                controller: dateController,
-                readOnly: true,
-                decoration: InputDecoration(
-                  hintText: "Select Date",
-                  border: OutlineInputBorder(),
-                  suffixIcon: Icon(Icons.calendar_today),
-                ),
-                onTap: () {
-                  pickDateTime(state);
-                },
-              ),
-              SizedBox(height: 16),
-              Text("Task Key"),
-              SizedBox(height: 4),
-              TextField(
-                controller: taskKeyInputController,
-                decoration: InputDecoration(
-                  hintText: "NPR-739",
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TextButton(
-                    onPressed: clearFilters,
-                    child: Text("Clear Filters"),
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: SingleChildScrollView(
+            padding: EdgeInsets.only(bottom: 8, left: 16, right: 16, top: 16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 16),
+                Text("Date"),
+                SizedBox(height: 4),
+                TextField(
+                  controller: dateController,
+                  readOnly: true,
+                  decoration: InputDecoration(
+                    hintText: "Select Date",
+                    border: OutlineInputBorder(),
+                    suffixIcon: Icon(Icons.calendar_today),
                   ),
-                  FilledButton(
-                    onPressed: applyFilters,
-                    child: Text("Apply Filters"),
+                  onTap: () {
+                    pickDateTime(state);
+                  },
+                ),
+                SizedBox(height: 16),
+                Text("Task Key"),
+                SizedBox(height: 4),
+                TextField(
+                  controller: taskKeyInputController,
+                  decoration: InputDecoration(
+                    hintText: "NPR-739",
+                    border: OutlineInputBorder(),
                   ),
-                ],
-              ),
-              SizedBox(height: 20),
-            ],
+                ),
+                SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextButton(
+                      onPressed: clearFilters,
+                      child: Text("Clear Filters"),
+                    ),
+                    FilledButton(
+                      onPressed: applyFilters,
+                      child: Text("Apply Filters"),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 20),
+              ],
+            ),
           ),
         );
       },

@@ -24,6 +24,8 @@ abstract interface class IWorkLogService {
     List<WorkLogStateEnum>? states,
     String? taskKey,
     DateTime? startDate,
+    int? page,
+    int? pageSize,
   });
 
   Future<Result<WorkLog, Failure>> getWorklogById(int id);
