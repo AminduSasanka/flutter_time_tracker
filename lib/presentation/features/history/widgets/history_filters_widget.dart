@@ -35,7 +35,7 @@ class HistoryFilterWidget extends ConsumerWidget {
                 ? DateTime.parse(dateController.text)
                 : null,
             taskKey: taskKeyInputController.text,
-            worklogState: null,
+            worklogStates: null,
           );
 
       Navigator.pop(context);
@@ -56,7 +56,7 @@ class HistoryFilterWidget extends ConsumerWidget {
     void clearFilters() {
       ref
           .read(historyScreenControllerProvider.notifier)
-          .filterWorkLogs(startDate: null, taskKey: null, worklogState: null);
+          .filterWorkLogs(startDate: null, taskKey: null, worklogStates: null);
 
       taskKeyInputController.text = "";
       dateController.text = "";

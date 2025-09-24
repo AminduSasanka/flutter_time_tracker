@@ -7,7 +7,7 @@ class HistoryScreenState {
   String? errorMessage;
   DateTime? filterStartDate;
   String? filterTaskKey;
-  WorkLogStateEnum? filterState;
+  List<WorkLogStateEnum>? filterStates;
   List<int> selectedWorkLogIds = [];
 
   HistoryScreenState({
@@ -16,7 +16,7 @@ class HistoryScreenState {
     required this.errorMessage,
     this.filterStartDate,
     this.filterTaskKey,
-    this.filterState,
+    this.filterStates,
     this.selectedWorkLogIds = const [],
   });
 
@@ -27,7 +27,7 @@ class HistoryScreenState {
     DateTime? filterStartDate,
     DateTime? filterEndDate,
     String? filterTaskKey,
-    WorkLogStateEnum? filterState,
+    List<WorkLogStateEnum>? filterStates,
     List<int>? selectedWorkLogIds,
   }) {
     return HistoryScreenState(
@@ -36,7 +36,7 @@ class HistoryScreenState {
       errorMessage: errorMessage ?? this.errorMessage,
       filterStartDate: filterStartDate,
       filterTaskKey: filterTaskKey,
-      filterState: filterState,
+      filterStates: filterStates,
       selectedWorkLogIds: selectedWorkLogIds ?? this.selectedWorkLogIds,
     );
   }
