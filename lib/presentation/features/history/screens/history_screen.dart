@@ -15,6 +15,30 @@ class HistoryScreen extends ConsumerStatefulWidget {
 }
 
 class _HistoryScreenState extends ConsumerState<HistoryScreen> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent &&
+        !_scrollController.position.outOfRange) {
+      ref
+          .read(historyScreenControllerProvider.notifier).loadMore();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final historyScreenState = ref.watch(historyScreenControllerProvider);
@@ -57,6 +81,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
             ],
           ),
           body: ListView.builder(
+            controller: _scrollController,
             itemCount: workLogsGroupedByDate.length,
             itemBuilder: (context, index) {
               final date = workLogsGroupedByDate.keys.elementAt(index);
