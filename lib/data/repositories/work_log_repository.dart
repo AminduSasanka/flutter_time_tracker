@@ -195,6 +195,8 @@ class WorkLogRepository implements IWorkLogRepository {
     String? taskKey,
     DateTime? startDate,
     String? groupBy,
+    int? page,
+    int? pageSize,
   }) async {
     try {
       final whereClauses = <String>[];
@@ -223,6 +225,8 @@ class WorkLogRepository implements IWorkLogRepository {
         where: whereString.isEmpty ? null : whereString,
         whereArgs: whereArgs.isEmpty ? null : whereArgs,
         orderBy: 'start_time DESC',
+        limit: pageSize,
+        offset: page != null && pageSize != null ? (page - 1) * pageSize : null,
       );
 
       return filteredWorkLogs.map((e) => WorkLogModel.fromMap(e)).toList();

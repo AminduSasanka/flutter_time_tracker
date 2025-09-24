@@ -216,12 +216,16 @@ class WorkLogService implements IWorkLogService {
     List<WorkLogStateEnum>? states,
     String? taskKey,
     DateTime? startDate,
+    int? page,
+    int? pageSize,
   }) async {
     try {
       final workLogModels = await _workLogRepository.getFilteredWorkLogs(
         states: states,
         taskKey: taskKey,
         startDate: startDate,
+        page: page ?? 1,
+        pageSize: pageSize ?? 10,
       );
 
       final Map<String, List<WorkLog>> groupedWorkLogs = {};
