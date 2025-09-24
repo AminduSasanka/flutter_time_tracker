@@ -18,6 +18,10 @@ class HistoryScreenController
       workLogs: workLogs,
       isError: false,
       errorMessage: null,
+      selectedWorkLogIds: [],
+      currentPage: 1,
+      hasMore: true,
+      isLoading: false,
     );
   }
 
@@ -96,6 +100,40 @@ class HistoryScreenController
     }
 
     return {};
+  }
+
+  Future<void> loadMore() async {
+    state = AsyncData(state.value!.copyWith(isLoading: true));
+
+    final result = await ref
+        .read(workLogServiceProvider)
+        .getFilteredWorkLogs(
+          states: state.value!.filterStates,
+          startDate: state.value!.filterStartDate,
+          taskKey: state.value!.filterTaskKey,
+          page: state.value!.currentPage + 1,
+          pageSize: 10,
+        );
+
+    if (result.isSuccess()) {
+      Map<String, List<WorkLog>>? workLogs = result.tryGetSuccess();
+
+      if (workLogs != null && workLogs.isNotEmpty) {
+        state = AsyncData(
+          state.value!.copyWith(
+            workLogs: {...state.value!.workLogs, ...workLogs},
+            isLoading: false,
+            currentPage: state.value!.currentPage + 1,
+          ),
+        );
+      } else {
+        state = AsyncData(
+          state.value!.copyWith(hasMore: false, isLoading: false),
+        );
+      }
+    } else {
+      state = AsyncError(result.tryGetError()!, StackTrace.current);
+    }
   }
 
   void selectWorkLog(int id) {
