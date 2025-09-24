@@ -32,10 +32,9 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
 
   void _onScroll() {
     if (_scrollController.position.pixels ==
-        _scrollController.position.maxScrollExtent &&
+            _scrollController.position.maxScrollExtent &&
         !_scrollController.position.outOfRange) {
-      ref
-          .read(historyScreenControllerProvider.notifier).loadMore();
+      ref.read(historyScreenControllerProvider.notifier).loadMore();
     }
   }
 

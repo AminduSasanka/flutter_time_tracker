@@ -96,7 +96,7 @@ class _AddWorklogScreenState extends ConsumerState<AddWorklogScreen> {
         title: Text('Add Work Log', style: TextStyles.appBarTitle),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.only(top: 16, left: 8, right: 8),
+        padding: const EdgeInsets.only(top: 16, left: 8, right: 8, bottom: 16),
         child: AddWorkLogWidget(
           state: screenState,
           taskIdController: _taskIdController,
