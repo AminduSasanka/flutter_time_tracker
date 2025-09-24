@@ -103,6 +103,8 @@ class HistoryScreenController
   }
 
   Future<void> loadMore() async {
+    if (!state.value!.hasMore! || state.value!.isLoading!) return;
+
     state = AsyncData(state.value!.copyWith(isLoading: true));
 
     final result = await ref
@@ -116,12 +118,22 @@ class HistoryScreenController
         );
 
     if (result.isSuccess()) {
-      Map<String, List<WorkLog>>? workLogs = result.tryGetSuccess();
+      Map<String, List<WorkLog>>? newWorkLogsByDates = result.tryGetSuccess();
 
-      if (workLogs != null && workLogs.isNotEmpty) {
+      if (newWorkLogsByDates != null && newWorkLogsByDates.isNotEmpty) {
+        final updatedWorkLogs = Map<String, List<WorkLog>>.from(state.value!.workLogs);
+
+        newWorkLogsByDates.forEach((key, value) {
+          if (updatedWorkLogs.containsKey(key)) {
+            updatedWorkLogs[key] = [...updatedWorkLogs[key]!, ...value];
+          } else {
+            updatedWorkLogs[key] = value;
+          }
+        });
+
         state = AsyncData(
           state.value!.copyWith(
-            workLogs: {...state.value!.workLogs, ...workLogs},
+            workLogs: updatedWorkLogs,
             isLoading: false,
             currentPage: state.value!.currentPage + 1,
           ),
