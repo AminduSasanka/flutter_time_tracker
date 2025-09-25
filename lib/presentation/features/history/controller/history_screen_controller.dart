@@ -229,4 +229,22 @@ class HistoryScreenController
       return false;
     }
   }
+
+  void bulkSelectWorkLog(List<int> ids) {
+    state = AsyncData(
+      state.value!.copyWith(
+        selectedWorkLogIds: [...state.value!.selectedWorkLogIds, ...ids],
+      ),
+    );
+  }
+
+  void bulkDeselectWorkLog(List<int> ids) {
+    state = AsyncData(
+      state.value!.copyWith(
+        selectedWorkLogIds: state.value!.selectedWorkLogIds
+            .where((element) => !ids.contains(element))
+            .toList(),
+      ),
+    );
+  }
 }

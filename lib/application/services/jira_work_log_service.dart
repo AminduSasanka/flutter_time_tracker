@@ -85,11 +85,7 @@ class JiraWorkLogService implements IJiraWorkLogService {
         selectedWorkLogIds,
       );
 
-      final worklogsToBeSynced = worklogs.where(
-        (workLog) => workLog.workLogState != WorkLogStateEnum.synced,
-      );
-
-      for (WorkLog workLog in worklogsToBeSynced) {
+      for (WorkLog workLog in worklogs) {
         final result = await syncWorkLog(workLog);
 
         if (result.isError()) {
