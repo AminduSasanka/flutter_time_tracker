@@ -1,14 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_time_tracker/core/DI/controller_providers.dart';
+import 'package:flutter_time_tracker/core/constants/enums.dart';
 import 'package:flutter_time_tracker/presentation/features/history/state/history_screen_state.dart';
 import 'package:intl/intl.dart';
 
-class HistoryFilterWidget extends ConsumerWidget {
+class HistoryFilterWidget extends ConsumerStatefulWidget {
   const HistoryFilterWidget({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HistoryFilterWidget> createState() =>
+      _HistoryFilterWidgetState();
+}
+
+class _HistoryFilterWidgetState extends ConsumerState<HistoryFilterWidget> {
+  final List<WorkLogStateEnum> selectedWorkLogStates = [];
+  bool prioritizeLocalSelectedWorkLogState = false;
+
+  @override
+  Widget build(BuildContext context) {
     final stateProvider = ref.watch(historyScreenControllerProvider);
     final TextEditingController dateController = TextEditingController();
     final TextEditingController taskKeyInputController =
@@ -35,7 +45,7 @@ class HistoryFilterWidget extends ConsumerWidget {
                 ? DateTime.parse(dateController.text)
                 : null,
             taskKey: taskKeyInputController.text,
-            worklogStates: null,
+            worklogStates: selectedWorkLogStates,
           );
 
       Navigator.pop(context);
@@ -83,6 +93,18 @@ class HistoryFilterWidget extends ConsumerWidget {
             : "";
         taskKeyInputController.text = state.filterTaskKey ?? "";
 
+        if (!prioritizeLocalSelectedWorkLogState) {
+          selectedWorkLogStates.addAll(state.filterStates ?? []);
+        }
+
+        bool isWorkLogStateSelected(WorkLogStateEnum workLogState) {
+          if (prioritizeLocalSelectedWorkLogState) {
+            return selectedWorkLogStates.contains(workLogState);
+          } else {
+            return state.filterStates?.contains(workLogState) ?? false;
+          }
+        }
+
         return Padding(
           padding: EdgeInsets.only(
             bottom: MediaQuery.of(context).viewInsets.bottom,
@@ -93,6 +115,35 @@ class HistoryFilterWidget extends ConsumerWidget {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                SizedBox(height: 16),
+                Text("Work Log State"),
+                SizedBox(height: 4),
+                Wrap(
+                  spacing: 8,
+                  children:
+                      [WorkLogStateEnum.synced, WorkLogStateEnum.completed].map(
+                        (WorkLogStateEnum workLogState) {
+                          return FilterChip(
+                            showCheckmark: false,
+                            padding: const EdgeInsets.all(2),
+                            selectedColor: Theme.of(context).primaryColor,
+                            label: Text(workLogState.name),
+                            selected: isWorkLogStateSelected(workLogState),
+                            onSelected: (bool selected) {
+                              setState(() {
+                                if (selected) {
+                                  prioritizeLocalSelectedWorkLogState = true;
+                                  selectedWorkLogStates.add(workLogState);
+                                } else {
+                                  prioritizeLocalSelectedWorkLogState = true;
+                                  selectedWorkLogStates.remove(workLogState);
+                                }
+                              });
+                            },
+                          );
+                        },
+                      ).toList(),
+                ),
                 SizedBox(height: 16),
                 Text("Date"),
                 SizedBox(height: 4),
