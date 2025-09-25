@@ -107,6 +107,8 @@ class HistoryScreenController
 
     state = AsyncData(state.value!.copyWith(isLoading: true));
 
+    await Future.delayed(Duration(milliseconds: 250));
+
     final result = await ref
         .read(workLogServiceProvider)
         .getFilteredWorkLogs(
