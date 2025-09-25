@@ -79,19 +79,30 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
               ),
             ],
           ),
-          body: ListView.builder(
-            controller: _scrollController,
-            itemCount: workLogsGroupedByDate.length,
-            itemBuilder: (context, index) {
-              final date = workLogsGroupedByDate.keys.elementAt(index);
-              final workLogs = workLogsGroupedByDate[date]!;
+          body: Stack(
+            children: [
+              ListView.builder(
+                controller: _scrollController,
+                itemCount: workLogsGroupedByDate.length,
+                itemBuilder: (context, index) {
+                  final date = workLogsGroupedByDate.keys.elementAt(index);
+                  final workLogs = workLogsGroupedByDate[date]!;
 
-              return WorkLogListWidget(
-                workLogs: workLogs,
-                listTitle: date,
-                selectedWorkLogIds: selectedWorkLogIds,
-              );
-            },
+                  return WorkLogListWidget(
+                    workLogs: workLogs,
+                    listTitle: date,
+                    selectedWorkLogIds: selectedWorkLogIds,
+                  );
+                },
+              ),
+              if (state.isLoading!)
+                Positioned.fill(
+                  child: Container(
+                    color: Colors.black54,
+                    child: Center(child: CircularProgressIndicator()),
+                  ),
+                ),
+            ],
           ),
         );
       },
