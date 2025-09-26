@@ -14,7 +14,12 @@ class _SettingsState extends State<SettingsScreen> {
     return Scaffold(
       appBar: AppBar(title: Text("Settings")),
       body: Padding(
-        padding: EdgeInsetsGeometry.directional(top: 16, start: 8, end: 8),
+        padding: EdgeInsetsGeometry.directional(
+          top: 16,
+          start: 8,
+          end: 8,
+          bottom: 16,
+        ),
         child: SingleChildScrollView(
           child: Column(children: [JiraAuthWidget()]),
         ),
