@@ -37,4 +37,6 @@ abstract interface class IWorkLogService {
   Future<Result<List<WorkLog>, Failure>> getWeeklyWorkLogs();
 
   Future<Result<List<WorkLog>, Failure>> getMonthlyWorkLogs();
+
+  Future<Result<WorkLog, Failure>> startWorkLogFrom(WorkLog workLog);
 }
