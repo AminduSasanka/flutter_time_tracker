@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_time_tracker/core/DI/controller_providers.dart';
 import 'package:flutter_time_tracker/core/constants/enums.dart';
+import 'package:flutter_time_tracker/presentation/features/edit_worklog/widgets/edit_work_log_menu_widget.dart';
 import 'package:flutter_time_tracker/presentation/features/edit_worklog/widgets/edit_work_log_widget.dart';
 import 'package:flutter_time_tracker/presentation/shared/helpers/confirmation_dialog.dart';
 
@@ -44,29 +45,6 @@ class _EditWorklogScreenState extends ConsumerState<EditWorklogScreen> {
 
   @override
   Widget build(BuildContext context) {
-    void deleteWorkLog() async {
-      final isDeleted = await ref
-          .read(
-            editWorklogScreenControllerProvider(
-              int.parse(widget.worklogId!),
-            ).notifier,
-          )
-          .deleteWorkLog();
-
-      if (context.mounted) {
-        if (isDeleted) {
-          ref.invalidate(historyScreenControllerProvider);
-          Navigator.pop(context);
-
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(content: Text('Worklog deleted successfully')),
-            );
-        }
-      }
-    }
-
     void saveWorkLog() async {
       final controller = ref.read(
         editWorklogScreenControllerProvider(
@@ -91,30 +69,6 @@ class _EditWorklogScreenState extends ConsumerState<EditWorklogScreen> {
             ..hideCurrentSnackBar()
             ..showSnackBar(
               SnackBar(content: Text('Worklog saved successfully')),
-            );
-        }
-      }
-    }
-
-    void syncWorkLog() async {
-      final result = await ref
-          .read(
-            editWorklogScreenControllerProvider(
-              int.parse(widget.worklogId!),
-            ).notifier,
-          )
-          .syncWorkLog();
-
-      if (context.mounted) {
-        if (result) {
-          ref.invalidate(
-            editWorklogScreenControllerProvider(int.parse(widget.worklogId!)),
-          );
-
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(content: Text('Worklog synced successfully.')),
             );
         }
       }
@@ -150,35 +104,24 @@ class _EditWorklogScreenState extends ConsumerState<EditWorklogScreen> {
       appBar: AppBar(
         title: Text('Edit Work Log'),
         actions: [
-          IconButton(icon: Icon(Icons.sync), onPressed: syncWorkLog),
-          IconButton(
-            icon: Icon(Icons.delete),
-            onPressed: () async {
-              if (screenState.value != null &&
-                  screenState.value!.workLog.workLogState ==
-                      WorkLogStateEnum.synced) {
-                final confirmed = await showConfirmationDialog(
-                  context,
-                  title: "Delete Work Log",
-                  content:
-                      "Are you sure you want to delete this work log? This will delete the work log from jira as well.",
-                  confirmText: "Delete",
-                  cancelText: "Cancel",
-                );
-
-                if (confirmed == true) {
-                  deleteWorkLog();
-                }
-              } else {
-                deleteWorkLog();
-              }
-            },
+          EditWorkLogMenu(
+            workLogId: widget.worklogId!,
+            screenContext: context,
+            isSynced:
+                screenState.value != null &&
+                screenState.value!.workLog.workLogState ==
+                    WorkLogStateEnum.synced,
           ),
         ],
       ),
       body: screenState.when(
         data: (state) => SingleChildScrollView(
-          padding: const EdgeInsets.only(top: 16, left: 8, right: 8),
+          padding: const EdgeInsets.only(
+            top: 16,
+            left: 8,
+            right: 8,
+            bottom: 16,
+          ),
           child: EditWorkLogWidget(
             worklogId: int.parse(widget.worklogId!),
             taskIdController: _taskIdController,

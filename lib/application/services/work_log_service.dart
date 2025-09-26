@@ -352,4 +352,27 @@ class WorkLogService implements IWorkLogService {
       );
     }
   }
+
+  @override
+  Future<Result<WorkLog, Failure>> startWorkLogFrom(WorkLog workLog) async {
+    try {
+      WorkLog newWorklog = WorkLog(
+        taskKey: workLog.taskKey,
+        summary: workLog.summary,
+        startTime: DateTime.now(),
+        workLogState: WorkLogStateEnum.pending,
+      );
+
+      final id = await _workLogRepository.create(newWorklog);
+      final createdWorkLog = workLog.copyWith(id: id);
+
+      return Success(createdWorkLog);
+    } catch (e, s) {
+      return Error(
+        e is Failure
+            ? e
+            : UnknownFailure(exception: Exception(e.toString()), stackTrace: s),
+      );
+    }
+  }
 }
