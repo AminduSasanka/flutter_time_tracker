@@ -52,7 +52,6 @@ class CurrentWorkLogWidget extends ConsumerWidget {
         return Card(
           margin: const EdgeInsets.all(0),
           shape: RoundedRectangleBorder(
-            side: const BorderSide(color: Colors.black12, width: 1.0),
             borderRadius: BorderRadius.circular(8.0),
           ),
           elevation: 0,
