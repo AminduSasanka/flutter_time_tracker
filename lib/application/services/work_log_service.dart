@@ -356,6 +356,12 @@ class WorkLogService implements IWorkLogService {
   @override
   Future<Result<WorkLog, Failure>> startWorkLogFrom(WorkLog workLog) async {
     try {
+      final currentWorklogResult = await getCurrentWorkLog();
+
+      if (currentWorklogResult.isSuccess()) {
+        await completeWorkLog();
+      }
+
       WorkLog newWorklog = WorkLog(
         taskKey: workLog.taskKey,
         summary: workLog.summary,

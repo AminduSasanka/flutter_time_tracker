@@ -120,6 +120,8 @@ class EditWorklogScreenController
         );
 
         ref.invalidate(homePageControllerProvider);
+        ref.invalidate(historyScreenControllerProvider);
+
         return true;
       } else {
         state = AsyncData(state.value!.copyWith(workLog: worklog));
