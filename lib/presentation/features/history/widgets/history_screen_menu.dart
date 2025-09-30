@@ -43,6 +43,20 @@ class HistoryScreenMenu extends ConsumerWidget {
       }
     }
 
+    void handleSafeDelete() async {
+      bool isSyncSuccess = await ref
+          .read(historyScreenControllerProvider.notifier)
+          .safeDeleteSelectedWorkLogs();
+
+      if (!screenContext.mounted) return;
+
+      if (isSyncSuccess) {
+        ScaffoldMessenger.of(screenContext).showSnackBar(
+          SnackBar(content: Text('Selected items removed successfully')),
+        );
+      }
+    }
+
     return PopupMenuButton(
       initialValue: '',
       icon: Icon(Icons.more_vert),
@@ -53,7 +67,7 @@ class HistoryScreenMenu extends ConsumerWidget {
               context,
               title: "Delete Work Logs",
               content:
-                  "Are you sure you want to delete selected work logs? Doing this will delete synced work logs in jira.",
+                  "Are you sure you want to delete selected work logs? Doing this will delete synced work logs in Jira.",
             );
 
             if (isConfirmed != true) return;
@@ -65,12 +79,24 @@ class HistoryScreenMenu extends ConsumerWidget {
               context,
               title: "Sync Work Logs",
               content:
-              "Are you sure you want to sync selected work logs to jira?",
+              "Are you sure you want to sync selected work logs to Jira?",
             );
 
             if (isConfirmed != true) return;
 
             handleBulkSync();
+            break;
+          case 'safe_delete':
+            bool? isConfirmed = await showConfirmationDialog(
+              context,
+              title: "Remove Work Logs",
+              content:
+              "These work logs will be deleted from your device. They will still remain in Jira. Are you sure you want to continue?",
+            );
+
+            if (isConfirmed != true) return;
+
+            handleSafeDelete();
             break;
         }
       },
@@ -95,6 +121,17 @@ class HistoryScreenMenu extends ConsumerWidget {
                 Icon(Icons.sync),
                 SizedBox(width: 8),
                 Text('Sync selected items'),
+              ],
+            ),
+          ),
+          PopupMenuItem(
+            value: 'safe_delete',
+            enabled: isSelectionMode,
+            child: Row(
+              children: [
+                Icon(Icons.clear_all),
+                SizedBox(width: 8),
+                Text('Remove selected items'),
               ],
             ),
           ),
