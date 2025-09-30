@@ -28,14 +28,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsetsGeometry.directional(
-          start: 8,
-          end: 8,
-          top: 16,
-          bottom: 8,
-        ),
-        child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsetsGeometry.directional(
+            start: 8,
+            end: 8,
+            top: 16,
+            bottom: 16,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
