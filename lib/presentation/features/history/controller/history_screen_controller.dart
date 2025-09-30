@@ -123,7 +123,9 @@ class HistoryScreenController
       Map<String, List<WorkLog>>? newWorkLogsByDates = result.tryGetSuccess();
 
       if (newWorkLogsByDates != null && newWorkLogsByDates.isNotEmpty) {
-        final updatedWorkLogs = Map<String, List<WorkLog>>.from(state.value!.workLogs);
+        final updatedWorkLogs = Map<String, List<WorkLog>>.from(
+          state.value!.workLogs,
+        );
 
         newWorkLogsByDates.forEach((key, value) {
           if (updatedWorkLogs.containsKey(key)) {
@@ -178,7 +180,7 @@ class HistoryScreenController
 
     final result = await ref
         .read(workLogServiceProvider)
-        .bulkDeleteWorkLogs(selectedWorkLogIds);
+        .bulkDeleteWorkLogs(ids: selectedWorkLogIds);
 
     if (result.isSuccess()) {
       state = AsyncData(
@@ -248,5 +250,37 @@ class HistoryScreenController
             .toList(),
       ),
     );
+  }
+
+  Future<bool> safeDeleteSelectedWorkLogs() async {
+    if (state.value!.selectedWorkLogIds.isEmpty) {
+      return false;
+    }
+
+    List<int> selectedWorkLogIds = state.value!.selectedWorkLogIds;
+    state = const AsyncLoading();
+
+    final result = await ref
+        .read(workLogServiceProvider)
+        .bulkDeleteWorkLogs(ids: selectedWorkLogIds, isSafeDelete: true);
+
+    if (result.isSuccess()) {
+      state = AsyncData(
+        state.value!.copyWith(
+          workLogs: await _getInitialWorkLogs(
+            states: [WorkLogStateEnum.completed, WorkLogStateEnum.synced],
+          ),
+          isError: false,
+          errorMessage: null,
+          selectedWorkLogIds: [],
+        ),
+      );
+
+      return true;
+    } else {
+      state = AsyncError(result.tryGetError()!, StackTrace.current);
+
+      return false;
+    }
   }
 }
