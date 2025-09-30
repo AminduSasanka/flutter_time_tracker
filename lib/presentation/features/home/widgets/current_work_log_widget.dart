@@ -56,12 +56,7 @@ class CurrentWorkLogWidget extends ConsumerWidget {
           ),
           elevation: 0,
           child: Padding(
-            padding: const EdgeInsetsGeometry.only(
-              left: 20.0,
-              right: 8.0,
-              top: 8.0,
-              bottom: 8.0,
-            ),
+            padding: const EdgeInsetsGeometry.all(16),
             child: Row(
               children: [
                 Expanded(
@@ -85,7 +80,9 @@ class CurrentWorkLogWidget extends ConsumerWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Text(workLog.summary, style: TextStyles.subTitle),
+                      Text(workLog.summary, style: TextStyle(
+                        fontSize: 16,
+                      )),
                     ],
                   ),
                 ),
