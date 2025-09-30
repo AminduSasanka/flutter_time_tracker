@@ -19,57 +19,69 @@ class SummaryWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title, style: TextStyles.subTitle),
+        Text(title, style: TextStyles.title),
         SizedBox(height: 12),
-        Card(
-          margin: const EdgeInsets.all(0),
-          shape: RoundedRectangleBorder(
-            side: const BorderSide(color: Colors.black12, width: 1.0),
-            borderRadius: BorderRadius.circular(8.0),
-          ),
-          elevation: 0,
-          child: Padding(
-            padding: const EdgeInsetsGeometry.directional(
-              start: 16,
-              end: 16,
-              top: 16,
-              bottom: 16,
-            ),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.4,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text("Hours", style: TextStyles.subTitle),
-                          SizedBox(height: 8),
-                          Text(
-                            durationToSpentTime(hours),
-                            style: TextStyles.title,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Spacer(),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.4,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text("Tasks", style: TextStyles.subTitle),
-                          SizedBox(height: 8),
-                          Text(tasksCount.toString(), style: TextStyles.title),
-                        ],
-                      ),
-                    ),
-                  ],
+        Row(
+          children: [
+            Expanded(
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  side: const BorderSide(color: Colors.black12, width: 1.0),
+                  borderRadius: BorderRadius.circular(8.0),
                 ),
-              ],
+                elevation: 0,
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    top: 16,
+                    right: 8,
+                    bottom: 16,
+                    left: 8,
+                  ),
+                  child: Column(
+                    children: [
+                      Text(
+                        "Hours",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                      ),
+                      Text(durationToSpentTime(hours), style: TextStyles.title),
+                    ],
+                  ),
+                ),
+              ),
             ),
-          ),
+            Expanded(
+              child: Card(
+                shape: RoundedRectangleBorder(
+                  side: const BorderSide(color: Colors.black12, width: 1.0),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                elevation: 0,
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    top: 16,
+                    right: 8,
+                    bottom: 16,
+                    left: 8,
+                  ),
+                  child: Column(
+                    children: [
+                      Text(
+                        "Tasks",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                      ),
+                      Text(tasksCount.toString(), style: TextStyles.title),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ],
     );
