@@ -16,19 +16,19 @@ class HomeSummaryWidget extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SummaryWidget(
-              title: "Today's Summary",
+              title: "Today Summary",
               hours: state.todayHours,
               tasksCount: state.todayTasksCount,
             ),
             SizedBox(height: 18),
             SummaryWidget(
-              title: "This Week's Summary",
+              title: "Week Summary",
               hours: state.weekHours,
               tasksCount: state.weekTasksCount,
             ),
             SizedBox(height: 18),
             SummaryWidget(
-              title: "This Month's Summary",
+              title: "Month Summary",
               hours: state.monthHours,
               tasksCount: state.monthTasksCount,
             ),

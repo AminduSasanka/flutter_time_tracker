@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_time_tracker/core/DI/controller_providers.dart';
+import 'package:flutter_time_tracker/core/theme/text_styles.dart';
 import 'package:flutter_time_tracker/presentation/features/home/widgets/start_new_work_log_widget.dart';
 
 class CurrentWorkLogWidget extends ConsumerWidget {
@@ -51,27 +52,27 @@ class CurrentWorkLogWidget extends ConsumerWidget {
         return Card(
           margin: const EdgeInsets.all(0),
           shape: RoundedRectangleBorder(
-            side: const BorderSide(color: Colors.black12, width: 1.0),
             borderRadius: BorderRadius.circular(8.0),
           ),
           elevation: 0,
           child: Padding(
-            padding: const EdgeInsetsGeometry.only(
-              left: 20.0,
-              right: 8.0,
-              top: 8.0,
-              bottom: 8.0,
-            ),
+            padding: const EdgeInsetsGeometry.all(16),
             child: Row(
               children: [
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Text("Current Task", style: TextStyles.subTitle),
+                      SizedBox(height: 8),
                       Text(
                         _formatDuration(elapsedTime),
-                        style: TextStyle(fontSize: 24),
+                        style: TextStyle(
+                          fontSize: 35,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
+                      SizedBox(height: 8),
                       Text(
                         workLog.taskKey,
                         style: TextStyle(
@@ -79,7 +80,9 @@ class CurrentWorkLogWidget extends ConsumerWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Text(workLog.summary, style: TextStyle(fontSize: 14)),
+                      Text(workLog.summary, style: TextStyle(
+                        fontSize: 16,
+                      )),
                     ],
                   ),
                 ),
