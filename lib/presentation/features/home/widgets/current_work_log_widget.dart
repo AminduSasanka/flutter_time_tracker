@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_time_tracker/core/DI/controller_providers.dart';
+import 'package:flutter_time_tracker/core/theme/text_styles.dart';
 import 'package:flutter_time_tracker/presentation/features/home/widgets/start_new_work_log_widget.dart';
 
 class CurrentWorkLogWidget extends ConsumerWidget {
@@ -68,10 +69,16 @@ class CurrentWorkLogWidget extends ConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Text("Current Task", style: TextStyles.subTitle),
+                      SizedBox(height: 8),
                       Text(
                         _formatDuration(elapsedTime),
-                        style: TextStyle(fontSize: 24),
+                        style: TextStyle(
+                          fontSize: 35,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
+                      SizedBox(height: 8),
                       Text(
                         workLog.taskKey,
                         style: TextStyle(
@@ -79,7 +86,7 @@ class CurrentWorkLogWidget extends ConsumerWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Text(workLog.summary, style: TextStyle(fontSize: 14)),
+                      Text(workLog.summary, style: TextStyles.subTitle),
                     ],
                   ),
                 ),
