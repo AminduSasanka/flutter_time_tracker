@@ -79,7 +79,7 @@ class HistoryScreenMenu extends ConsumerWidget {
               context,
               title: "Sync Work Logs",
               content:
-              "Are you sure you want to sync selected work logs to Jira?",
+                  "Are you sure you want to sync selected work logs to Jira?",
             );
 
             if (isConfirmed != true) return;
@@ -91,7 +91,7 @@ class HistoryScreenMenu extends ConsumerWidget {
               context,
               title: "Remove Work Logs",
               content:
-              "These work logs will be deleted from your device. They will still remain in Jira. Are you sure you want to continue?",
+                  "These work logs will be deleted from your device. They will still remain in Jira. Are you sure you want to continue?",
             );
 
             if (isConfirmed != true) return;
@@ -102,17 +102,6 @@ class HistoryScreenMenu extends ConsumerWidget {
       },
       itemBuilder: (context) {
         return [
-          PopupMenuItem(
-            value: 'delete',
-            enabled: isSelectionMode,
-            child: Row(
-              children: [
-                Icon(Icons.delete),
-                SizedBox(width: 8),
-                Text('Delete selected items'),
-              ],
-            ),
-          ),
           PopupMenuItem(
             value: 'sync',
             enabled: isSelectionMode,
@@ -132,6 +121,17 @@ class HistoryScreenMenu extends ConsumerWidget {
                 Icon(Icons.clear_all),
                 SizedBox(width: 8),
                 Text('Remove selected items'),
+              ],
+            ),
+          ),
+          PopupMenuItem(
+            value: 'delete',
+            enabled: isSelectionMode,
+            child: Row(
+              children: [
+                Icon(Icons.delete),
+                SizedBox(width: 8),
+                Text('Delete selected items'),
               ],
             ),
           ),
