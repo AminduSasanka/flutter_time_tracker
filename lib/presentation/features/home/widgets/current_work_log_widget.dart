@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_time_tracker/core/DI/controller_providers.dart';
+import 'package:flutter_time_tracker/core/constants/route_names.dart';
 import 'package:flutter_time_tracker/core/theme/text_styles.dart';
 import 'package:flutter_time_tracker/presentation/features/home/widgets/start_new_work_log_widget.dart';
+import 'package:go_router/go_router.dart';
 
 class CurrentWorkLogWidget extends ConsumerWidget {
   const CurrentWorkLogWidget({super.key});
@@ -86,35 +88,45 @@ class CurrentWorkLogWidget extends ConsumerWidget {
                     ],
                   ),
                 ),
-                IconButton(
-                  onPressed: () async {
-                    if (isTimerRunning) {
-                      await ref
-                          .read(workLogControllerProvider.notifier)
-                          .pauseWorkLog();
-                    } else {
-                      await ref
-                          .read(workLogControllerProvider.notifier)
-                          .resumeWorkLog();
-                    }
-                  },
-                  icon: isTimerRunning
-                      ? Container()
-                      : Icon(Icons.play_circle, size: 50),
+                Column(
+                  children: [
+                    IconButton(onPressed: () {
+                      context.pushNamed(
+                        editWorklogRoute,
+                        pathParameters: {'worklogId': workLog.id!.toString()},
+                      );
+                    }, icon: Icon(Icons.edit)),
+                    IconButton(
+                      onPressed: () async {
+                        if (isTimerRunning) {
+                          await ref
+                              .read(workLogControllerProvider.notifier)
+                              .pauseWorkLog();
+                        } else {
+                          await ref
+                              .read(workLogControllerProvider.notifier)
+                              .resumeWorkLog();
+                        }
+                      },
+                      icon: isTimerRunning
+                          ? Container()
+                          : Icon(Icons.play_circle, size: 50),
+                    ),
+                    isTimerRunning
+                        ? IconButton(
+                            onPressed: () => stopWorkLog(isTimerRunning),
+                            icon: Icon(Icons.stop, size: 50),
+                          )
+                        : Container(),
+                  ],
                 ),
-                isTimerRunning
-                    ? IconButton(
-                        onPressed: () => stopWorkLog(isTimerRunning),
-                        icon: Icon(Icons.stop, size: 50),
-                      )
-                    : Container(),
               ],
             ),
           ),
         );
       },
       error: (error, stack) => Text('Error: $error'),
-      loading: () => CircularProgressIndicator(),
+      loading: () => Center(child: CircularProgressIndicator()),
     );
   }
 }
