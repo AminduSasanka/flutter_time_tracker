@@ -1,24 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_time_tracker/core/DI/controller_providers.dart';
+import 'package:flutter_time_tracker/core/constants/enums.dart';
 import 'package:flutter_time_tracker/presentation/shared/helpers/confirmation_dialog.dart';
 
 class EditWorkLogMenu extends ConsumerWidget {
   final BuildContext screenContext;
   final String workLogId;
-  final bool isSynced;
+  final WorkLogStateEnum workLogState;
 
   const EditWorkLogMenu({
     super.key,
     required this.workLogId,
     required this.screenContext,
-    required this.isSynced,
+    required this.workLogState,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     void deleteWorkLog() async {
-      if (isSynced) {
+      if (workLogState == WorkLogStateEnum.synced) {
         bool? isConfirmed = await showConfirmationDialog(
           context,
           title: "Delete Work Log",
@@ -93,6 +94,10 @@ class EditWorkLogMenu extends ConsumerWidget {
             );
         }
       }
+    }
+
+    if (workLogState == WorkLogStateEnum.pending) {
+      return Container();
     }
 
     return PopupMenuButton(
