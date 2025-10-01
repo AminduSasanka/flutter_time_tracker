@@ -59,65 +59,76 @@ class CurrentWorkLogWidget extends ConsumerWidget {
           elevation: 0,
           child: Padding(
             padding: const EdgeInsetsGeometry.all(16),
-            child: Row(
+            child: Column(
               children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Current Task", style: TextStyles.subTitle),
-                      SizedBox(height: 8),
-                      Text(
-                        _formatDuration(elapsedTime),
-                        style: TextStyle(
-                          fontSize: 35,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        workLog.taskKey,
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(workLog.summary, style: TextStyle(
-                        fontSize: 16,
-                      )),
-                    ],
-                  ),
-                ),
-                Column(
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    IconButton(onPressed: () {
-                      context.pushNamed(
-                        editWorklogRoute,
-                        pathParameters: {'worklogId': workLog.id!.toString()},
-                      );
-                    }, icon: Icon(Icons.edit)),
+                    Text("Current Task", style: TextStyles.subTitle),
                     IconButton(
-                      onPressed: () async {
-                        if (isTimerRunning) {
-                          await ref
-                              .read(workLogControllerProvider.notifier)
-                              .pauseWorkLog();
-                        } else {
-                          await ref
-                              .read(workLogControllerProvider.notifier)
-                              .resumeWorkLog();
-                        }
+                      onPressed: () {
+                        context.pushNamed(
+                          editWorklogRoute,
+                          pathParameters: {
+                            'worklogId': workLog.id!.toString(),
+                          },
+                        );
                       },
-                      icon: isTimerRunning
-                          ? Container()
-                          : Icon(Icons.play_circle, size: 50),
+                      icon: Icon(Icons.edit_note, size: 30,),
                     ),
-                    isTimerRunning
-                        ? IconButton(
-                            onPressed: () => stopWorkLog(isTimerRunning),
-                            icon: Icon(Icons.stop, size: 50),
-                          )
-                        : Container(),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            _formatDuration(elapsedTime),
+                            style: TextStyle(
+                              fontSize: 35,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 8),
+                          Text(
+                            workLog.taskKey,
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(workLog.summary, style: TextStyle(fontSize: 16)),
+                        ],
+                      ),
+                    ),
+                    Column(
+                      children: [
+                        IconButton(
+                          onPressed: () async {
+                            if (isTimerRunning) {
+                              await ref
+                                  .read(workLogControllerProvider.notifier)
+                                  .pauseWorkLog();
+                            } else {
+                              await ref
+                                  .read(workLogControllerProvider.notifier)
+                                  .resumeWorkLog();
+                            }
+                          },
+                          icon: isTimerRunning
+                              ? Container()
+                              : Icon(Icons.play_circle, size: 50),
+                        ),
+                        isTimerRunning
+                            ? IconButton(
+                                onPressed: () => stopWorkLog(isTimerRunning),
+                                icon: Icon(Icons.stop, size: 50),
+                              )
+                            : Container(),
+                      ],
+                    ),
                   ],
                 ),
               ],
