@@ -107,10 +107,8 @@ class _EditWorklogScreenState extends ConsumerState<EditWorklogScreen> {
           EditWorkLogMenu(
             workLogId: widget.worklogId!,
             screenContext: context,
-            isSynced:
-                screenState.value != null &&
-                screenState.value!.workLog.workLogState ==
-                    WorkLogStateEnum.synced,
+            workLogState: screenState.value?.workLog.workLogState ??
+                WorkLogStateEnum.pending,
           ),
         ],
       ),
@@ -146,6 +144,10 @@ class _EditWorklogScreenState extends ConsumerState<EditWorklogScreen> {
                 }
               } else {
                 saveWorkLog();
+              }
+
+              if (state.workLog.workLogState == WorkLogStateEnum.pending) {
+                ref.invalidate(workLogControllerProvider);
               }
             },
             state: state,

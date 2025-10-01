@@ -12,6 +12,7 @@ class WorkLogFormWidget extends StatelessWidget {
   final TextEditingController spentTimeController;
   final TextEditingController startTimeController;
   final GlobalKey<FormState> formKey;
+  final bool showAllFields;
   final void Function() onSave;
 
   const WorkLogFormWidget({
@@ -23,6 +24,7 @@ class WorkLogFormWidget extends StatelessWidget {
     required this.spentTimeController,
     required this.startTimeController,
     required this.formKey,
+    required this.showAllFields,
     required this.onSave,
   });
 
@@ -104,7 +106,7 @@ class WorkLogFormWidget extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          FormFieldInputLabel(label: "Date & Time", isRequired: true),
+          FormFieldInputLabel(label: "Start Date & Time", isRequired: true),
           const SizedBox(height: 8),
           TextFormField(
             controller: startTimeController,
@@ -124,30 +126,38 @@ class WorkLogFormWidget extends StatelessWidget {
               pickDateTime(context: context, worklog: workLog);
             },
           ),
-          SizedBox(height: 16),
-          FormFieldInputLabel(label: 'Time Spent', isRequired: true),
-          const SizedBox(height: 8),
-          TextFormField(
-            controller: spentTimeController,
-            decoration: const InputDecoration(hintText: "3h 04m"),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter valid time spent';
-              }
 
-              // Regular expression to match format: XhYmZs or XhYs or XmYs or Xh or Xm or Xs
-              RegExp timeRegex = RegExp(
-                r'^(?:(\d+)h\s*)?(?:(\d+)m\s*)?(?:(\d+)s)?$',
-                caseSensitive: false,
-              );
+          showAllFields == true
+              ? Column(
+                  children: [
+                    SizedBox(height: 16),
+                    FormFieldInputLabel(label: 'Time Spent', isRequired: true),
+                    const SizedBox(height: 8),
+                    TextFormField(
+                      controller: spentTimeController,
+                      decoration: const InputDecoration(hintText: "3h 04m"),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter valid time spent';
+                        }
 
-              if (!timeRegex.hasMatch(value.trim())) {
-                return 'Invalid format. Use: 3h 04m 23s, 2h 30m, 45m, etc.';
-              }
+                        // Regular expression to match format: XhYmZs or XhYs or XmYs or Xh or Xm or Xs
+                        RegExp timeRegex = RegExp(
+                          r'^(?:(\d+)h\s*)?(?:(\d+)m\s*)?(?:(\d+)s)?$',
+                          caseSensitive: false,
+                        );
 
-              return null;
-            },
-          ),
+                        if (!timeRegex.hasMatch(value.trim())) {
+                          return 'Invalid format. Use: 3h 04m 23s, 2h 30m, 45m, etc.';
+                        }
+
+                        return null;
+                      },
+                    ),
+                  ],
+                )
+              : Container(),
+
           const SizedBox(height: 24),
           PrimaryButton(text: "Save", onPressed: onSave, isLoading: false),
         ],
