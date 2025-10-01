@@ -147,6 +147,10 @@ class _EditWorklogScreenState extends ConsumerState<EditWorklogScreen> {
               } else {
                 saveWorkLog();
               }
+
+              if (state.workLog.workLogState == WorkLogStateEnum.pending) {
+                ref.invalidate(homePageControllerProvider);
+              }
             },
             state: state,
           ),
