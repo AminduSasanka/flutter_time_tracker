@@ -53,6 +53,7 @@ class AddWorkLogWidget extends StatelessWidget {
       spentTimeController: spentTimeController,
       startTimeController: startDateController,
       formKey: formKey,
+      showAllFields: true,
       onSave: onSave,
     );
   }

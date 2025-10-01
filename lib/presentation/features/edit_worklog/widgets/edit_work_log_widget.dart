@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_time_tracker/core/constants/enums.dart';
 import 'package:flutter_time_tracker/presentation/features/edit_worklog/state/edit_worklog_screen_state.dart';
 import 'package:flutter_time_tracker/presentation/shared/widgets/work_log_form_widget.dart';
 import 'package:intl/intl.dart';
@@ -55,6 +56,7 @@ class EditWorkLogWidget extends StatelessWidget {
       spentTimeController: spentTimeController,
       startTimeController: startTimeController,
       formKey: formKey,
+      showAllFields: state.workLog.workLogState != WorkLogStateEnum.pending,
       onSave: onSave,
     );
   }
