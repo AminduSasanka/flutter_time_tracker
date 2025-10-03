@@ -56,6 +56,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         error: (error, stack) => Text('Error: $error'),
         loading: () => Center(child: CircularProgressIndicator()),
       ),
+      floatingActionButton: workLogState.when(
+        data: (state) {
+          if (state.isTimerRunning) {
+            return Container();
+          }
+
+          return FloatingActionButton(
+            onPressed: () {
+              context.push(startWorkLog);
+            },
+            child: Icon(Icons.add),
+          );
+        },
+        error: (error, stack) => Text('Error: $error'),
+        loading: () => Center(child: CircularProgressIndicator()),
+      ),
     );
   }
 }
