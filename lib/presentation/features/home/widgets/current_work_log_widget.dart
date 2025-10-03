@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_time_tracker/core/DI/controller_providers.dart';
 import 'package:flutter_time_tracker/core/constants/route_names.dart';
 import 'package:flutter_time_tracker/core/theme/text_styles.dart';
-import 'package:flutter_time_tracker/presentation/features/home/widgets/start_new_work_log_widget.dart';
 import 'package:go_router/go_router.dart';
 
 class CurrentWorkLogWidget extends ConsumerWidget {
@@ -48,11 +47,11 @@ class CurrentWorkLogWidget extends ConsumerWidget {
         final elapsedTime = state.elapsedTime;
 
         if (workLog == null || workLog.taskKey == "") {
-          return StartNewWorkLogWidget();
+          return Container();
         }
 
         return Card(
-          margin: const EdgeInsets.all(0),
+          margin: const EdgeInsets.only(top: 0, bottom: 16, left: 0, right: 0),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8.0),
           ),
