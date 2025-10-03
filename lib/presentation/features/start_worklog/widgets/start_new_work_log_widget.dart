@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_time_tracker/core/DI/controller_providers.dart';
+import 'package:flutter_time_tracker/core/constants/route_names.dart';
 import 'package:flutter_time_tracker/core/theme/primary_button.dart';
+import 'package:go_router/go_router.dart';
 
 class StartNewWorkLogWidget extends ConsumerStatefulWidget {
   const StartNewWorkLogWidget({super.key});
@@ -27,15 +29,19 @@ class _StartNewWorkLogWidgetState extends ConsumerState<StartNewWorkLogWidget> {
     super.dispose();
   }
 
-  void _startWorkLog() {
+  void _startWorkLog() async {
     if (_formKey.currentState!.validate()) {
-      ref
+      await ref
           .read(workLogControllerProvider.notifier)
           .startNewWorkLog(
             _taskIdController.text,
             _summaryController.text,
             _descriptionController.text,
           );
+
+      if (mounted) {
+        context.replace(homeRoute);
+      }
     }
   }
 
