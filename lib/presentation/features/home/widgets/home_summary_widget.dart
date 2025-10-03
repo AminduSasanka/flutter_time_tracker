@@ -14,12 +14,13 @@ class HomeSummaryWidget extends ConsumerWidget {
     return summaryState.when(
       data: (state) {
         return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Row(
               children: [
                 Expanded(
                   child: Card(
+                    margin: EdgeInsets.all(0),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.0),
                     ),
@@ -49,8 +50,10 @@ class HomeSummaryWidget extends ConsumerWidget {
                     ),
                   ),
                 ),
+                const SizedBox(width: 8),
                 Expanded(
                   child: Card(
+                    margin: EdgeInsets.all(0),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8.0),
                     ),
