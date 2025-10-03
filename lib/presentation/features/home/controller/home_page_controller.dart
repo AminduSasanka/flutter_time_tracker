@@ -27,10 +27,6 @@ class HomePageController extends AsyncNotifier<HomePageState> {
       return HomePageState(
         todayHours: Duration.zero,
         todayTasksCount: 0,
-        weekHours: Duration.zero,
-        weekTasksCount: 0,
-        monthHours: Duration.zero,
-        monthTasksCount: 0,
         isError: true,
         errorMessage: todayResult.tryGetError()?.message ??
             weekResult.tryGetError()?.message ??
@@ -49,10 +45,6 @@ class HomePageController extends AsyncNotifier<HomePageState> {
       return HomePageState(
         todayHours: Duration.zero,
         todayTasksCount: 0,
-        weekHours: Duration.zero,
-        weekTasksCount: 0,
-        monthHours: Duration.zero,
-        monthTasksCount: 0,
         isError: false,
         errorMessage: "",
       );
@@ -64,10 +56,6 @@ class HomePageController extends AsyncNotifier<HomePageState> {
       return HomePageState(
         todayHours: Duration.zero,
         todayTasksCount: 0,
-        weekHours: Duration.zero,
-        weekTasksCount: 0,
-        monthHours: Duration.zero,
-        monthTasksCount: 0,
         isError: false,
         errorMessage: "",
       );
@@ -76,10 +64,6 @@ class HomePageController extends AsyncNotifier<HomePageState> {
     final logs = HomePageState(
       todayHours: _totalHours(todayWorkLogs),
       todayTasksCount: todayWorkLogs.length,
-      weekHours: _totalHours(weekWorkLogs),
-      weekTasksCount: weekWorkLogs.length,
-      monthHours: _totalHours(monthWorkLogs),
-      monthTasksCount: monthWorkLogs.length,
       isError: false,
       errorMessage: "",
     );
