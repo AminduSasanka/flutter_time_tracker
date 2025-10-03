@@ -48,8 +48,20 @@ final ThemeData lightTheme = ThemeData(
     ),
     elevation: 1,
   ),
+  searchBarTheme: SearchBarThemeData(
+    backgroundColor: WidgetStateProperty.all(Colors.white),
+    elevation: WidgetStateProperty.all(0.0),
+    shape: WidgetStateProperty.all(
+      RoundedRectangleBorder(
+        side: BorderSide(color: Colors.grey[300]!),
+        borderRadius: BorderRadius.circular(12.0),
+      ),
+    ),
+    hintStyle: WidgetStateProperty.all(
+      TextStyle(color: Colors.grey[600], fontSize: 16.0),
+    ),
+  ),
 );
-
 
 final ThemeData darkTheme = ThemeData(
   brightness: Brightness.dark,
@@ -64,14 +76,8 @@ final ThemeData darkTheme = ThemeData(
     onSurface: const Color(0xFFE0E0E0),
   ),
   inputDecorationTheme: InputDecorationTheme(
-    border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(8),
-      borderSide: BorderSide(color: Colors.grey[700]!),
-    ),
-    enabledBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(8),
-      borderSide: BorderSide(color: Colors.grey[700]!),
-    ),
+    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+    enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
     focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(8),
       borderSide: const BorderSide(color: Color(0xFF90CAF9)),
@@ -98,5 +104,14 @@ final ThemeData darkTheme = ThemeData(
       borderRadius: BorderRadius.circular(15.0),
     ),
     elevation: 2,
+  ),
+  searchBarTheme: SearchBarThemeData(
+    elevation: WidgetStateProperty.all(0.0),
+    shape: WidgetStateProperty.all(
+      RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+    ),
+    hintStyle: WidgetStateProperty.all(
+      TextStyle(color: Colors.grey[600], fontSize: 16.0),
+    ),
   ),
 );

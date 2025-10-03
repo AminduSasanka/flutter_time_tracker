@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_time_tracker/core/theme/text_styles.dart';
+import 'package:flutter_time_tracker/presentation/features/start_worklog/widgets/start_new_work_log_widget.dart';
 
 class StartWorklogScreen extends StatelessWidget {
   const StartWorklogScreen({super.key});
@@ -7,11 +9,18 @@ class StartWorklogScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Start Worklog'),
-        centerTitle: true,
+        title: Text('Start Work Log', style: TextStyles.title,),
       ),
-      body: Center(
-        child: Text('Start Worklog Screen'),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.only(
+            top: 16,
+            left: 8,
+            right: 8,
+            bottom: 16,
+          ),
+          child: StartNewWorkLogWidget(),
+        ),
       ),
     );
   }
