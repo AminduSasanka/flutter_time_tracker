@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_time_tracker/core/DI/controller_providers.dart';
 
-class SearchWidget extends StatefulWidget {
+class SearchWidget extends ConsumerStatefulWidget {
   const SearchWidget({super.key});
 
   @override
-  State<SearchWidget> createState() => _SearchWidgetState();
+  ConsumerState<SearchWidget> createState() => _SearchWidgetState();
 }
 
-class _SearchWidgetState extends State<SearchWidget> {
+class _SearchWidgetState extends ConsumerState<SearchWidget> {
   late final TextEditingController _searchController;
 
   @override
@@ -22,8 +24,10 @@ class _SearchWidgetState extends State<SearchWidget> {
     super.dispose();
   }
 
-  void _handleSearch(String value) {
-    print('Search term: $value');
+  void _handleSearch(String value) async {
+    await ref
+        .read(searchIssueScreenControllerProvider.notifier)
+        .searchIssues(value);
   }
 
   @override
