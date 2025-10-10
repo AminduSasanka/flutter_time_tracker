@@ -31,14 +31,14 @@ class Section {
   final List<Issue> issues;
   final String label;
   final String? msg;
-  final String sub;
+  final String? sub;
 
   Section({
     required this.id,
     required this.issues,
     required this.label,
     this.msg,
-    required this.sub,
+    this.sub,
   });
 
   Section copyWith({
