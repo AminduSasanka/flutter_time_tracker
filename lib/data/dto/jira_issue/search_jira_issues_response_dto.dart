@@ -30,14 +30,14 @@ class Section {
   final String id;
   final List<Issue> issues;
   final String label;
-  final String msg;
+  final String? msg;
   final String sub;
 
   Section({
     required this.id,
     required this.issues,
     required this.label,
-    required this.msg,
+    this.msg,
     required this.sub,
   });
 
