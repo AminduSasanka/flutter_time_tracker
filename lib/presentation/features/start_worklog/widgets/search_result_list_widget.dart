@@ -16,7 +16,7 @@ class SearchResultListWidget extends ConsumerWidget {
       data: (state) {
         List<JIraIssue> searchResults = state.searchResults;
 
-        if (searchResults.isEmpty) {
+        if (searchResults.isEmpty && state.searchTerm != null) {
           return Center(child: Text('No search results found.'));
         }
 
