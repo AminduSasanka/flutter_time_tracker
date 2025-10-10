@@ -29,4 +29,13 @@ class SearchIssueScreenController
       state = AsyncError(searchResult.tryGetError()!, StackTrace.current);
     }
   }
+
+  Future<void> clearSearchResults() async {
+    state = AsyncData(
+      state.value!.copyWith(
+        searchResults: [],
+        searchTerm: null,
+      ),
+    );
+  }
 }
