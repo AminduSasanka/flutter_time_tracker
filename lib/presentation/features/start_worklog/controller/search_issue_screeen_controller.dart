@@ -12,7 +12,9 @@ class SearchIssueScreenController
   }
 
   Future<void> searchIssues(String query) async {
-    state = AsyncData(state.value!.copyWith(isLoading: true));
+    state = const AsyncLoading();
+
+    Future.delayed(Duration(seconds: 2));
 
     final searchResult = await ref.read(jiraIssueServiceProvider).searchIssue(query);
 
