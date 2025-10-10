@@ -1,4 +1,5 @@
 import 'package:flutter_time_tracker/core/constants/enums.dart';
+import 'package:flutter_time_tracker/domain/entities/jira_issue.dart';
 import 'package:flutter_time_tracker/domain/entities/work_log.dart';
 import 'package:flutter_time_tracker/domain/failures/failure.dart';
 import 'package:multiple_result/multiple_result.dart';
@@ -42,4 +43,8 @@ abstract interface class IWorkLogService {
   Future<Result<List<WorkLog>, Failure>> getMonthlyWorkLogs();
 
   Future<Result<WorkLog, Failure>> startWorkLogFrom(WorkLog workLog);
+
+  Future<Result<WorkLog, Failure>> startWorkLogFromJiraIssue(
+    JIraIssue jiraIssue,
+  );
 }

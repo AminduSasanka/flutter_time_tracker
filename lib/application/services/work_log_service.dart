@@ -1,5 +1,6 @@
 import 'package:flutter_time_tracker/core/constants/enums.dart';
 import 'package:flutter_time_tracker/data/models/work_log_model.dart';
+import 'package:flutter_time_tracker/domain/entities/jira_issue.dart';
 import 'package:flutter_time_tracker/domain/entities/work_log.dart';
 import 'package:flutter_time_tracker/domain/failures/failure.dart';
 import 'package:flutter_time_tracker/domain/failures/unknown_failure.dart';
@@ -376,6 +377,37 @@ class WorkLogService implements IWorkLogService {
 
       final id = await _workLogRepository.create(newWorklog);
       final createdWorkLog = workLog.copyWith(id: id);
+
+      return Success(createdWorkLog);
+    } catch (e, s) {
+      return Error(
+        e is Failure
+            ? e
+            : UnknownFailure(exception: Exception(e.toString()), stackTrace: s),
+      );
+    }
+  }
+
+  @override
+  Future<Result<WorkLog, Failure>> startWorkLogFromJiraIssue(
+    JIraIssue jiraIssue,
+  ) async {
+    try {
+      final currentWorklogResult = await getCurrentWorkLog();
+
+      if (currentWorklogResult.isSuccess()) {
+        await completeWorkLog();
+      }
+
+      WorkLog newWorklog = WorkLog(
+        taskKey: jiraIssue.key,
+        summary: jiraIssue.summaryText,
+        startTime: DateTime.now(),
+        workLogState: WorkLogStateEnum.pending,
+      );
+
+      final id = await _workLogRepository.create(newWorklog);
+      final createdWorkLog = newWorklog.copyWith(id: id);
 
       return Success(createdWorkLog);
     } catch (e, s) {
