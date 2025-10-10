@@ -15,7 +15,9 @@ class SearchResultListWidget extends ConsumerWidget {
     );
 
     void handleOnTap(JIraIssue jiraIssue) async {
-      final isSuccess = await ref.read(searchIssueScreenControllerProvider.notifier).startWorkLog(jiraIssue);
+      final isSuccess = await ref
+          .read(searchIssueScreenControllerProvider.notifier)
+          .startWorkLog(jiraIssue);
 
       if (!context.mounted) {
         return;
@@ -26,15 +28,11 @@ class SearchResultListWidget extends ConsumerWidget {
         context.go(homeRoute);
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Work log started successfully.'),
-          ),
+          const SnackBar(content: Text('Work log started successfully.')),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Failed to start work log.'),
-          ),
+          const SnackBar(content: Text('Failed to start work log.')),
         );
       }
     }
