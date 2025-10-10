@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_time_tracker/core/DI/controller_providers.dart';
 import 'package:flutter_time_tracker/core/constants/route_names.dart';
 import 'package:flutter_time_tracker/core/theme/primary_button.dart';
-import 'package:flutter_time_tracker/presentation/features/start_worklog/widgets/search_widget.dart';
+import 'package:flutter_time_tracker/presentation/features/start_worklog/widgets/search_placeholder_widget.dart';
 import 'package:go_router/go_router.dart';
 
 class StartNewWorkLogWidget extends ConsumerStatefulWidget {
@@ -52,7 +52,7 @@ class _StartNewWorkLogWidgetState extends ConsumerState<StartNewWorkLogWidget> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SearchWidget(),
+        SearchPlaceholderWidget(),
         Form(
           key: _formKey,
           child: Column(
