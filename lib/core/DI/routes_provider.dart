@@ -5,6 +5,7 @@ import 'package:flutter_time_tracker/presentation/features/edit_worklog/screens/
 import 'package:flutter_time_tracker/presentation/features/history/screens/history_screen.dart';
 import 'package:flutter_time_tracker/presentation/features/home/screens/home_screen.dart';
 import 'package:flutter_time_tracker/presentation/features/settings/screens/settings_screen.dart';
+import 'package:flutter_time_tracker/presentation/features/start_worklog/screen/search_issue_screen.dart';
 import 'package:flutter_time_tracker/presentation/features/start_worklog/screen/start_worklog_screen.dart';
 import 'package:flutter_time_tracker/presentation/shared/layouts/main_layout.dart';
 import 'package:go_router/go_router.dart';
@@ -53,6 +54,11 @@ final goRouterProvider = Provider<GoRouter>((ref) {
         path: '/start_worklog',
         name: startWorkLog,
         builder: (context, state) => const StartWorklogScreen(),
+      ),
+      GoRoute(
+        path: '/search_issue',
+        name: searchIssueRoute,
+        builder: (context, state) => const SearchIssueScreen(),
       ),
     ],
   );
