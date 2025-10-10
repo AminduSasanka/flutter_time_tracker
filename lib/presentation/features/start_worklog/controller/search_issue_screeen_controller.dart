@@ -14,10 +14,17 @@ class SearchIssueScreenController
   Future<void> searchIssues(String query) async {
     state = const AsyncLoading();
 
-    final searchResult = await ref.read(jiraIssueServiceProvider).searchIssue(query);
+    final searchResult = await ref
+        .read(jiraIssueServiceProvider)
+        .searchIssue(query);
 
-    if(searchResult.isSuccess()) {
-      state = AsyncData(state.value!.copyWith(searchResults: searchResult.tryGetSuccess()));
+    if (searchResult.isSuccess()) {
+      state = AsyncData(
+        state.value!.copyWith(
+          searchResults: searchResult.tryGetSuccess(),
+          searchTerm: query,
+        ),
+      );
     } else {
       state = AsyncError(searchResult.tryGetError()!, StackTrace.current);
     }
