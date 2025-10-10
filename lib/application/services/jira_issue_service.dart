@@ -1,4 +1,5 @@
 import 'package:flutter_time_tracker/data/models/jira_issue_model.dart';
+import 'package:flutter_time_tracker/domain/entities/jira_issue.dart';
 import 'package:flutter_time_tracker/domain/failures/failure.dart';
 import 'package:flutter_time_tracker/domain/failures/unknown_failure.dart';
 import 'package:flutter_time_tracker/domain/repositories/i_jira_issue_repository.dart';
@@ -11,14 +12,16 @@ class JiraIssueService implements IJiraIssueService {
   JiraIssueService(this._jiraIssueRepository);
 
   @override
-  Future<Result<List<JIraIssueModel>, Failure>> searchIssue(
+  Future<Result<List<JIraIssue>, Failure>> searchIssue(
     String searchTerm,
   ) async {
     try {
       List<JIraIssueModel> jiraIssueModels = await _jiraIssueRepository
           .getJiraIssues(searchTerm);
 
-      return Result.success(jiraIssueModels);
+      return Result.success(
+        jiraIssueModels.map((issueModel) => issueModel.toEntity()).toList(),
+      );
     } catch (e, s) {
       if (e is Failure) {
         return Result.error(e);

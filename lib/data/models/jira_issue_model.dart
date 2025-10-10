@@ -1,3 +1,5 @@
+import 'package:flutter_time_tracker/domain/entities/jira_issue.dart';
+
 class JIraIssueModel {
   final int id;
   final String img;
@@ -48,4 +50,15 @@ class JIraIssueModel {
     "summary": summary,
     "summaryText": summaryText,
   };
+
+  JIraIssue toEntity() {
+    return JIraIssue(
+      id: id,
+      img: img,
+      key: key,
+      keyHtml: keyHtml,
+      summary: summary,
+      summaryText: summaryText,
+    );
+  }
 }
