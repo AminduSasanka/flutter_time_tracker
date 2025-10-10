@@ -2,9 +2,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_time_tracker/core/DI/source_providers.dart';
 import 'package:flutter_time_tracker/core/services/network/network_service_provider.dart';
 import 'package:flutter_time_tracker/data/repositories/jira_auth_repository.dart';
+import 'package:flutter_time_tracker/data/repositories/jira_issue_repository.dart';
 import 'package:flutter_time_tracker/data/repositories/jira_work_log_repository.dart';
 import 'package:flutter_time_tracker/data/repositories/work_log_repository.dart';
 import 'package:flutter_time_tracker/domain/repositories/i_jira_auth_repository.dart';
+import 'package:flutter_time_tracker/domain/repositories/i_jira_issue_repository.dart';
 import 'package:flutter_time_tracker/domain/repositories/i_jira_work_log_repository.dart';
 import 'package:flutter_time_tracker/domain/repositories/i_work_log_repository.dart';
 
@@ -26,4 +28,8 @@ final jiraWorkLogRepositoryProvider = Provider<IJiraWorkLogRepository>((ref) {
     ref.watch(jiraApiServiceProvider),
     ref.watch(jiraWorkLogMapper),
   );
+});
+
+final jiraIssueRepositoryProvider = Provider<IJiraIssueRepository>((ref) {
+  return JiraIssueRepository(ref.watch(jiraApiServiceProvider));
 });
